@@ -52,11 +52,8 @@ Vagrant.configure("2") do |config|
       sudo usermod -a -G docker vagrant
       sudo systemctl enable docker
       sudo systemctl start docker
-      git clone https://github.com/AbdelatifAitBara/ProjectB
-      cd ProjectB
-      docker build -t addproducts .
-      docker run -p 8080:8080 addproducts
-      rm -drf /home/vagrant/ProjectB
+      sudo docker network create jenkins
+      sudo docker run -d -p 8888:8080 --restart always -v jenkinsvol1:/var/jenkins_home --name Jenkins_Container jenkins/jenkins:lts
     SHELL
   end
 end
