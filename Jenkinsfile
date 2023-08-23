@@ -4,7 +4,7 @@ pipeline {
   stages {
     stage('Clone Git repository') {
       steps {
-        sh 'git clone https://github.com/AbdelatifAitBara/ProjectB /home/vagrant'
+        git 'https://github.com/AbdelatifAitBara/ProjectB'
       }
     }
 
