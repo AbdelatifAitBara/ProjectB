@@ -23,10 +23,5 @@ pipeline {
       }
     }
 
-    stage('Clean Up') {
-      steps {
-        sh 'docker rmi -f microservice:$(git rev-parse --short=7 HEAD)'
-      }
-    }
   }
 }
