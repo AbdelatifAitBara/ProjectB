@@ -11,19 +11,10 @@ pipeline {
 
     stage('Build Docker Image') {
       steps {
-        sh 'docker rmi -f microservice'
         sh 'docker build -t microservice:$(git rev-parse --short=7 HEAD) /home/vagrant/agent/ProjectB/'
       }
     }
 
-        
-    stage('Tag Docker Image') {
-      steps {
-        script {
-          sh 'docker tag microservice:$(git rev-parse --short=7 HEAD) microservice_image:latest'
-        }
-      }
-    }
     stage('Deploy container') {
       steps {
         sh 'docker rm -f microservice_container'
