@@ -28,6 +28,7 @@ Vagrant.configure("2") do |config|
       git clone https://github.com/AbdelatifAitBara/ProjectB
       cd ProjectB
       docker-compose up -d
+      rm -drf /home/vagrant/ProjectB
     SHELL
   end
 
@@ -51,6 +52,8 @@ Vagrant.configure("2") do |config|
       sudo usermod -a -G docker vagrant
       sudo systemctl enable docker
       sudo systemctl start docker
+      git clone https://github.com/AbdelatifAitBara/ProjectB
+      cd ProjectB
     SHELL
   end
 end
