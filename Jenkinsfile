@@ -16,11 +16,18 @@ pipeline {
       }
     }
 
-
+        
+    stage('Tag Docker Image') {
+      steps {
+        script {
+          sh 'docker tag microservice:$(git rev-parse --short=7 HEAD)'
+        }
+      }
+    }
     stage('Deploy container') {
       steps {
         sh 'docker rm -f microservice_container'
-        sh 'docker run -d -p 8080:8080 --name microservice_container microservice'
+        sh 'docker run -d -p 8080:8080 --name microservice_container microservice:$(git rev-parse --short=7 HEAD)'
       }
     }
   }
