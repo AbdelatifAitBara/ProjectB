@@ -53,7 +53,7 @@ Vagrant.configure("2") do |config|
       sudo systemctl enable docker
       sudo systemctl start docker
       sudo docker network create jenkins
-      sudo docker run -d -p 8888:8080 --restart always -v jenkinsvol1:/var/jenkins_home --name Jenkins_Container jenkins/jenkins:lts
+      sudo docker run -d -p 8888:8080 --restart always -v jenkinsvol1:/var/jenkins_home --name Jenkins_Container jenkins/jenkins:ltsw
     SHELL
   end
 end
