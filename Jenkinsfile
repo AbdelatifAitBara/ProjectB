@@ -21,5 +21,11 @@ pipeline {
         sh 'docker run -d -p 8080:8080 --name microservice_container microservice:$(git rev-parse --short=7 HEAD)'
       }
     }
+
+    stage('Clean Up') {
+      steps {
+        sh 'docker rmi -f microservice:$(git rev-parse --short=7 HEAD)'
+      }
+    }
   }
 }
