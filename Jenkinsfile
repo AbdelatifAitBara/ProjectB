@@ -18,7 +18,7 @@ pipeline {
     stage('Deploy container') {
       steps {
         sh 'docker rm -f microservice_container'
-        sh 'docker run -d -p 8080:8080 --name microservice_container microservice_image:latest'
+        sh 'docker run -d -p 8080:8080 --name microservice_container microservice:$(git rev-parse --short=7 HEAD)'
       }
     }
   }
