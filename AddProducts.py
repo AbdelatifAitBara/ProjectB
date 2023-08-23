@@ -9,8 +9,8 @@ def add_product():
     product_data = request.json
 
     # Set up the OAuth1Session for authentication
-    consumer_key = 'ck_a5f11e0d2a04d974d877f6b8dfeb6f4f1a32b2e9'
-    consumer_secret = 'cs_1e5b43eebc244d9a7917bec31cd181f25d6928a0'
+    consumer_key = 'ck_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+    consumer_secret = 'cs_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
     oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret) # We have http website that's why we use that type of authentication
 
     # Set up the API endpoint and headers
