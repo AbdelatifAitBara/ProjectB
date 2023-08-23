@@ -9,7 +9,7 @@ Vagrant.configure("2") do |config|
     master.vm.network "private_network", ip: "192.168.10.10"
 
     master.vm.provider "virtualbox" do |vb|
-      vb.memory = 3096
+      vb.memory = 2096
       vb.cpus = 2
       vb.name = "WooCommerce"
     end
@@ -32,14 +32,16 @@ Vagrant.configure("2") do |config|
     SHELL
   end
 
-  config.vm.define "AddProducts" do |master|
-    master.vm.hostname = "AddProducts"
+  # Deploy Jenkins Master:
+
+  config.vm.define "JenkinsMaster" do |master|
+    master.vm.hostname = "JenkinsMaster"
     master.vm.network "private_network", ip: "192.168.10.20"
 
     master.vm.provider "virtualbox" do |vb|
-      vb.memory = 2096
+      vb.memory = 2048
       vb.cpus = 2
-      vb.name = "AddProducts"
+      vb.name = "JenkinsMaster"
     end
 
     master.vm.provision "shell", inline: <<-SHELL
@@ -48,12 +50,36 @@ Vagrant.configure("2") do |config|
       curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
       sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
       sudo apt update
-      sudo apt install docker-ce=5:20.10.24~3-0~ubuntu-$(lsb_release -cs) docker-ce-cli=5:20.10.24~3-0~ubuntu-$(lsb_release -cs) containerd.io docker-compose -y
+      sudo apt install docker-ce docker-ce-cli containerd.io docker-compose -y
       sudo usermod -a -G docker vagrant
       sudo systemctl enable docker
       sudo systemctl start docker
-      sudo docker network create jenkins
-      sudo docker run -d -p 8888:8080 --restart always -v jenkinsvol1:/var/jenkins_home --name Jenkins_Container jenkins/jenkins:ltsw
+      docker container run -d -p 5555:8080 --restart always -v jenkinsvol1:/var/jenkins_home --name Jenkins_Container jenkins/jenkins:lts
+    SHELL
+  end
+
+
+  # Deploy Jenkins Agent ( Will Contains The Microservice ):
+
+  config.vm.define "agent" do |agent|
+    agent.vm.hostname = "Docker-JenkinsAgent"
+    agent.vm.network "private_network", ip: "192.168.10.30"
+
+    agent.vm.provider "virtualbox" do |vb|
+      vb.memory = 2048
+      vb.cpus = 2
+      vb.name = "Docker-JenkinsAgent"
+    end
+
+    agent.vm.provision "shell", inline: <<-SHELL
+      sudo apt-get update
+      sudo apt install apt-transport-https ca-certificates curl software-properties-common -y
+      curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+      sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+      sudo apt update
+      sudo apt install openjdk-17-jdk -y
+      sudo apt install docker-ce docker-ce-cli containerd.io docker-compose -y
+      sudo usermod -a -G docker vagrant
     SHELL
   end
 end
