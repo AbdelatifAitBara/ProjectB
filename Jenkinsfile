@@ -4,7 +4,7 @@ pipeline {
   stages {
     stage('Clone Git repository') {
       steps {
-        sh 'rm -drf /home/vagrant/agent/ci-cd/'
+        sh 'rm -drf /home/vagrant/agent/ProjectB/'
         sh 'git -C /home/vagrant/agent/ clone --recursive git@github.com:AbdelatifAitBara/ProjectB.git'
       }
     }
