@@ -16,6 +16,7 @@ pipeline {
       }
     }
 
+
     stage('Deploy container') {
       steps {
         sh 'docker rm -f microservice_container'
