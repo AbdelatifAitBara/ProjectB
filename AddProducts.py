@@ -9,8 +9,8 @@ def add_product():
     product_data = request.json
 
     # Set up the OAuth1Session for authentication
-    consumer_key = 'ck_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
-    consumer_secret = 'cs_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+    consumer_key = 'ck_3a9eb4a02be6bb4719a82fdb8f6d277952cc675e'
+    consumer_secret = 'cs_7187da1b50984a92f7c699ad8baf3bb828bbf033'
     oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret) # We have http website that's why we use that type of authentication
 
     # Set up the API endpoint and headers
@@ -25,6 +25,6 @@ def add_product():
         return jsonify({'message': 'Product added successfully.'}), 201
     else:
         return jsonify({'error': 'Failed to add product.'}), 400
-    
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port=8080)
