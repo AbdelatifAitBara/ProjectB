@@ -12,7 +12,7 @@ pipeline {
     stage('Build Docker Image') {
       steps {
         sh 'docker rmi -f microservice'
-        sh 'docker build -t microservice .'
+        sh 'docker build -t microservice:$(git rev-parse --short=7 HEAD)'
       }
     }
 
