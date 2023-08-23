@@ -5,7 +5,7 @@ FROM python:3.8-slim-buster
 WORKDIR /app
 
 # Copy the current directory contents into the container at /app
-COPY AddProducts.py /app
+COPY app.py /app
 COPY requirements.txt /app
 
 # Install any needed packages specified in requirements.txt
@@ -18,4 +18,4 @@ EXPOSE 80
 ENV NAME World
 
 # Run app.py when the container launches
-CMD ["python", "AddProducts.py"]
+CMD ["python", "app.py"]
