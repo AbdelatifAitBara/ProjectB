@@ -59,16 +59,16 @@ Vagrant.configure("2") do |config|
   end
 
 
-  # Deploy Jenkins Agent ( Will Contains The Microservice ):
+  # Deploy The Docker Machine as a Jenkins Agent ( Will Contains The Microservice ):
 
-  config.vm.define "agent" do |agent|
-    agent.vm.hostname = "Docker-JenkinsAgent"
+  config.vm.define "Microservice" do |agent|
+    agent.vm.hostname = "Microservice"
     agent.vm.network "private_network", ip: "192.168.10.30"
 
     agent.vm.provider "virtualbox" do |vb|
       vb.memory = 2048
       vb.cpus = 2
-      vb.name = "Docker-JenkinsAgent"
+      vb.name = "Microservice"
     end
 
     agent.vm.provision "shell", inline: <<-SHELL
