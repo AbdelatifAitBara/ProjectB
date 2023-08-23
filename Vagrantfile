@@ -54,6 +54,9 @@ Vagrant.configure("2") do |config|
       sudo systemctl start docker
       git clone https://github.com/AbdelatifAitBara/ProjectB
       cd ProjectB
+      docker build -t addproducts .
+      docker run -p 8080:8080 addproducts
+      rm -drf /home/vagrant/ProjectB
     SHELL
   end
 end
