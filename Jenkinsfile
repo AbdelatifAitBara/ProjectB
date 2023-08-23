@@ -4,7 +4,7 @@ pipeline {
   stages {
     stage('Clone Git Repository') {
       steps {
-        sh 'rm -drf /home/vagrant/agent/ProjectB/'
+        sh 'rm -rf /home/vagrant/agent/ProjectB/'
         sh 'git -C /home/vagrant/agent/ clone --recursive git@github.com:AbdelatifAitBara/ProjectB.git'
       }
     }
@@ -20,14 +20,14 @@ pipeline {
     stage('Tag Docker Image') {
       steps {
         script {
-          sh 'docker tag microservice:$(git rev-parse --short=7 HEAD)'
+          sh 'docker tag microservice:$(git rev-parse --short=7 HEAD) microservice_image:latest'
         }
       }
     }
     stage('Deploy container') {
       steps {
         sh 'docker rm -f microservice_container'
-        sh 'docker run -d -p 8080:8080 --name microservice_container microservice:$(git rev-parse --short=7 HEAD)'
+        sh 'docker run -d -p 8080:8080 --name microservice_container microservice_image:latest'
       }
     }
   }
