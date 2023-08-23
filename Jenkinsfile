@@ -4,28 +4,19 @@ pipeline {
   stages {
     stage('Clone Git repository') {
       steps {
-        git 'https://github.com/username/repo.git'
+        git 'https://github.com/AbdelatifAitBara/ProjectB'
       }
     }
 
-    stage('Build Docker image') {
+    stage('Build Docker Image') {
       steps {
-        sh 'docker build -t myimage .'
-      }
-    }
-
-    stage('Push Docker image') {
-      steps {
-        withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-          sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
-          sh 'docker push myimage'
-        }
+        sh 'docker build -t microservice .'
       }
     }
 
     stage('Deploy container') {
       steps {
-        sh 'docker run -d -p 8080:80 myimage'
+        sh 'docker run -d -p 8080:8080 microservice'
       }
     }
   }
