@@ -8,6 +8,7 @@ pipeline {
         sh 'git -C /home/vagrant/agent/ clone --recursive git@github.com:AbdelatifAitBara/ProjectB.git'
       }
     }
+  }  
 
   stage('Build Docker Image') {
     steps {
@@ -15,17 +16,16 @@ pipeline {
     }
   }
 
-    stage('Remove container running on port 8080') {
-      steps {
-        sh 'docker rm -f $(docker ps -aq --filter "publish=8080")'
-      }
+  stage('Remove container running on port 8080') {
+    steps {
+      sh 'docker rm -f $(docker ps -aq --filter "publish=8080")'
     }
   }
 
-    stage('Deploy container') {
-      steps {
-        sh 'docker rm -f product_microservice_container'
-        sh 'docker run -d -p 8080:8080 --name product_microservice_container microservice:$(git rev-parse --short=7 HEAD)'
-      }
+  stage('Deploy container') {
+    steps {
+      sh 'docker rm -f product_microservice_container'
+      sh 'docker run -d -p 8080:8080 --name product_microservice_container microservice:$(git rev-parse --short=7 HEAD)'
     }
+  }
 }
