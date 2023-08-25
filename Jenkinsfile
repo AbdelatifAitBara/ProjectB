@@ -18,7 +18,7 @@ stage('Build Docker Image') {
     stage('Deploy container') {
       steps {
         sh 'docker rm -f product_microservice_container'
-        sh 'docker run -d -p 8080:8080 --name product_microservice_container microservice:$(git rev-parse --short=7 HEAD)'
+        sh 'docker run -d -p 8080:8080 --name product_microservice_container product_microservice:$(git rev-parse --short=7 HEAD)'
       }
     }
   }
