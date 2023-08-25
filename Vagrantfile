@@ -84,6 +84,8 @@ Vagrant.configure("2") do |config|
       sudo apt install docker-ce docker-ce-cli containerd.io docker-compose -y
       sudo usermod -a -G docker vagrant
       sudo apt install python3-pip -y
+      pip install -U mock
+      pip install nose
     SHELL
   end
 end
