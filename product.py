@@ -11,7 +11,6 @@ redis_client = redis.Redis(host='redis', port=6379, db=0)
 
 consumer_key = os.getenv('CONSUMER_KEY')
 consumer_secret = os.getenv('CONSUMER_SECRET')
-URL = os.getenv('API_URL')
 
 @app.route('/add_product', methods=['POST'])
 def add_product():
@@ -22,7 +21,6 @@ def add_product():
     oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
 
     # Set up the API endpoint and headers
-    f'{URL}/delete_product/{product_id}',
     url = 'http://192.168.10.10:8080/wp-json/wc/v3/products'
     headers = {'Content-Type': 'application/json'}
 
