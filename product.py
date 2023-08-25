@@ -79,7 +79,7 @@ def get_product(product_id):
     # Set up the OAuth1Session for authentication
     oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
 
-    # Set up the API endpoint and headers
+    # Set up the API endpoint and  headers 
     url = f'http://192.168.10.10:8080/wp-json/wc/v3/products/{product_id}'
     headers = {'Content-Type': 'application/json'}
 
