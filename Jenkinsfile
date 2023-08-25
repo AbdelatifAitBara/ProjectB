@@ -30,7 +30,7 @@ pipeline {
 
     stage('Run functional tests for add product') {
       steps {
-        sh 'python3 -m unittest test_api.py'
+        sh 'python3 -m unittest test_product.py'
       }
     }
 
