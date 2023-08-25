@@ -6,6 +6,8 @@ import json
 class TestAPI(unittest.TestCase):
     def setUp(self):
         self.base_url = 'http://192.168.10.30:8080'
+        self.consumer_key = 'ck_871224cf87f8459b0862453fa7e03dbe2accbecd'
+        self.consumer_secret = 'cs_3f3dc3a74524e7f7442303a6e12ec03de5da505c'
 
     def test_add_product(self):
         # Define the product data to add
