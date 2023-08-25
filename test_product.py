@@ -64,23 +64,28 @@ class TestAPI(unittest.TestCase):
         # Check that the response is valid
         self.assertIn(response.status_code, [200, 400])
 
-    def test_get_product(self):
-        # Define the product ID to retrieve
-        product_id = 1
+    def test_add_product(self):
+        # Define the product data to add
+        product_data = {
+            'name': 'Test Product',
+            'type': 'simple',
+            'regular_price': '10.00'
+        }
 
-        # Send the GET request to retrieve the product
-        response = requests.get(
-            f'{self.base_url}/get_product/{product_id}',
+        # Send the POST request to add the product
+        response = requests.post(
+            f'{self.base_url}/add_product',
             headers={'Content-Type': 'application/json'},
+            json=product_data,
             auth=requests.auth.HTTPBasicAuth(self.consumer_key, self.consumer_secret)
         )
 
+        # Print the response content for debugging
+        print(response.content)
+
         # Check that the response is valid
-        if response.status_code == 200:
-            self.assertIn('id', response.json())
-        else:
-            self.assertEqual(response.status_code, 400)
-            self.assertIn('error', response.json())
+        self.assertEqual(response.status_code, 201)
+        self.assertIn('product_id', response.json())
 
 if __name__ == '__main__':
     unittest.main()
