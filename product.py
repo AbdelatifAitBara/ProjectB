@@ -11,6 +11,7 @@ redis_client = redis.Redis(host='redis', port=6379, db=0)
 
 consumer_key = os.getenv('CONSUMER_KEY')
 consumer_secret = os.getenv('CONSUMER_SECRET')
+api_url = os.getenv('API_URL')
 
 @app.route('/add_product', methods=['POST'])
 def add_product():
@@ -21,7 +22,7 @@ def add_product():
     oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
 
     # Set up the API endpoint and headers
-    url = 'http://192.168.10.10:8080/wp-json/wc/v3/products'
+    api_url
     headers = {'Content-Type': 'application/json'}
 
     # Send the POST request to add the product
@@ -41,7 +42,7 @@ def delete_product(product_id):
     oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
 
     # Set up the API endpoint and headers
-    url = f'http://192.168.10.10:8080/wp-json/wc/v3/products/{product_id}'
+    url = api_url/{product_id}
     headers = {'Content-Type': 'application/json'}
 
     # Send the DELETE request to delete the product
@@ -62,7 +63,7 @@ def update_product(product_id):
     oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
 
     # Set up the API endpoint and headers
-    url = f'http://192.168.10.10:8080/wp-json/wc/v3/products/{product_id}'
+    url = api_url/{product_id}
     headers = {'Content-Type': 'application/json'}
 
     # Send the PUT request to update the product
@@ -80,7 +81,7 @@ def get_product(product_id):
     oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
 
     # Set up the API endpoint and  headers 
-    url = f'http://192.168.10.10:8080/wp-json/wc/v3/products/{product_id}'
+    url = api_url/{product_id}
     headers = {'Content-Type': 'application/json'}
 
     # Send the GET request to retrieve the product
