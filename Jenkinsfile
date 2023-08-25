@@ -1,7 +1,6 @@
 pipeline {
   agent any
 
-
   stages {
     stage('Clone Git Repository') {
       steps {
@@ -10,7 +9,6 @@ pipeline {
       }
     }
 
-  stages {
     stage('Build') {
       steps {
         script {
@@ -25,7 +23,5 @@ pipeline {
         sh 'docker run -d -p 8080:8080 --name microservice_container microservice:$(git rev-parse --short=7 HEAD)'
       }
     }
-
   }
-}
 }
