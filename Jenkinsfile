@@ -11,14 +11,14 @@ pipeline {
 
 stage('Build Docker Image') {
   steps {
-    sh 'docker build -f /home/vagrant/agent/ProjectB/DockerfileProducts -t microservice:$(git rev-parse --short=7 HEAD) /home/vagrant/agent/ProjectB/'
+    sh 'docker build -f /home/vagrant/agent/ProjectB/DockerfileProducts -t product_microservice:$(git rev-parse --short=7 HEAD) /home/vagrant/agent/ProjectB/'
   }
 }
 
     stage('Deploy container') {
       steps {
-        sh 'docker rm -f microservice_container'
-        sh 'docker run -d -p 8080:8080 --name microservice_container microservice:$(git rev-parse --short=7 HEAD)'
+        sh 'docker rm -f product_microservice_container'
+        sh 'docker run -d -p 8080:8080 --name product_microservice_container microservice:$(git rev-parse --short=7 HEAD)'
       }
     }
   }
