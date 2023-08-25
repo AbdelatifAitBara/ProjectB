@@ -10,9 +10,12 @@ pipeline {
       }
     }
 
-    stage('Build Docker Image') {
+  stages {
+    stage('Build') {
       steps {
-        sh 'docker build -t microservice:$(git rev-parse --short=7 HEAD) /home/vagrant/agent/ProjectB/'
+        script {
+          docker.build("microservice:$(git rev-parse --short=7 HEAD)")
+        }
       }
     }
 
