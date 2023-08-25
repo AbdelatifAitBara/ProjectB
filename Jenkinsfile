@@ -40,6 +40,7 @@ pipeline {
 
     stage('Product Microservice Test') {
       steps {
+        sh 'sleep 10'
         sh 'python3 -m unittest test_product.py'
       }
     }
