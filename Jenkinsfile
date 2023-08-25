@@ -15,7 +15,7 @@ pipeline {
       }
     }
 
-    stage('Remove container running on port 8080') {
+    stage('Remove Container Running on port 8080') {
       steps {
         sh 'docker rm -f $(docker ps -aq --filter "publish=8080")'
       }
@@ -28,7 +28,7 @@ pipeline {
       }
     }
 
-    stage('Run functional tests for product microservice') {
+    stage('Product Microservice Test') {
       steps {
         sh 'python3 -m unittest test_product.py'
       }
