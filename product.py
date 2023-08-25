@@ -29,7 +29,9 @@ def add_product():
 
     # Handle the response from the WooCommerce API
     if response.status_code == 201:
-        return jsonify({'message': 'Product added successfully.'}), 201
+        # Extract the product_id from the response body
+        product_id = response.json()['id']
+        return jsonify({'message': 'Product added successfully.', 'product_id': product_id}), 201
     else:
         return jsonify({'error': 'Failed to add product.'}), 400
 
