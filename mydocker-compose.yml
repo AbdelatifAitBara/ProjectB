@@ -1,15 +1,12 @@
 version: '3'
 services:
-  redis:
-    image: redis
-    ports:
-      - "6379:6379"
-  add_product:
+  product:
     build: .
     ports:
       - "8080:8080"
-    environment:
-      - CONSUMER_KEY=${CONSUMER_KEY}
-      - CONSUMER_SECRET=${CONSUMER_SECRET}
     depends_on:
       - redis
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
