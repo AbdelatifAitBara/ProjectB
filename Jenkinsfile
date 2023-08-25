@@ -9,11 +9,11 @@ pipeline {
       }
     }
 
-    stage('Build Docker Image') {
-      steps {
-        sh 'docker build -f /home/vagrant/agent/ProjectB/DockerfileProducts  -t microservice:$(git rev-parse --short=7 HEAD)'
-      }
-    }
+stage('Build Docker Image') {
+  steps {
+    sh 'docker build -f /home/vagrant/agent/ProjectB/DockerfileProducts -t microservice:$(git rev-parse --short=7 HEAD) /home/vagrant/agent/ProjectB/'
+  }
+}
 
     stage('Deploy container') {
       steps {
