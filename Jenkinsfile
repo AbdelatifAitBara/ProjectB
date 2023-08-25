@@ -14,7 +14,7 @@ pipeline {
     stage('Build') {
       steps {
         script {
-          docker.build("microservice:$(git rev-parse --short=7 HEAD)")
+          docker.build("microservice")
         }
       }
     }
