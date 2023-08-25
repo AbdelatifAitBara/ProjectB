@@ -27,5 +27,12 @@ pipeline {
         sh 'docker run -d -p 8080:8080 --name product_microservice_container product_microservice:$(git rev-parse --short=7 HEAD)'
       }
     }
+
+    stage('Run functional tests for add product') {
+      steps {
+        sh 'python -m unittest test_api.py'
+      }
+    }
+
   }
 }
