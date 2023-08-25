@@ -23,7 +23,7 @@ def add_product():
 
     # Set up the API endpoint and headers
     
-    url = f'{URL}/delete_product/{product_id}'
+    url = f'{URL}'
     headers = {'Content-Type': 'application/json'}
 
     # Send the POST request to add the product
@@ -43,7 +43,7 @@ def delete_product(product_id):
     oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
 
     # Set up the API endpoint and headers
-    url = f'{URL}/{product_id}'
+    url = f'{URL}/delete_product/{product_id}'
     headers = {'Content-Type': 'application/json'}
 
     # Send the DELETE request to delete the product
@@ -64,7 +64,7 @@ def update_product(product_id):
     oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
 
     # Set up the API endpoint and headers
-    url = f'{URL}/{product_id}'
+    url = f'{URL}/update_product/{product_id}'
     headers = {'Content-Type': 'application/json'}
 
     # Send the PUT request to update the product
@@ -82,7 +82,7 @@ def get_product(product_id):
     oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
 
     # Set up the API endpoint and  headers 
-    url = f'{URL}/{product_id}'
+    url = f'{URL}/get_product/{product_id}'
     headers = {'Content-Type': 'application/json'}
 
     # Send the GET request to retrieve the product
