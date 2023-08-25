@@ -28,7 +28,7 @@ pipeline {
       }
     }
 
-    stage('Run functional tests for add product') {
+    stage('Run functional tests for product microservice') {
       steps {
         sh 'python3 -m unittest test_product.py'
       }
