@@ -4,7 +4,7 @@ import json
 
 class TestAPI(unittest.TestCase):
     def setUp(self):
-        self.url = 'http://localhost:8080/add_product'
+        self.url = 'http://192.168.10.30:8080/add_product'
         self.headers = {'Content-Type': 'application/json'}
         self.product_data = {
             "name": "Test Product",
