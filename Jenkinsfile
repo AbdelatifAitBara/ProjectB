@@ -17,9 +17,18 @@ pipeline {
 
     stage('Remove Container Running on port 8080') {
       steps {
-        sh 'docker rm -f $(docker ps -aq --filter "publish=8080")'
+        script {
+          def containers = sh(
+            script: 'docker ps --filter "publish=8080" -q',
+            returnStdout: true
+          ).trim()
+          if (containers) {
+            sh "docker rm -f ${containers}"
+          } else {
+            echo "No containers running on port 8080"
+          }
+        }
       }
-    }
 
     stage('Deploy container') {
       steps {
