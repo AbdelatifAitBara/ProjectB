@@ -1,0 +1,14 @@
+version: '3'
+services:
+  product:
+    build:
+      context: ./product
+      dockerfile: Dockerfile
+    ports:
+      - 8000:8000
+  order:
+    build:
+      context: ./order
+      dockerfile: Dockerfile
+    ports:
+      - 8001:8001

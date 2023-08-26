@@ -9,6 +9,7 @@ pipeline {
       }
     }
 
+/*
     stage('Build Product Image') {
       steps {
         sh 'docker build -f /home/vagrant/agent/ProjectB/product/Dockerfile -t product_microservice:$(git rev-parse --short=7 HEAD) /home/vagrant/agent/ProjectB/product/'
@@ -20,6 +21,8 @@ pipeline {
         sh 'docker build -f /home/vagrant/agent/ProjectB/order/Dockerfile -t order_microservice:$(git rev-parse --short=7 HEAD) /home/vagrant/agent/ProjectB/order/'
       }
     }
+
+*/
 
     stage('Remove Containers Running on Ports 8080 and 9090') {
       steps {
@@ -37,12 +40,14 @@ pipeline {
       }
     }
     
+/*
     stage('Deploy Product Microservice') {
       steps {
         sh 'rm -f product_microservice_container'
         sh 'docker run -d -p 8080:8080 --name product_microservice_container product_microservice:$(git rev-parse --short=7 HEAD)'
       }
     }
+
 
     stage('Deploy Order Microservice') {
       steps {
@@ -57,6 +62,13 @@ pipeline {
         sh 'python3 -m unittest test_product.py'
       }
     }
+*/
+    stage('Deploy with Docker Compose') {
+      steps {
+        sh 'docker-compose up -d'
+      }
+    }
+
 
   }
 }
