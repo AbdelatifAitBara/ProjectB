@@ -9,7 +9,7 @@ Vagrant.configure("2") do |config|
     woo.vm.network "private_network", ip: "192.168.10.10"
 
     woo.vm.provider "virtualbox" do |vb|
-      vb.memory = 2096
+      vb.memory = 2048
       vb.cpus = 2
       vb.name = "WooCommerce"
     end
