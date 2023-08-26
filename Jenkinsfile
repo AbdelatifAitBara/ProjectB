@@ -55,6 +55,7 @@ pipeline {
         sh 'docker run -d -p 9090:9090 --name order_microservice_container order_microservice:$(git rev-parse --short=7 HEAD)'
       }
     }
+*/
 
     stage('Product Microservice Test') {
       steps {
@@ -62,7 +63,6 @@ pipeline {
         sh 'python3 -m unittest test_product.py'
       }
     }
-*/
 
     stage('Build') {
       steps {
