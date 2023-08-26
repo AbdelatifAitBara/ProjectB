@@ -5,7 +5,7 @@ services:
       context: ./product
       dockerfile: Dockerfile
     ports:
-      - 8000:8000
+      - 8080:8080
   order:
     build:
       context: ./order
