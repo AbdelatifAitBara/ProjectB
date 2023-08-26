@@ -65,6 +65,7 @@ pipeline {
 */
     stage('Deploy with Docker Compose') {
       steps {
+        sh 'cd /home/vagrant/agent/ProjectB/microservices'
         sh 'docker-compose up -d'
       }
     }
