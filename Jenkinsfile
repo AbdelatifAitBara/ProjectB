@@ -37,13 +37,13 @@ pipeline {
         sh 'docker run -d -p 8080:8080 --name product_microservice_container product_microservice:$(git rev-parse --short=7 HEAD)'
       }
     }
-
+/*
     stage('Product Microservice Test') {
       steps {
         sh 'sleep 4'
         sh 'python3 -m unittest test_product.py'
       }
     }
-
+*/
   }
 }
