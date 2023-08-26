@@ -11,7 +11,7 @@ pipeline {
 
     stage('Build Docker Image') {
       steps {
-        sh 'docker build -f /home/vagrant/agent/ProjectB/DockerfileProducts -t product_microservice:$(git rev-parse --short=7 HEAD) /home/vagrant/agent/ProjectB/'
+        sh 'docker build -f /home/vagrant/agent/ProjectB/Dockerfile -t product_microservice:$(git rev-parse --short=7 HEAD) /home/vagrant/agent/ProjectB/'
       }
     }
 
