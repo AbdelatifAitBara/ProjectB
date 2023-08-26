@@ -93,14 +93,15 @@ Vagrant.configure("2") do |config|
     sudo usermod -a -G docker vagrant
     sudo systemctl enable docker
     sudo systemctl start docker
+    sudo apt install openjdk-17-jdk -y
     if ! docker info >/dev/null 2>&1; then
       echo "Docker failed to start."
       exit 1
     fi
-      ssh-keyscan github.com >> ~/.ssh/known_hosts
-      sudo apt install python3-pip -y
-      pip install -U mock
-      pip install nose
+    ssh-keyscan github.com >> ~/.ssh/known_hosts
+    sudo apt install python3-pip -y
+    pip install -U mock
+    pip install nose
     SHELL
   end
 end
