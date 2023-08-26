@@ -83,13 +83,20 @@ Vagrant.configure("2") do |config|
     end
 
     agent.vm.provision "shell", inline: <<-SHELL
-      sudo apt-get update
-      sudo apt install apt-transport-https ca-certificates curl software-properties-common -y
-      curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-      sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-      sudo apt update
-      sudo apt install openjdk-11-jdk -y
-      sudo -E apt install docker-ce=5:20.10.24~3-0~ubuntu-$CODENAME docker-ce-cli=5:20.10.24~3-0~ubuntu-$CODENAME containerd.io docker-compose -y      sudo usermod -a -G docker vagrant
+    sudo apt-get update
+    sudo -E apt install apt-transport-https ca-certificates curl software-properties-common -y
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo -E apt-key add -
+    CODENAME=$(lsb_release -cs)
+    sudo -E add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $CODENAME stable"
+    sudo -E apt update   
+    sudo -E apt install docker-ce docker-ce-cli containerd.io -y
+    sudo usermod -a -G docker vagrant
+    sudo systemctl enable docker
+    sudo systemctl start docker
+    if ! docker info >/dev/null 2>&1; then
+      echo "Docker failed to start."
+      exit 1
+    fi
       ssh-keyscan github.com >> ~/.ssh/known_hosts
       sudo apt install python3-pip -y
       pip install -U mock
