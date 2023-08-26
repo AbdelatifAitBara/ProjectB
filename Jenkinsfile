@@ -67,17 +67,15 @@ pipeline {
     stage('Build') {
       steps {
         // Build your microservices using Docker-compose
-        sh 'docker-compose build'
+        sh 'docker-compose -f microservices/docker-compose.yml build'
       }
     }
     
     stage('Deploy') {
       steps {
         // Deploy your microservices using Docker-compose
-        sh 'docker-compose up -d'
+        sh 'docker-compose -f microservices/docker-compose.yml up -d'
       }
     }
-
-
   }
 }
