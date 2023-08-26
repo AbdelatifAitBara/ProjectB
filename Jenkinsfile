@@ -57,13 +57,6 @@ pipeline {
     }
 */
 
-    stage('Product Microservice Test') {
-      steps {
-        sh 'sleep 6'
-        sh 'python3 -m unittest test_product.py'
-      }
-    }
-
     stage('Build') {
       steps {
         // Build your microservices using Docker-compose
@@ -77,5 +70,14 @@ pipeline {
         sh 'docker-compose -f microservices/docker-compose.yml up -d'
       }
     }
+
+    
+    stage('Product Microservice Test') {
+      steps {
+        sh 'sleep 6'
+        sh 'python3 -m unittest test_product.py'
+      }
+    }
+    
   }
 }
