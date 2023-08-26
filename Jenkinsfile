@@ -39,12 +39,14 @@ pipeline {
     
     stage('Deploy Product Microservice') {
       steps {
+        sh 'rm -f product_microservice_container'
         sh 'docker run -d -p 8080:80 --name product_microservice_container product_microservice:$(git rev-parse --short=7 HEAD)'
       }
     }
 
     stage('Deploy Order Microservice') {
       steps {
+        sh 'rm -f order_microservice_container'
         sh 'docker run -d -p 9090:80 --name order_microservice_container order_microservice:$(git rev-parse --short=7 HEAD)'
       }
     }
