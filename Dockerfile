@@ -15,8 +15,8 @@ RUN pip install --trusted-host pypi.python.org -r requirements.txt
 EXPOSE 80
 
 # Define environment variables
-ENV CONSUMER_KEY=ck_c86d458381c645d1709dbbf95ae3033226871df8
-ENV CONSUMER_SECRET=cs_a413d091ad0ebc09df06e547dcbb787e0256baeb
+ENV CONSUMER_KEY='ck_dee05a6912d2c948e9607abb9e6174b330e04e6b'
+ENV CONSUMER_SECRET='cs_685e63b42008ef7ecb2ec9fc534b6b607fdee5ee'
 
 # Define environment variable
 ENV NAME World
