@@ -25,7 +25,7 @@ pipeline {
       steps {
         script {
           def containers = sh(
-            script: 'docker ps --filter "publish=80" --filter "publish=90" -q',
+            script: 'docker ps --filter "publish=8080" --filter "publish=9090" -q',
             returnStdout: true
           ).trim()
           if (containers) {
