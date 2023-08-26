@@ -11,6 +11,9 @@ COPY requirements.txt /app
 # Install any needed packages specified in requirements.txt
 RUN pip install --trusted-host pypi.python.org -r requirements.txt
 
+# Make port 80 available to the world outside this container
+EXPOSE 80
+
 # Define environment variables
 ENV CONSUMER_KEY='ck_dee05a6912d2c948e9607abb9e6174b330e04e6b'
 ENV CONSUMER_SECRET='cs_685e63b42008ef7ecb2ec9fc534b6b607fdee5ee'
