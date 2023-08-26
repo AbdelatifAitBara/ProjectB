@@ -11,13 +11,13 @@ pipeline {
 
     stage('Build Product Image') {
       steps {
-        sh 'docker build -f /home/vagrant/agent/ProjectB/product/Dockerfile -t product_microservice:$(git rev-parse --short=7 HEAD) /home/vagrant/agent/ProjectB/product/Dockerfile'
+        sh 'docker build -f /home/vagrant/agent/ProjectB/product/Dockerfile -t product_microservice:$(git rev-parse --short=7 HEAD) /home/vagrant/agent/ProjectB/product/'
       }
     }
 
     stage('Build Order Image') {
       steps {
-        sh 'docker build -f /home/vagrant/agent/ProjectB/order/Dockerfile -t order_microservice:$(git rev-parse --short=7 HEAD) /home/vagrant/agent/ProjectB/order/Dockerfile'
+        sh 'docker build -f /home/vagrant/agent/ProjectB/order/Dockerfile -t order_microservice:$(git rev-parse --short=7 HEAD) /home/vagrant/agent/ProjectB/order/'
       }
     }
 
