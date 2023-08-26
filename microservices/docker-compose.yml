@@ -11,4 +11,4 @@ services:
       context: ./order
       dockerfile: Dockerfile
     ports:
-      - 8001:8001
+      - 9090:9090
