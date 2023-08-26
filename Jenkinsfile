@@ -63,7 +63,7 @@ pipeline {
       }
     }
 */
-  stages {
+
     stage('Build') {
       steps {
         // Build your microservices using Docker-compose
@@ -77,7 +77,6 @@ pipeline {
         sh 'docker-compose up -d'
       }
     }
-  }
 
 
   }
