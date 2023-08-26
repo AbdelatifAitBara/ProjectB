@@ -63,12 +63,21 @@ pipeline {
       }
     }
 */
-    stage('Deploy with Docker Compose') {
+  stages {
+    stage('Build') {
       steps {
-        sh 'cd /home/vagrant/agent/ProjectB/microservices'
+        // Build your microservices using Docker-compose
+        sh 'docker-compose build'
+      }
+    }
+    
+    stage('Deploy') {
+      steps {
+        // Deploy your microservices using Docker-compose
         sh 'docker-compose up -d'
       }
     }
+  }
 
 
   }
