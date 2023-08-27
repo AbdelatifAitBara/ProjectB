@@ -9,7 +9,9 @@ COPY product.py /app
 COPY requirements.txt /app
 
 # Install any needed packages specified in requirements.txt
-RUN pip install --trusted-host pypi.python.org -r requirements.txt
+RUN pip install --trusted-host pypi.python.org -r requirements.txt && \
+    apt update && \
+    apt install -y git
 
 # Make port 9090 available to the world outside this container
 EXPOSE 9090
