@@ -27,16 +27,8 @@ pipeline {
     stage('Remove Containers Running on Ports 8080 and 9090') {
       steps {
         script {
-          def containers = sh(
-            script: 'docker ps --filter "publish=8080" --filter "publish=9090" -q',
-            returnStdout: true
-          ).trim()
-          if (containers) {
-            sh "docker rm -f ${containers}"
-          } else {
-            echo "No containers running on ports 8080 and 9090"
-          }
-        }
+          sh 'docker rm -f product_container'
+          sh 'docker rm -f order_container'
       }
     }
     
