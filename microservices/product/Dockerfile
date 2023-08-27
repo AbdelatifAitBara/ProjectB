@@ -21,5 +21,7 @@ ENV CONSUMER_SECRET='cs_685e63b42008ef7ecb2ec9fc534b6b607fdee5ee'
 # Define environment variable
 ENV NAME World
 
+LABEL git_commit=$GIT_COMMIT
+
 # Run app.py when the container launches
 CMD ["python", "product.py"]
