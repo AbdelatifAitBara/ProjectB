@@ -6,9 +6,11 @@ services:
       dockerfile: Dockerfile
     ports:
       - 8080:8080
+    restart: always
   order:
     build:
       context: ./order
       dockerfile: Dockerfile
     ports:
       - 9090:9090
+    restart: always
