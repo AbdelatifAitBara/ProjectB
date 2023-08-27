@@ -4,13 +4,19 @@ services:
     build:
       context: ./product
       dockerfile: Dockerfile
+      args:
+        GIT_COMMIT: $(git rev-parse --short=7 HEAD)
     ports:
       - 8080:8080
     restart: always
+    container_name: product_container
   order:
     build:
       context: ./order
       dockerfile: Dockerfile
+      args:
+        GIT_COMMIT: $(git rev-parse --short=7 HEAD)
     ports:
       - 9090:9090
     restart: always
+    container_name: order_container
