@@ -10,7 +10,7 @@ services:
       - 8080:8080
     restart: always
     container_name: product_container
-    image: product_image:$${GIT_COMMIT:0:7} # Use double dollar signs to escape the interpolation
+    image: product_image:${GIT_COMMIT}
   order:
     build:
       context: ./order
@@ -21,4 +21,4 @@ services:
       - 9090:9090
     restart: always
     container_name: order_container
-    image: order_image:$${GIT_COMMIT:0:7} # Use double dollar signs to escape the interpolation
+    image: order_image:${GIT_COMMIT}
