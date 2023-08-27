@@ -29,9 +29,9 @@ pipeline {
         script {
           sh 'docker rm -f product_container'
           sh 'docker rm -f order_container'
+        }
       }
     }
-    
 /*
     stage('Deploy Product Microservice') {
       steps {
