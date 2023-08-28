@@ -1,18 +1,27 @@
 from flask import Flask, jsonify, request
+from requests_oauthlib import OAuth1Session
+import os
 
 app = Flask(__name__)
+
+api_url = os.getenv('API_URL')
+consumer_key = os.getenv('CONSUMER_KEY')
+consumer_secret = os.getenv('CONSUMER_SECRET')
 
 @app.route('/add_order', methods=['POST'])
 def add_order():
     # Get the order data from the request
     order_data = request.json
 
+    # Set up the OAuth1Session for authentication
+    oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
+
     # Set up the API endpoint and headers
-    url = 'http://192.168.10.10:8080/wp-json/wc/v3/orders'
+    url = api_url + '/orders'
     headers = {'Content-Type': 'application/json'}
 
     # Send the POST request to add the order
-    response = requests.post(url, headers=headers, json=order_data)
+    response = oauth.post(url, headers=headers, json=order_data)
 
     # Handle the response from the WooCommerce API
     if response.status_code == 201:
@@ -23,12 +32,15 @@ def add_order():
 
 @app.route('/delete_order/<order_id>', methods=['DELETE'])
 def delete_order(order_id):
+    # Set up the OAuth1Session for authentication
+    oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
+
     # Set up the API endpoint and headers
-    url = f'http://192.168.10.10:8080/wp-json/wc/v3/orders/{order_id}'
+    url = api_url + f'/orders/{order_id}'
     headers = {'Content-Type': 'application/json'}
 
     # Send the DELETE request to delete the order
-    response = requests.delete(url, headers=headers)
+    response = oauth.delete(url, headers=headers)
 
     # Handle the response from the WooCommerce API
     if response.status_code == 200:
@@ -41,12 +53,15 @@ def update_order(order_id):
     # Get the order data from the request
     order_data = request.json
 
+    # Set up the OAuth1Session for authentication
+    oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
+
     # Set up the API endpoint and headers
-    url = f'http://192.168.10.10:8080/wp-json/wc/v3/orders/{order_id}'
+    url = api_url + f'/orders/{order_id}'
     headers = {'Content-Type': 'application/json'}
 
     # Send the PUT request to update the order
-    response = requests.put(url, headers=headers, json=order_data)
+    response = oauth.put(url, headers=headers, json=order_data)
 
     # Handle the response from the WooCommerce API
     if response.status_code == 200:
@@ -56,12 +71,15 @@ def update_order(order_id):
 
 @app.route('/get_order/<order_id>', methods=['GET'])
 def get_order(order_id):
+    # Set up the OAuth1Session for authentication
+    oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
+
     # Set up the API endpoint and headers
-    url = f'http://192.168.10.10:8080/wp-json/wc/v3/orders/{order_id}'
+    url = api_url + f'/orders/{order_id}'
     headers = {'Content-Type': 'application/json'}
 
     # Send the GET request to retrieve the order
-    response = requests.get(url, headers=headers)
+    response = oauth.get(url, headers=headers)
 
     # Handle the response from the WooCommerce API
     if response.status_code == 200:
