@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request
 from requests_oauthlib import OAuth1Session
 import os
 import jwt
-import psycopg2
+from sqlalchemy import create_engine
 from datetime import datetime, timedelta
 from functools import wraps
 
@@ -15,14 +15,6 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['JWT_EXPIRATION_DELTA'] = timedelta(hours=1)
 
 
-# Establish a connection to the PostgreSQL database
-conn = psycopg2.connect(
-    database="mydatabase",
-    user="postgres",
-    password="example",
-    host="192.168.10.30",
-    port="5432",
-)
 
 def token_required(f):
     @wraps(f)
@@ -49,11 +41,21 @@ def token_required(f):
 def get_token():
     username = request.json.get('username')
     password = request.json.get('password')
+    
+    # Create a SQLAlchemy engine
+    engine = create_engine('postgresql://postgres:example@192.168.10.30/mydatabase')
 
-    # Query the database to check if the username and password match
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM product WHERE username = %s AND password = %s", (username, password))
-    result = cursor.fetchone()
+    # Execute a SQL query
+    rows = engine.execute('SELECT * FROM product')
+
+    # Fetch all rows from the result
+    result = rows.fetchall()
+
+
+    # Close the result and the engine
+    result.close()
+    engine.dispose()
+    
 
     if result:
         secret_key = os.getenv('SECRET_KEY')
@@ -61,7 +63,7 @@ def get_token():
         token = jwt.encode({'user': username, 'exp': expiration_time}, secret_key, algorithm="HS256")
         return jsonify({'access_token': token})
     else:
-        return jsonify({'error': 'Invalid credentials'}), 4011
+        return jsonify({'error': 'Invalid credentials'}), 401
 
 @app.route('/add_product', methods=['POST'])
 @token_required
