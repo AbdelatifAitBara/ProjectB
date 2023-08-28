@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from requests_oauthlib import OAuth1Session
 import os
+import redis
 import jwt
 from datetime import datetime, timedelta
 from functools import wraps
@@ -12,6 +13,9 @@ consumer_secret = os.getenv('CONSUMER_SECRET')
 api_url = os.getenv('API_URL')
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['JWT_EXPIRATION_DELTA'] = timedelta(hours=1)
+
+# Create a Redis client
+redis_client = redis.Redis(host='redis', port=6379, db=0)
 
 def token_required(f):
     @wraps(f)
@@ -38,7 +42,9 @@ def token_required(f):
 def get_token():
     username = request.json.get('username')
     password = request.json.get('password')
-    if username == 'admin' and password == 'password':
+
+    # Check if the username and password are correct using Redis
+    if redis_client.hget('users', username) == password:
         secret_key = os.getenv('SECRET_KEY')
         expiration_time = datetime.utcnow() + timedelta(minutes=15)
         token = jwt.encode({'user': username, 'exp': expiration_time}, secret_key, algorithm="HS256")

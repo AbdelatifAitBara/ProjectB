@@ -1,5 +1,6 @@
 version: '3'
 services:
+
   product:
     build:
       context: ./product
@@ -11,6 +12,9 @@ services:
     restart: always
     container_name: product_container
     image: product_image:${GIT_COMMIT}
+    depends_on:
+      - redis
+
   order:
     build:
       context: ./order
@@ -22,3 +26,12 @@ services:
     restart: always
     container_name: order_container
     image: order_image:${GIT_COMMIT}
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:latest
+    ports:
+      - 6379:6379
+    restart: always
+    container_name: redis_container
