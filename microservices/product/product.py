@@ -36,7 +36,6 @@ def token_required(f):
 
     return decorated
 
-import psycopg2
 
 @app.route('/token', methods=['POST'])
 def get_token():
