@@ -49,14 +49,13 @@ def get_token():
     cur.execute("SELECT password FROM users WHERE username = %s", (username,))
     result = cur.fetchone()
 
-    if result is None or result[0] != password:
+    if result and result[0] == password:
+        secret_key = os.getenv('SECRET_KEY')
+        expiration_time = datetime.utcnow() + timedelta(minutes=15)
+        token = jwt.encode({'user': username, 'exp': expiration_time}, secret_key, algorithm="HS256")
+        return jsonify({'access_token': token})
+    else:
         return jsonify({'error': 'Invalid credentials'}), 401
-
-    secret_key = os.getenv('SECRET_KEY')
-    expiration_time = datetime.utcnow() + timedelta(minutes=15)
-    token = jwt.encode({'user': username, 'exp': expiration_time}, secret_key, algorithm="HS256")
-    return jsonify({'access_token': token})
-
 
 @app.route('/add_product', methods=['POST'])
 @token_required
