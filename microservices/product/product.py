@@ -36,14 +36,7 @@ def token_required(f):
 
     return decorated
 
-
-@app.route('/token', methods=['POST'])
-def get_token():
-    username = request.json.get('username')
-    password = request.json.get('password')
-
-    # Connect to the PostgreSQL database
-    conn = psycopg2.connect(
+conn = psycopg2.connect(
         host="192.168.10.30",
         port=5432,
         database="mydatabase",
@@ -51,29 +44,23 @@ def get_token():
         password="example"
     )
     
-    # Define the query
-    cur = conn.cursor()
-    cur.execute("SELECT * FROM users WHERE username=%s AND password=%s", (username, password))
+    # Open a cursor to perform database operations
+cur = conn.cursor()
 
-    #ssquery = "SELECT role FROM product WHERE role = 'shop manager' AND password = %s and username = %s;"
+    # Execute an SQL query to retrieve the username, password, and role
+cur.execute("SELECT usename, passwd, rolname FROM pg_user JOIN pg_auth_members ON pg_user.usesysid = pg_auth_members.member JOIN pg_roles ON pg_auth_members.roleid = pg_roles.oid")
 
-    # Fetch the result
-    result = cur.fetchone()
+    # Fetch all the rows returned by the query
+rows = cur.fetchall()
 
-    # Close database connection
-    cur.close()
-    conn.close()
+    # Print the username, password, and role for each row
+for row in rows:
+        print("Username:", row[0])
+        print("Password:", row[1])
+        print("Role:", row[2])
+        print()
     
-    # Check if the result = 'shop manager'
-    if result and result[0] == "shop manager":
-        secret_key = os.getenv('SECRET_KEY')
-        expiration_time = datetime.utcnow() + timedelta(minutes=15)
-        token = jwt.encode({'user': username, 'role': result[0], 'exp': expiration_time}, secret_key, algorithm="HS256")
-        return json.dumps({'access_token': token.decode('utf-8')})
-    else:
-        return json.dumps({'error': 'Invalid credentials or insufficient permissions'}), 401
     
-
 @app.route('/add_product', methods=['POST'])
 @token_required
 def add_product(current_user):
