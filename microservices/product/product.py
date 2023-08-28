@@ -54,15 +54,17 @@ def get_token():
     # Define the query
     query = "SELECT role FROM product WHERE role = 'shop manager' AND password = %s and username = %s;"
 
+    # Create a cursor to execute the query
+    cur = conn.cursor()
     
     # Execute the query
-    psycopg2.cursor.execute(query)
+    cur.execute(query, (password, username))
 
     # Fetch the result
-    result = psycopg2.cursor.fetchone()
+    result = cur.fetchone()
     
     # Close the cursor and connection
-    psycopg2.cursor.close()
+    cur.close()
     conn.close()
     
     # Check if the result is not None
