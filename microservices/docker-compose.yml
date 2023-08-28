@@ -5,7 +5,7 @@ services:
       context: ./product
       dockerfile: Dockerfile
       args:
-        GIT_COMMIT: $(git --git-dir=/home/vagrant/agent/ProjectB/.git rev-parse --short HEAD)
+        GIT_COMMIT: $$(git --git-dir=/home/vagrant/agent/ProjectB/.git rev-parse --short HEAD)
     ports:
       - 8080:8080
     restart: always
@@ -19,7 +19,7 @@ services:
       context: ./order
       dockerfile: Dockerfile
       args:
-        GIT_COMMIT: $(git --git-dir=/home/vagrant/agent/ProjectB/.git rev-parse --short HEAD)
+        GIT_COMMIT: $$(git --git-dir=/home/vagrant/agent/ProjectB/.git rev-parse --short HEAD)
     ports:
       - 9090:9090
     restart: always
