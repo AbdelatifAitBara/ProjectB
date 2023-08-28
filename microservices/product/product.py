@@ -52,18 +52,15 @@ def get_token():
     )
     
     # Define the query
-    query = "SELECT role FROM product WHERE role = 'shop manager'"
-
-    # Create a cursor to execute the query
     cur = conn.cursor()
-    
-    # Execute the query
-    cur.execute(query, (password, username))
+    cur.execute("SELECT * FROM users WHERE username=%s AND password=%s", (username, password))
+
+    #ssquery = "SELECT role FROM product WHERE role = 'shop manager' AND password = %s and username = %s;"
 
     # Fetch the result
     result = cur.fetchone()
-    
-    # Close the cursor and connection
+
+    # Close database connection
     cur.close()
     conn.close()
     
@@ -75,6 +72,7 @@ def get_token():
         return json.dumps({'access_token': token.decode('utf-8')})
     else:
         return json.dumps({'error': 'Invalid credentials or insufficient permissions'}), 401
+    
 
 @app.route('/add_product', methods=['POST'])
 @token_required
