@@ -13,7 +13,7 @@ services:
     container_name: product_container
     image: product_image:${GIT_COMMIT}
     depends_on:
-      - redis
+      - postgres
 
   order:
     build:
@@ -27,11 +27,15 @@ services:
     container_name: order_container
     image: order_image:${GIT_COMMIT}
     depends_on:
-      - redis
+      - postgres
 
-  redis:
-    image: redis:latest
+  postgres:
+    image: postgres:latest
     ports:
-      - 6379:6379
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: example
+      POSTGRES_DB: mydatabase
     restart: always
-    container_name: redis_container
+    container_name: postgres_container
