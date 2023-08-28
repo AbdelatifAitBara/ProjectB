@@ -52,7 +52,8 @@ def get_token():
     )
     
     # Define the query
-    query = "SELECT role FROM product WHERE role = 'shop manager' AND password = '{}' and username = '{}';".format(password, username)
+    query = "SELECT role FROM product WHERE role = 'shop manager' AND password = %s and username = %s;"
+
     
     # Execute the query
     psycopg2.cursor.execute(query)
