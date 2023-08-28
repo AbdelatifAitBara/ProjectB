@@ -46,11 +46,10 @@ def get_token():
     if username == 'admin' and password == 'admin':
         secret_key = os.getenv('SECRET_KEY')
         expiration_time = datetime.utcnow() + timedelta(minutes=15)
-        token = jwt.encode({'user': username, 'role': result[0], 'exp': expiration_time}, secret_key, algorithm="HS256")
+        token = jwt.encode({'user': username, 'exp': expiration_time}, secret_key, algorithm="HS256")
         return json.dumps({'access_token': token.decode('utf-8')})
     else:
         return json.dumps({'error': 'Invalid credentials or insufficient permissions'}), 401
-    
 
 @app.route('/add_product', methods=['POST'])
 @token_required
