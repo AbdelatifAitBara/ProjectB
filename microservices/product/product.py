@@ -40,6 +40,8 @@ def token_required(f):
 
     return decorated
 
+import psycopg2
+
 @app.route('/token', methods=['POST'])
 def get_token():
     username = request.json.get('username')
@@ -47,7 +49,8 @@ def get_token():
 
     # Connect to the PostgreSQL database
     conn = psycopg2.connect(
-        host="postgres",
+        host="192.168.10.30",
+        port=5432,
         database="mydatabase",
         user="postgres",
         password="example"
