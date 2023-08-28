@@ -51,7 +51,7 @@ def get_token():
 
     # Query the database to check if the username and password match
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM users WHERE username = %s AND password = %s", (username, password))
+    cursor.execute("SELECT * FROM product WHERE username = %s AND password = %s", (username, password))
     result = cursor.fetchone()
 
     if result:
