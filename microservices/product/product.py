@@ -13,6 +13,16 @@ api_url = os.getenv('API_URL')
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['JWT_EXPIRATION_DELTA'] = timedelta(hours=1)
 
+
+# Establish a connection to the PostgreSQL database
+conn = psycopg2.connect(
+    database="mydatabase",
+    user="postgres",
+    password="example",
+    host="192.168.10.30",
+    port="5432",
+)
+
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
@@ -38,13 +48,19 @@ def token_required(f):
 def get_token():
     username = request.json.get('username')
     password = request.json.get('password')
-    if username == 'admin' and password == 'password':
+
+    # Query the database to check if the username and password match
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM users WHERE username = %s AND password = %s", (username, password))
+    result = cursor.fetchone()
+
+    if result:
         secret_key = os.getenv('SECRET_KEY')
         expiration_time = datetime.utcnow() + timedelta(minutes=15)
         token = jwt.encode({'user': username, 'exp': expiration_time}, secret_key, algorithm="HS256")
         return jsonify({'access_token': token})
     else:
-        return jsonify({'error': 'Invalid credentials'}), 401
+        return jsonify({'error': 'Invalid credentials'}), 4011
 
 @app.route('/add_product', methods=['POST'])
 @token_required
