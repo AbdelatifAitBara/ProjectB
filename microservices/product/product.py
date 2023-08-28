@@ -50,21 +50,28 @@ def get_token():
         user="postgres",
         password="example"
     )
+    
+    # Define the query
+    query = "SELECT role FROM product WHERE role = 'shop manager' AND password = '{}' and username = '{}';".format(password, username)
+    
+    # Execute the query
+    psycopg2.cursor.execute(query)
 
-    # Execute a query to check if the username, password, and role are correct
-    cur = conn.cursor()
-    cur.execute("SELECT role FROM product WHERE username = %s AND password = %s AND role = %s", (username, password, "shop manager"))
-    result = cur.fetchone()
-
-    if result:
+    # Fetch the result
+    result = psycopg2.cursor.fetchone()
+    
+    # Close the cursor and connection
+    psycopg2.cursor.close()
+    conn.close()
+    
+    # Check if the result is not None
+    if result is not None:
         secret_key = os.getenv('SECRET_KEY')
         expiration_time = datetime.utcnow() + timedelta(minutes=15)
         token = jwt.encode({'user': username, 'role': result[0], 'exp': expiration_time}, secret_key, algorithm="HS256")
         return json.dumps({'access_token': token.decode('utf-8')})
     else:
         return json.dumps({'error': 'Invalid credentials or insufficient permissions'}), 401
-    
-    
 
 @app.route('/add_product', methods=['POST'])
 @token_required
