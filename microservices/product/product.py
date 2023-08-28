@@ -47,7 +47,7 @@ def get_token():
         host="192.168.10.30",
         port=5432,
         database="mydatabase",
-        user="postgr",
+        user="postgres",
         password="example"
     )
     
