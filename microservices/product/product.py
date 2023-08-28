@@ -1,15 +1,52 @@
 from flask import Flask, jsonify, request
 from requests_oauthlib import OAuth1Session
 import os
+import jwt
+from datetime import datetime, timedelta
+from functools import wraps
 
 app = Flask(__name__)
 
 consumer_key = os.getenv('CONSUMER_KEY')
 consumer_secret = os.getenv('CONSUMER_SECRET')
 api_url = os.getenv('API_URL')
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+app.config['JWT_EXPIRATION_DELTA'] = timedelta(hours=1)
+
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = None
+
+        if 'Authorization' in request.headers:
+            token = request.headers['Authorization'].split(' ')[1]
+
+        if not token:
+            return jsonify({'error': 'Token is missing!'}), 401
+
+        try:
+            data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
+            current_user = data['user']
+        except:
+            return jsonify({'error': 'Token is invalid!'}), 401
+
+        return f(current_user, *args, **kwargs)
+
+    return decorated
+
+@app.route('/token', methods=['POST'])
+def get_token():
+    username = request.json.get('username')
+    password = request.json.get('password')
+    if username == 'admin' and password == 'password':
+        token = jwt.encode({'user': username, 'exp': datetime.utcnow() + app.config['JWT_EXPIRATION_DELTA']}, app.config['SECRET_KEY'], algorithm="HS256")
+        return jsonify({'access_token': token.decode('utf-8')})
+    else:
+        return jsonify({'error': 'Invalid credentials'}), 401
 
 @app.route('/add_product', methods=['POST'])
-def add_product():
+@token_required
+def add_product(current_user):
     # Get the product data from the request
     product_data = request.json
 
@@ -32,7 +69,8 @@ def add_product():
         return jsonify({'error': 'Failed to add product.'}), 400
 
 @app.route('/delete_product/<product_id>', methods=['DELETE'])
-def delete_product(product_id):
+@token_required
+def delete_product(current_user, product_id):
     # Set up the OAuth1Session for authentication
     oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
 
@@ -50,7 +88,8 @@ def delete_product(product_id):
         return jsonify({'error': 'Failed to delete product.'}), 400
 
 @app.route('/update_product/<product_id>', methods=['PUT'])
-def update_product(product_id):
+@token_required
+def update_product(current_user, product_id):
     # Get the product data from the request
     product_data = request.json
 
@@ -71,7 +110,8 @@ def update_product(product_id):
         return jsonify({'error': 'Failed to update product.'}), 400
 
 @app.route('/get_product/<product_id>', methods=['GET'])
-def get_product(product_id):
+@token_required
+def get_product(current_user, product_id):
     # Set up the OAuth1Session for authentication
     oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
 
