@@ -38,7 +38,7 @@ Vagrant.configure("2") do |config|
   end
 
 
-  # Deploy Jenkins Master
+# Deploy Jenkins Master
 
   config.vm.define "JenkinsMaster" do |master|
     master.vm.hostname = "JenkinsMaster"
