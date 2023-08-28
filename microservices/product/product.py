@@ -68,7 +68,7 @@ def get_token():
     conn.close()
     
     # Check if the result = 'shop manager'
-    if result == "shop manager":
+    if result and result[0] == "shop manager":
         secret_key = os.getenv('SECRET_KEY')
         expiration_time = datetime.utcnow() + timedelta(minutes=15)
         token = jwt.encode({'user': username, 'role': result[0], 'exp': expiration_time}, secret_key, algorithm="HS256")
