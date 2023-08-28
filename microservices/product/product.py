@@ -45,17 +45,26 @@ def get_token():
     username = request.json.get('username')
     password = request.json.get('password')
 
-    # Check if the username and password are correct using PostgreSQL
-    cur.execute("SELECT password FROM users WHERE username = %s", (username,))
+    # Connect to the PostgreSQL database
+    conn = psycopg2.connect(
+        host="http://192.168.10.30:5432",
+        database="mydatabase",
+        user="postgres",
+        password="example"
+    )
+
+    # Execute a query to check if the username, password, and role are correct
+    cur = conn.cursor()
+    cur.execute("SELECT role FROM users WHERE username = %s AND password = %s AND role = %s", (username, password, "shop manager"))
     result = cur.fetchone()
 
-    if result and result[0] == password:
+    if result:
         secret_key = os.getenv('SECRET_KEY')
         expiration_time = datetime.utcnow() + timedelta(minutes=15)
-        token = jwt.encode({'user': username, 'exp': expiration_time}, secret_key, algorithm="HS256")
+        token = jwt.encode({'user': username, 'role': result[0], 'exp': expiration_time}, secret_key, algorithm="HS256")
         return jsonify({'access_token': token})
     else:
-        return jsonify({'error': 'Invalid credentials'}), 401
+        return jsonify({'error': 'Invalid credentials or insufficient permissions'}), 401
 
 @app.route('/add_product', methods=['POST'])
 @token_required
