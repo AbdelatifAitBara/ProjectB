@@ -17,6 +17,10 @@ app.config['JWT_EXPIRATION_DELTA'] = timedelta(hours=1)
 # Create a Redis client
 redis_client = redis.Redis(host='redis', port=6379, db=0)
 
+# Add usernames and passwords to Redis
+redis_client.hset('users', 'lotfi', 'password')
+redis_client.hset('users', 'phenix', 'pass')
+
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
