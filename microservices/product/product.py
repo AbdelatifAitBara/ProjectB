@@ -47,7 +47,7 @@ def get_token():
 
     # Connect to the PostgreSQL database
     conn = psycopg2.connect(
-        host="http://192.168.10.30:5432",
+        host="postgres",
         database="mydatabase",
         user="postgres",
         password="example"
