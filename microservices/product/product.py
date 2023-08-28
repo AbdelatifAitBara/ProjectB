@@ -10,7 +10,7 @@ app = Flask(__name__)
 consumer_key = os.getenv('CONSUMER_KEY')
 consumer_secret = os.getenv('CONSUMER_SECRET')
 api_url = os.getenv('API_URL')
-app.config['SECRET_KEY'] = 'sk_fYVw52zywDRVAgsC8yUi2TXFRu1MmtPK'
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['JWT_EXPIRATION_DELTA'] = timedelta(hours=1)
 
 def token_required(f):
@@ -39,8 +39,9 @@ def get_token():
     username = request.json.get('username')
     password = request.json.get('password')
     if username == 'admin' and password == 'password':
-        secret_key = 'sk_fYVw52zywDRVAgsC8yUi2TXFRu1MmtPK'
-        token = jwt.encode({'user': username, 'exp': datetime.utcnow() + app.config['JWT_EXPIRATION_DELTA']}, secret_key, algorithm="HS256")
+        secret_key = os.getenv('SECRET_KEY')
+        expiration_time = datetime.utcnow() + timedelta(minutes=15)
+        token = jwt.encode({'user': username, 'exp': expiration_time}, secret_key, algorithm="HS256")
         return jsonify({'access_token': token})
     else:
         return jsonify({'error': 'Invalid credentials'}), 401
