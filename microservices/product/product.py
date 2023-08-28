@@ -36,31 +36,22 @@ def token_required(f):
 
     return decorated
 
-conn = psycopg2.connect(
-        host="192.168.10.30",
-        port=5432,
-        database="mydatabase",
-        user="postgres",
-        password="example"
-    )
-    
-    # Open a cursor to perform database operations
-cur = conn.cursor()
 
-    # Execute an SQL query to retrieve the username, password, and role
-cur.execute("SELECT usename, passwd, rolname FROM pg_user JOIN pg_auth_members ON pg_user.usesysid = pg_auth_members.member JOIN pg_roles ON pg_auth_members.roleid = pg_roles.oid")
+@app.route('/token', methods=['POST'])
+def get_token():
+    username = request.json.get('username')
+    password = request.json.get('password')
 
-    # Fetch all the rows returned by the query
-rows = cur.fetchall()
+    # if the username and the password are correct then return the token
+    if username == 'admin' and password == 'admin':
+        secret_key = os.getenv('SECRET_KEY')
+        expiration_time = datetime.utcnow() + timedelta(minutes=15)
+        token = jwt.encode({'user': username, 'role': result[0], 'exp': expiration_time}, secret_key, algorithm="HS256")
+        return json.dumps({'access_token': token.decode('utf-8')})
+    else:
+        return json.dumps({'error': 'Invalid credentials or insufficient permissions'}), 401
+    
 
-    # Print the username, password, and role for each row
-for row in rows:
-        print("Username:", row[0])
-        print("Password:", row[1])
-        print("Role:", row[2])
-        print()
-    
-    
 @app.route('/add_product', methods=['POST'])
 @token_required
 def add_product(current_user):
