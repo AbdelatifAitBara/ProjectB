@@ -53,7 +53,7 @@ def get_token():
 
     # Execute a query to check if the username, password, and role are correct
     cur = conn.cursor()
-    cur.execute("SELECT role FROM users WHERE username = %s AND password = %s AND role = %s", (username, password, "shop manager"))
+    cur.execute("SELECT role FROM product WHERE username = %s AND password = %s AND role = %s", (username, password, "shop manager"))
     result = cur.fetchone()
 
     if result:
