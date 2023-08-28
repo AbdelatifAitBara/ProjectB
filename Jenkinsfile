@@ -3,6 +3,9 @@ pipeline {
 
   stages {
     stage('Clone Git Repository') {
+      when {
+                branch 'AAB'
+            }
       steps {
         sh 'rm -rf /home/vagrant/agent/ProjectB/'
         sh 'git -C /home/vagrant/agent/ clone --recursive git@github.com:AbdelatifAitBara/ProjectB.git'
@@ -25,6 +28,9 @@ pipeline {
 */
 
     stage('Remove Containers Running on Ports 8080 and 9090') {
+      when {
+                branch 'AAB'
+            }
       steps {
         script {
           sh 'docker rm -f product_container'
@@ -50,6 +56,9 @@ pipeline {
 */
 
     stage('Build') {
+      when {
+                branch 'AAB'
+            }
       steps {
         // Build your microservices using Docker-compose
         sh 'docker-compose -f microservices/docker-compose.yml build'
@@ -57,6 +66,9 @@ pipeline {
     }
     
     stage('Deploy') {
+      when {
+          branch 'AAB'
+      }
       steps {
         // Deploy your microservices using Docker-compose
         sh 'docker-compose -f microservices/docker-compose.yml up -d'
@@ -65,6 +77,9 @@ pipeline {
 
     
     stage('Product Microservice Test') {
+      when {
+                branch 'AAB'
+          }
       steps {
         sh 'sleep 6'
         sh 'python3 -m unittest test_product.py'
