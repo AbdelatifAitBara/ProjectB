@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, json
 from requests_oauthlib import OAuth1Session
 import os
 import psycopg2
@@ -60,9 +60,11 @@ def get_token():
         secret_key = os.getenv('SECRET_KEY')
         expiration_time = datetime.utcnow() + timedelta(minutes=15)
         token = jwt.encode({'user': username, 'role': result[0], 'exp': expiration_time}, secret_key, algorithm="HS256")
-        return jsonify({'access_token': token})
+        return json.dumps({'access_token': token.decode('utf-8')})
     else:
-        return jsonify({'error': 'Invalid credentials or insufficient permissions'}), 401
+        return json.dumps({'error': 'Invalid credentials or insufficient permissions'}), 401
+    
+    
 
 @app.route('/add_product', methods=['POST'])
 @token_required
