@@ -41,7 +41,7 @@ def token_required(f):
 def get_token():
     username = request.json.get('username')
     password = request.json.get('password')
-    
+
     # Create a SQLAlchemy engine
     engine = create_engine('postgresql://postgres:example@192.168.10.30/mydatabase')
 
@@ -51,13 +51,11 @@ def get_token():
     # Fetch all rows from the result
     result = rows.fetchall()
 
-
     # Close the result and the engine
-    result.close()
+    rows.close()
     engine.dispose()
-    
 
-    if result:
+    if username == 'admin' and password == 'password':
         secret_key = os.getenv('SECRET_KEY')
         expiration_time = datetime.utcnow() + timedelta(minutes=15)
         token = jwt.encode({'user': username, 'exp': expiration_time}, secret_key, algorithm="HS256")
