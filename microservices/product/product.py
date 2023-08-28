@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 from requests_oauthlib import OAuth1Session
 import os
 import jwt
+import psycopg2
 from datetime import datetime, timedelta
 from functools import wraps
 
