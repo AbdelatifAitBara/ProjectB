@@ -1,7 +1,6 @@
-from flask import Flask, jsonify, request, json
+from flask import Flask, jsonify, request
 from requests_oauthlib import OAuth1Session
 import os
-import psycopg2
 import jwt
 from datetime import datetime, timedelta
 from functools import wraps
@@ -13,7 +12,6 @@ consumer_secret = os.getenv('CONSUMER_SECRET')
 api_url = os.getenv('API_URL')
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['JWT_EXPIRATION_DELTA'] = timedelta(hours=1)
-
 
 def token_required(f):
     @wraps(f)
@@ -36,20 +34,17 @@ def token_required(f):
 
     return decorated
 
-
 @app.route('/token', methods=['POST'])
 def get_token():
     username = request.json.get('username')
     password = request.json.get('password')
-
-    # if the username and the password are correct then return the token
-    if username == 'admin' and password == 'admin':
+    if username == 'admin' and password == 'password':
         secret_key = os.getenv('SECRET_KEY')
         expiration_time = datetime.utcnow() + timedelta(minutes=15)
         token = jwt.encode({'user': username, 'exp': expiration_time}, secret_key, algorithm="HS256")
-        return json.dumps({'access_token': token.decode('utf-8')})
+        return jsonify({'access_token': token})
     else:
-        return json.dumps({'error': 'Invalid credentials or insufficient permissions'}), 401
+        return jsonify({'error': 'Invalid credentials'}), 401
 
 @app.route('/add_product', methods=['POST'])
 @token_required
