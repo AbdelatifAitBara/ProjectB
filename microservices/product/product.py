@@ -52,7 +52,7 @@ def get_token():
     )
     
     # Define the query
-    query = "SELECT role FROM product WHERE role = 'shop manager' AND password = 'password' and username = 'abdelatif';"
+    query = "SELECT role FROM product WHERE role = 'shop manager' AND password = %s and username = %s;"
 
     # Create a cursor to execute the query
     cur = conn.cursor()
@@ -67,8 +67,8 @@ def get_token():
     cur.close()
     conn.close()
     
-    # Check if the result is not None
-    if result is not None:
+    # Check if the result = 'shop manager'
+    if result == "shop manager":
         secret_key = os.getenv('SECRET_KEY')
         expiration_time = datetime.utcnow() + timedelta(minutes=15)
         token = jwt.encode({'user': username, 'role': result[0], 'exp': expiration_time}, secret_key, algorithm="HS256")
