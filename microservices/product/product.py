@@ -2,7 +2,6 @@ from flask import Flask, jsonify, request
 from requests_oauthlib import OAuth1Session
 import os
 import jwt
-from sqlalchemy import create_engine
 from datetime import datetime, timedelta
 from functools import wraps
 
@@ -13,7 +12,6 @@ consumer_secret = os.getenv('CONSUMER_SECRET')
 api_url = os.getenv('API_URL')
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['JWT_EXPIRATION_DELTA'] = timedelta(hours=1)
-
 
 
 def token_required(f):
@@ -42,23 +40,13 @@ def get_token():
     username = request.json.get('username')
     password = request.json.get('password')
 
-    # Create a SQLAlchemy engine
-    engine = create_engine('postgresql://postgres:example@192.168.10.30/mydatabase')
-
-    # Execute a SQL query
-    rows = engine.execute('SELECT * FROM product')
-
-    # Fetch all rows from the result
-    result = rows.fetchall()
-
-    # Close the result and the engine
-    rows.close()
-    engine.dispose()
 
     if username == 'admin' and password == 'password':
+        
         secret_key = os.getenv('SECRET_KEY')
         expiration_time = datetime.utcnow() + timedelta(minutes=15)
         token = jwt.encode({'user': username, 'exp': expiration_time}, secret_key, algorithm="HS256")
+        
         return jsonify({'access_token': token})
     else:
         return jsonify({'error': 'Invalid credentials'}), 401
