@@ -62,9 +62,10 @@ def add_product(current_user):
     # Get the product data from the request
     product_data = request.json
 
-    # Check if product_data is empty
-    if not product_data:
-        return jsonify({'error': 'Product data is empty.'}), 400
+    # Check if any field is empty
+    for key, value in product_data.items():
+        if not value:
+            return jsonify({'error': f'{key} is required.'}), 400
 
     # Set up the OAuth1Session for authentication
     oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
