@@ -24,7 +24,7 @@ conn = psycopg2.connect(
 
 cursor = conn.cursor()
 cursor.execute("""
-    CREATE TABLE products (
+    CREATE TABLE prod (
         product_id SERIAL PRIMARY KEY,
         name VARCHAR(255) NOT NULL,
         price NUMERIC(10, 2) NOT NULL
@@ -91,7 +91,7 @@ def add_product(current_user):
 
         # Insert the product data into the PostgreSQL database
         cursor = conn.cursor()
-        cursor.execute("INSERT INTO products (product_id, name, price) VALUES (%s, %s, %s)",
+        cursor.execute("INSERT INTO prod (product_id, name, price) VALUES (%s, %s, %s)",
                     (product_id, product_data['name'], product_data['price']))
         conn.commit()
 
