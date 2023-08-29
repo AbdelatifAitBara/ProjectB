@@ -79,11 +79,13 @@ def add_product(current_user):
         with connection.cursor() as cursor:
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS products (
-                    id INT(11) NOT NULL AUTO_INCREMENT,
-                    name VARCHAR(255) NOT NULL,
-                    price DECIMAL(10, 2) NOT NULL,
-                    description TEXT,
-                    PRIMARY KEY (id)
+                        id INT(11) NOT NULL,
+                        name VARCHAR(255) NOT NULL,
+                        price DECIMAL(10, 2) NOT NULL,
+                        description TEXT,
+                        type VARCHAR(255) NOT NULL,
+                        short_description TEXT,
+                        PRIMARY KEY (id)
                 )
             """)
 
