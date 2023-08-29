@@ -9,7 +9,7 @@ services:
     ports:
       - 8080:8080
     restart: always
-    container_name: product_container
+    container_name: Product_Container
     image: product_image:${GIT_COMMIT}
     depends_on:
       - db
@@ -23,7 +23,7 @@ services:
     ports:
       - 9090:9090
     restart: always
-    container_name: order_container
+    container_name: Order_Container
     image: order_image:${GIT_COMMIT}
     depends_on:
       - db
@@ -31,6 +31,7 @@ services:
   db:
     image: mysql:8.0
     restart: always
+    container_name: MySQL_Container
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: product_db
