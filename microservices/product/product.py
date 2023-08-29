@@ -5,6 +5,7 @@ import jwt
 from datetime import datetime, timedelta
 from functools import wraps
 import pymysql
+from cryptography.fernet import Fernet
 
 app = Flask(__name__)
 
