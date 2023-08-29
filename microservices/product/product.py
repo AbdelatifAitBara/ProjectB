@@ -12,7 +12,12 @@ consumer_secret = os.getenv('CONSUMER_SECRET')
 api_url = os.getenv('API_URL')
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['JWT_EXPIRATION_DELTA'] = timedelta(hours=1)
-users = os.getenv('USERS')
+
+
+users = {
+    os.getenv('USERNAME1'): {'password': os.getenv('PASSWORD1'), 'role': os.getenv('ROLE1')},
+    os.getenv('USERNAME2'): {'password': os.getenv('PASSWORD2'), 'role': os.getenv('ROLE2')}
+}
 
 def token_required(f):
     @wraps(f)
@@ -51,7 +56,7 @@ def get_token():
 @token_required
 def add_product(current_user):
     # Check user role
-    if users[current_user]['role'] != 'shop manager':
+    if users[current_user]['role'] != 'shop_manager':
         return jsonify({'error': 'Sorry, you are not authorized to access'}), 403
 
     # Get the product data from the request
@@ -79,7 +84,7 @@ def add_product(current_user):
 @token_required
 def delete_product(current_user, product_id):
     # Check user role
-    if users[current_user]['role'] != 'shop manager':
+    if users[current_user]['role'] != 'shop_manager':
         return jsonify({'error': 'Unauthorized access'}), 403
 
     # Set up the OAuth1Session for authentication
@@ -102,7 +107,7 @@ def delete_product(current_user, product_id):
 @token_required
 def update_product(current_user, product_id):
     # Check user role
-    if users[current_user]['role'] != 'shop manager':
+    if users[current_user]['role'] != 'shop_manager':
         return jsonify({'error': 'Unauthorized access'}), 403
 
     # Get the product data from the request
@@ -128,7 +133,7 @@ def update_product(current_user, product_id):
 @token_required
 def get_product(current_user, product_id):
     # Check user role
-    if users[current_user]['role'] != 'shop manager':
+    if users[current_user]['role'] != 'shop_manager':
         return jsonify({'error': 'Unauthorized access'}), 403
 
     # Set up the OAuth1Session for authentication
