@@ -22,6 +22,18 @@ conn = psycopg2.connect(
     password="example"
 )
 
+cursor = conn.cursor()
+cursor.execute("""
+    CREATE TABLE products (
+        product_id SERIAL PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        price NUMERIC(10, 2) NOT NULL
+    )
+""")
+conn.commit()
+cursor.close()
+conn.close()
+
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
