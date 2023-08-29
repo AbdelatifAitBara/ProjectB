@@ -40,14 +40,11 @@ def get_token():
     username = request.json.get('username')
     password = request.json.get('password')
 
-
     if username == 'admin' and password == 'password':
-        
         secret_key = os.getenv('SECRET_KEY')
         expiration_time = datetime.utcnow() + timedelta(minutes=15)
         token = jwt.encode({'user': username, 'exp': expiration_time}, secret_key, algorithm="HS256")
-        
-        return jsonify({'access_token': token})
+        return jsonify({'access_token': token.decode('UTF-8')})
     else:
         return jsonify({'error': 'Invalid credentials'}), 401
 
