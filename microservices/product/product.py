@@ -34,7 +34,7 @@ class Product:
         """)
         conn.commit()
         cursor.close()
-        conn.close()
+        #conn.close()
         
 
     def add_product(self, current_user, product_data):
