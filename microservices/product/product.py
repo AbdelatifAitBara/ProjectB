@@ -54,7 +54,7 @@ class Product:
 
             # Insert the product data into the PostgreSQL database
             cursor = conn.cursor()
-            cursor.execute("INSERT INTO prod (product_id, name, price) VALUES (%s, %s, %s)",
+            cursor.execute("INSERT INTO products (product_id, name, price) VALUES (%s, %s, %s)",
                         (product_id, product_data['name'], product_data['price']))
             conn.commit()
 
@@ -118,7 +118,7 @@ product = Product()
 
 def token_required(f):
     @wraps(f)
-    def decorated(*args, **kwargs):
+    def decorated(current_user, *args, **kwargs):
         token = None
 
         if 'Authorization' in request.headers:
@@ -142,10 +142,10 @@ def get_token():
     username = request.json.get('username')
     password = request.json.get('password')
     
-    if username == 'admin' and password == 'password':
+    if username is not None and password is not None and username == 'admin' and password == 'password':
         secret_key = os.getenv('SECRET_KEY')
-        expiration_time = datetime.utcnow() + timedelta(minutes=15)
-        token = jwt.encode({'user': username, 'exp': expiration_time}, secret_key, algorithm="HS256")
+        expiration_time = int((datetime.utcnow() + timedelta(minutes=15)).timestamp())
+        token = jwt.encode({'user': username, 'exp': expiration_time}, secret_key, algorithm="HS256").decode('utf-8')
         return jsonify({'access_token': token})
     else:
         return jsonify({'error': 'Invalid credentials'}), 401
