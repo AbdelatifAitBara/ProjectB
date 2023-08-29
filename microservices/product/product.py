@@ -4,6 +4,7 @@ import os
 import jwt
 from datetime import datetime, timedelta
 from functools import wraps
+import pymysql
 
 app = Flask(__name__)
 
