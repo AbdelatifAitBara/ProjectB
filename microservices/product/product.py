@@ -143,6 +143,7 @@ def get_product(current_user, product_id):
     url = f'{api_url}/wp-json/wc/v3/products/{product_id}'
     headers = {'Content-Type': 'application/json', 'Authorization': f'Bearer {request.headers["Authorization"].split(" ")[1]}'}
 
+
     # Send the GET request to retrieve the product
     response = oauth.get(url, headers=headers)
 
