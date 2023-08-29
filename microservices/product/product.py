@@ -4,8 +4,6 @@ import os
 import jwt
 from datetime import datetime, timedelta
 from functools import wraps
-import pymysql
-from cryptography.fernet import Fernet
 
 app = Flask(__name__)
 
@@ -64,47 +62,23 @@ def add_product(current_user):
     # Get the product data from the request
     product_data = request.json
 
-    # Connect to the MySQL database
-    connection = pymysql.connect(
-        host='192.168.10.30',
-        user='user',
-        password='password',
-        db='product_db',
-        charset='utf8mb4',
-        cursorclass=pymysql.cursors.DictCursor
-    )
+    # Set up the OAuth1Session for authentication
+    oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
 
-    try:
-        # Create the products table if it doesn't exist
-        with connection.cursor() as cursor:
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS products (
-                        id INT(11) NOT NULL,
-                        name VARCHAR(255) NOT NULL,
-                        price DECIMAL(10, 2) NOT NULL,
-                        description TEXT,
-                        type VARCHAR(255) NOT NULL,
-                        short_description TEXT,
-                        PRIMARY KEY (id)
-                )
-            """)
+    # Set up the API endpoint and headers
+    url = f'{api_url}/wp-json/wc/v3/products'
+    headers = {'Content-Type': 'application/json', 'Authorization': f'Bearer {request.headers["Authorization"].split(" ")[1]}'}
 
-        # Insert the product data into the database
-        with connection.cursor() as cursor:
-            sql = "INSERT INTO products (name, price, description) VALUES (%s, %s, %s)"
-            cursor.execute(sql, (product_data['name'], product_data['price'], product_data['description']))
-            connection.commit()
+    # Send the POST request to add the product
+    response = oauth.post(url, headers=headers, json=product_data)
 
-        # Return a success message
-        return jsonify({'message': 'Product added successfully.'}), 201
-
-    except Exception as e:
-        # Return an error message
-        return jsonify({'error': f'Failed to add product: {str(e)}'}), 400
-
-    finally:
-        # Close the database connection
-        connection.close()
+    # Handle the response from the WooCommerce API
+    if response.status_code == 201:
+        # Extract the product_id from the response body
+        product_id = response.json()['id']
+        return jsonify({'message': 'Product added successfully.', 'product_id': product_id}), 201
+    else:
+        return jsonify({'error': 'Failed to add product.'}), 400
 
 @app.route('/delete_product/<product_id>', methods=['DELETE'])
 @token_required
