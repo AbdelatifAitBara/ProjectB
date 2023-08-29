@@ -20,6 +20,7 @@ ENV CONSUMER_KEY='ck_dee05a6912d2c948e9607abb9e6174b330e04e6b'
 ENV CONSUMER_SECRET='cs_685e63b42008ef7ecb2ec9fc534b6b607fdee5ee'
 ENV API_URL='http://192.168.10.10:8080'
 ENV SECRET_KEY='sk_fYVw52zywDRVAgsC8yUi2TXFRu1MmtPK'
+ENV USERS='{"abdelatif": {"password": "password", "role": "shop manager"}, "user1": {"password": "password1", "role": "regular user"}, "user2": {"password": "password2", "role": "regular user"}}'
 ENV NAME World
 
 LABEL git_commit=$GIT_COMMIT

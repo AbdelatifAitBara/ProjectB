@@ -12,12 +12,7 @@ consumer_secret = os.getenv('CONSUMER_SECRET')
 api_url = os.getenv('API_URL')
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['JWT_EXPIRATION_DELTA'] = timedelta(hours=1)
-
-users = {
-    'admin': {'password': 'password1', 'role': 'shop manager'},
-    'user1': {'password': 'password2', 'role': 'regular user'},
-    'user2': {'password': 'password3', 'role': 'regular user'}
-}
+users = os.getenv('USERS')
 
 def token_required(f):
     @wraps(f)
