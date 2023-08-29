@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request
 from requests_oauthlib import OAuth1Session
+import psycopg2
 import os
 import jwt
 from datetime import datetime, timedelta
@@ -12,6 +13,14 @@ consumer_secret = os.getenv('CONSUMER_SECRET')
 api_url = os.getenv('API_URL')
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['JWT_EXPIRATION_DELTA'] = timedelta(hours=1)
+
+conn = psycopg2.connect(
+    host="192.168.10.30",
+    port="5432",
+    database="your_database",
+    user="postgres",
+    password="example"
+)
 
 def token_required(f):
     @wraps(f)
@@ -38,6 +47,7 @@ def token_required(f):
 def get_token():
     username = request.json.get('username')
     password = request.json.get('password')
+    
     if username == 'admin' and password == 'password':
         secret_key = os.getenv('SECRET_KEY')
         expiration_time = datetime.utcnow() + timedelta(minutes=15)
@@ -66,6 +76,13 @@ def add_product(current_user):
     if response.status_code == 201:
         # Extract the product_id from the response body
         product_id = response.json()['id']
+
+        # Insert the product data into the PostgreSQL database
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO products (product_id, name, price) VALUES (%s, %s, %s)",
+                    (product_id, product_data['name'], product_data['price']))
+        conn.commit()
+
         return jsonify({'message': 'Product added successfully.', 'product_id': product_id}), 201
     else:
         return jsonify({'error': 'Failed to add product.'}), 400
