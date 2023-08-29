@@ -17,7 +17,7 @@ app.config['JWT_EXPIRATION_DELTA'] = timedelta(hours=1)
 conn = psycopg2.connect(
     host="192.168.10.30",
     port="5432",
-    database="your_database",
+    database="mydatabase",
     user="postgres",
     password="example"
 )
