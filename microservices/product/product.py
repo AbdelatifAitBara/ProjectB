@@ -26,14 +26,16 @@ class Product:
     def __init__(self):
         cursor = conn.cursor()
         cursor.execute("""
-            CREATE TABLE IF NOT EXISTS prod (
-                product_id SERIAL PRIMARY KEY,
+            CREATE TABLE IF NOT EXISTS products (
+                id SERIAL PRIMARY KEY,
                 name VARCHAR(255) NOT NULL,
                 price NUMERIC(10, 2) NOT NULL
             )
         """)
         conn.commit()
         cursor.close()
+        conn.close()
+        
 
     def add_product(self, current_user, product_data):
         # Set up the OAuth1Session for authentication
