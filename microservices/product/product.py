@@ -13,6 +13,12 @@ api_url = os.getenv('API_URL')
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['JWT_EXPIRATION_DELTA'] = timedelta(hours=1)
 
+users = {
+    'admin': {'password': 'password1', 'role': 'shop manager'},
+    'user1': {'password': 'password2', 'role': 'regular user'},
+    'user2': {'password': 'password3', 'role': 'regular user'}
+}
+
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
@@ -38,7 +44,7 @@ def token_required(f):
 def get_token():
     username = request.json.get('username')
     password = request.json.get('password')
-    if username == 'admin' and password == 'password':
+    if username in users and password == users[username]['password']:
         secret_key = os.getenv('SECRET_KEY')
         expiration_time = datetime.utcnow() + timedelta(minutes=15)
         token = jwt.encode({'user': username, 'exp': expiration_time}, secret_key, algorithm="HS256")
@@ -49,6 +55,10 @@ def get_token():
 @app.route('/add_product', methods=['POST'])
 @token_required
 def add_product(current_user):
+    # Check user role
+    if users[current_user]['role'] != 'shop manager':
+        return jsonify({'error': 'Unauthorized access'}), 403
+
     # Get the product data from the request
     product_data = request.json
 
@@ -73,6 +83,10 @@ def add_product(current_user):
 @app.route('/delete_product/<product_id>', methods=['DELETE'])
 @token_required
 def delete_product(current_user, product_id):
+    # Check user role
+    if users[current_user]['role'] != 'shop manager':
+        return jsonify({'error': 'Unauthorized access'}), 403
+
     # Set up the OAuth1Session for authentication
     oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
 
@@ -92,6 +106,10 @@ def delete_product(current_user, product_id):
 @app.route('/update_product/<product_id>', methods=['PUT'])
 @token_required
 def update_product(current_user, product_id):
+    # Check user role
+    if users[current_user]['role'] != 'shop manager':
+        return jsonify({'error': 'Unauthorized access'}), 403
+
     # Get the product data from the request
     product_data = request.json
 
@@ -114,10 +132,14 @@ def update_product(current_user, product_id):
 @app.route('/get_product/<product_id>', methods=['GET'])
 @token_required
 def get_product(current_user, product_id):
+    # Check user role
+    if users[current_user]['role'] != 'shop manager':
+        return jsonify({'error': 'Unauthorized access'}), 403
+
     # Set up the OAuth1Session for authentication
     oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
 
-    # Set up the API endpoint and  headers 
+    # Set up the API endpoint and headers
     url = f'{api_url}/wp-json/wc/v3/products/{product_id}'
     headers = {'Content-Type': 'application/json', 'Authorization': f'Bearer {request.headers["Authorization"].split(" ")[1]}'}
 
