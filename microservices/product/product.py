@@ -57,7 +57,7 @@ def get_token():
 def add_product(current_user):
     # Check user role
     if users[current_user]['role'] != 'shop manager':
-        return jsonify({'error': 'Unauthorized access'}), 403
+        return jsonify({'error': 'Sorry, you are not authorized to access'}), 403
 
     # Get the product data from the request
     product_data = request.json
