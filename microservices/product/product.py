@@ -22,17 +22,98 @@ conn = psycopg2.connect(
     password="example"
 )
 
-cursor = conn.cursor()
-cursor.execute("""
-    CREATE TABLE prod (
-        product_id SERIAL PRIMARY KEY,
-        name VARCHAR(255) NOT NULL,
-        price NUMERIC(10, 2) NOT NULL
-    )
-""")
-conn.commit()
-cursor.close()
-conn.close()
+class Product:
+    def __init__(self):
+        cursor = conn.cursor()
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS prod (
+                product_id SERIAL PRIMARY KEY,
+                name VARCHAR(255) NOT NULL,
+                price NUMERIC(10, 2) NOT NULL
+            )
+        """)
+        conn.commit()
+        cursor.close()
+
+    def add_product(self, current_user, product_data):
+        # Set up the OAuth1Session for authentication
+        oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
+
+        # Set up the API endpoint and headers
+        url = f'{api_url}/wp-json/wc/v3/products'
+        headers = {'Content-Type': 'application/json', 'Authorization': f'Bearer {request.headers["Authorization"].split(" ")[1]}'}
+
+        # Send the POST request to add the product
+        response = oauth.post(url, headers=headers, json=product_data)
+
+        # Handle the response from the WooCommerce API
+        if response.status_code == 201:
+            # Extract the product_id from the response body
+            product_id = response.json()['id']
+
+            # Insert the product data into the PostgreSQL database
+            cursor = conn.cursor()
+            cursor.execute("INSERT INTO prod (product_id, name, price) VALUES (%s, %s, %s)",
+                        (product_id, product_data['name'], product_data['price']))
+            conn.commit()
+
+            return jsonify({'message': 'Product added successfully.', 'product_id': product_id}), 201
+        else:
+            return jsonify({'error': 'Failed to add product.'}), 400
+
+    def delete_product(self, current_user, product_id):
+        # Set up the OAuth1Session for authentication
+        oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
+
+        # Set up the API endpoint and headers
+        url = f'{api_url}/wp-json/wc/v3/products/{product_id}'
+        headers = {'Content-Type': 'application/json', 'Authorization': f'Bearer {request.headers["Authorization"].split(" ")[1]}'}
+
+        # Send the DELETE request to delete the product
+        response = oauth.delete(url, headers=headers)
+
+        # Handle the response from the WooCommerce API
+        if response.status_code == 200:
+            return jsonify({'message': 'Product deleted successfully.'}), 200
+        else:
+            return jsonify({'error': 'Failed to delete product.'}), 400
+
+    def update_product(self, current_user, product_id, product_data):
+        # Set up the OAuth1Session for authentication
+        oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
+
+        # Set up the API endpoint and headers
+        url = f'{api_url}/wp-json/wc/v3/products/{product_id}'
+        headers = {'Content-Type': 'application/json', 'Authorization': f'Bearer {request.headers["Authorization"].split(" ")[1]}'}
+
+        # Send the PUT request to update the product
+        response = oauth.put(url, headers=headers, json=product_data)
+
+        # Handle the response from the WooCommerce API
+        if response.status_code == 200:
+            return jsonify({'message': 'Product updated successfully.'}), 200
+        else:
+            return jsonify({'error': 'Failed to update product.'}), 400
+
+    def get_product(self, current_user, product_id):
+        # Set up the OAuth1Session for authentication
+        oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
+
+        # Set up the API endpoint and  headers 
+        url = f'{api_url}/wp-json/wc/v3/products/{product_id}'
+        headers = {'Content-Type': 'application/json', 'Authorization': f'Bearer {request.headers["Authorization"].split(" ")[1]}'}
+
+        # Send the GET request to retrieve the product
+        response = oauth.get(url, headers=headers)
+
+        # Handle the response from the WooCommerce API
+        if response.status_code == 200:
+            product = response.json()
+            return jsonify(product), 200
+        else:
+            return jsonify({'error': 'Failed to retrieve product.'}), 400
+
+product = Product()
 
 def token_required(f):
     @wraps(f)
@@ -74,49 +155,12 @@ def add_product(current_user):
     # Get the product data from the request
     product_data = request.json
 
-    # Set up the OAuth1Session for authentication
-    oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
-
-    # Set up the API endpoint and headers
-    url = f'{api_url}/wp-json/wc/v3/products'
-    headers = {'Content-Type': 'application/json', 'Authorization': f'Bearer {request.headers["Authorization"].split(" ")[1]}'}
-
-    # Send the POST request to add the product
-    response = oauth.post(url, headers=headers, json=product_data)
-
-    # Handle the response from the WooCommerce API
-    if response.status_code == 201:
-        # Extract the product_id from the response body
-        product_id = response.json()['id']
-
-        # Insert the product data into the PostgreSQL database
-        cursor = conn.cursor()
-        cursor.execute("INSERT INTO prod (product_id, name, price) VALUES (%s, %s, %s)",
-                    (product_id, product_data['name'], product_data['price']))
-        conn.commit()
-
-        return jsonify({'message': 'Product added successfully.', 'product_id': product_id}), 201
-    else:
-        return jsonify({'error': 'Failed to add product.'}), 400
+    return product.add_product(current_user, product_data)
 
 @app.route('/delete_product/<product_id>', methods=['DELETE'])
 @token_required
 def delete_product(current_user, product_id):
-    # Set up the OAuth1Session for authentication
-    oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
-
-    # Set up the API endpoint and headers
-    url = f'{api_url}/wp-json/wc/v3/products/{product_id}'
-    headers = {'Content-Type': 'application/json', 'Authorization': f'Bearer {request.headers["Authorization"].split(" ")[1]}'}
-
-    # Send the DELETE request to delete the product
-    response = oauth.delete(url, headers=headers)
-
-    # Handle the response from the WooCommerce API
-    if response.status_code == 200:
-        return jsonify({'message': 'Product deleted successfully.'}), 200
-    else:
-        return jsonify({'error': 'Failed to delete product.'}), 400
+    return product.delete_product(current_user, product_id)
 
 @app.route('/update_product/<product_id>', methods=['PUT'])
 @token_required
@@ -124,41 +168,12 @@ def update_product(current_user, product_id):
     # Get the product data from the request
     product_data = request.json
 
-    # Set up the OAuth1Session for authentication
-    oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
-
-    # Set up the API endpoint and headers
-    url = f'{api_url}/wp-json/wc/v3/products/{product_id}'
-    headers = {'Content-Type': 'application/json', 'Authorization': f'Bearer {request.headers["Authorization"].split(" ")[1]}'}
-
-    # Send the PUT request to update the product
-    response = oauth.put(url, headers=headers, json=product_data)
-
-    # Handle the response from the WooCommerce API
-    if response.status_code == 200:
-        return jsonify({'message': 'Product updated successfully.'}), 200
-    else:
-        return jsonify({'error': 'Failed to update product.'}), 400
+    return product.update_product(current_user, product_id, product_data)
 
 @app.route('/get_product/<product_id>', methods=['GET'])
 @token_required
 def get_product(current_user, product_id):
-    # Set up the OAuth1Session for authentication
-    oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
-
-    # Set up the API endpoint and  headers 
-    url = f'{api_url}/wp-json/wc/v3/products/{product_id}'
-    headers = {'Content-Type': 'application/json', 'Authorization': f'Bearer {request.headers["Authorization"].split(" ")[1]}'}
-
-    # Send the GET request to retrieve the product
-    response = oauth.get(url, headers=headers)
-
-    # Handle the response from the WooCommerce API
-    if response.status_code == 200:
-        product = response.json()
-        return jsonify(product), 200
-    else:
-        return jsonify({'error': 'Failed to retrieve product.'}), 400
+    return product.get_product(current_user, product_id)
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=8080)
