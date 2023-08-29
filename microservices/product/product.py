@@ -67,6 +67,17 @@ def add_product(current_user):
         if not value:
             return jsonify({'error': f'{key} is required.'}), 400
 
+    # Check if any field contains special characters
+    for key, value in product_data.items():
+        if not value.isalnum():
+            return jsonify({'error': f'{key} should not contain special characters.'}), 400
+
+    # Check if any field is too long
+    max_length = 100
+    for key, value in product_data.items():
+        if len(value) > max_length:
+            return jsonify({'error': f'{key} should not exceed {max_length} characters.'}), 400
+
     # Set up the OAuth1Session for authentication
     oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
 
