@@ -41,7 +41,7 @@ def check_credentials(username, password):
                                  user='root',
                                  password='password',
                                  db='wordpress_db',
-                                 port=33060,
+                                 port=3306,
                                  cursorclass=pymysql.cursors.DictCursor)
 
     with connection.cursor() as cursor:
