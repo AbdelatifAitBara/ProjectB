@@ -37,8 +37,7 @@ def token_required(f):
 
 def check_credentials(username, password):
     # Connect to the MySQL database
-    cnx = mysql.connector.connect(user='phenix', password='password',
-                                  host='192.168.10.10', database='wordpress_db')
+    cnx = mysql.connector.connect(user='phenix', password='password', host='db', database='wordpress_db')
     cursor = cnx.cursor()
 
     # Check if the username, password, and role are correct
