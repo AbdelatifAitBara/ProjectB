@@ -1,10 +1,12 @@
-from flask import Flask, jsonify, request
-from requests_oauthlib import OAuth1Session
-import os
-import jwt
-from datetime import datetime, timedelta
 from functools import wraps
-import mysqlx
+from flask import Flask, request, jsonify
+from requests_oauthlib import OAuth1Session
+import pymysql
+import os
+from datetime import datetime, timedelta
+import jwt
+import requests
+
 
 app = Flask(__name__)
 
@@ -14,49 +16,35 @@ api_url = os.getenv('API_URL')
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['JWT_EXPIRATION_DELTA'] = timedelta(hours=1)
 
+
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        token = None
+        auth = request.authorization
 
-        if 'Authorization' in request.headers:
-            token = request.headers['Authorization'].split(' ')[1]
+        if not auth or not check_credentials(auth.username, auth.password):
+            return jsonify({'error': 'Could not verify your credentials.'}), 401
 
-        if not token:
-            return jsonify({'error': 'Token is missing!'}), 401
-
-        try:
-            data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
-            current_user = data['user']
-        except:
-            return jsonify({'error': 'Token is invalid!'}), 401
-
-        return f(current_user, *args, **kwargs)
+        return f(*args, **kwargs)
 
     return decorated
 
 def check_credentials(username, password):
-    # Connect to the MySQL database using X protocol
-    session = mysqlx.get_session({
-        'host': '192.168.10.10',
-        'port': 3306,
-        'user': 'root',
-        'password': 'password'
-    })
+    # Connect to the MySQL database
+    cnx = pymysql.connect(user='root', password='password', host='db', database='wordpress_db', port=3306)
+    cursor = cnx.cursor()
 
-    schema = session.get_schema('wordpress_db')
-
-    # Check if the username, password, and role are correct
-    result = schema.get_table('wp_users').select().where(
-        "user_login = :username and user_pass = :password and exists(select * from wp_usermeta where user_id = wp_users.ID and meta_key = 'wp_capabilities' and meta_value like '%shop_manager%')").bind(
-        'username', username).bind('password', password).execute().fetch_one()
+    # Check if the username and password match in the database
+    query = f"SELECT u.ID, u.user_login, u.user_email, m.meta_value FROM wp_users u JOIN wp_usermeta m ON u.ID = m.user_id WHERE m.meta_key = 'wp_capabilities' AND u.user_login = '{username}' AND m.meta_value = 'a:1:{{s:12:\"shop_manager\";b:1;}}'"
+    cursor.execute(query)
+    result = cursor.fetchone()
 
     # Close the database connection
-    session.close()
+    cursor.close()
+    cnx.close()
 
     # Return True if the credentials are correct, otherwise False
     return result is not None
-
 
 @app.route('/token', methods=['POST'])
 def get_token():
@@ -68,15 +56,12 @@ def get_token():
         token = jwt.encode({'user': username, 'exp': expiration_time}, secret_key, algorithm="HS256")
         return jsonify({'access_token': token})
     else:
-        return jsonify({'error': 'Invalid credentials'}), 401
+        return jsonify({'error': 'You are not authorized for this operation.'}), 401
+
 
 @app.route('/add_product', methods=['POST'])
 @token_required
 def add_product(current_user):
-    # Check user role
-    if users[current_user]['role'] != 'shop_manager':
-        return jsonify({'error': 'Sorry, you are not authorized to access'}), 403
-
     # Get the product data from the request
     product_data = request.json
 
@@ -106,6 +91,8 @@ def add_product(current_user):
         return jsonify({'message': 'Product added successfully.', 'product_id': product_id}), 201
     else:
         return jsonify({'error': 'Failed to add product.'}), 400
+
+
 
 @app.route('/delete_product/<product_id>', methods=['DELETE'])
 @token_required
@@ -182,4 +169,4 @@ def get_product(current_user, product_id):
         return jsonify({'error': 'Failed to retrieve product.'}), 400
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=8080)
+    app.run(debug=True, host='0.0.0.0', port=9090)
