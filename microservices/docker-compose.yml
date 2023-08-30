@@ -11,6 +11,8 @@ services:
     restart: always
     container_name: Product_Container
     image: product_image:${GIT_COMMIT}
+    networks:
+      - vagrant_my-network
 
   order:
     build:
@@ -23,5 +25,9 @@ services:
     restart: always
     container_name: Order_Container
     image: order_image:${GIT_COMMIT}
+    networks:
+      - vagrant_my-network
 
-
+networks:
+  vagrant_my-network:
+    external: true
