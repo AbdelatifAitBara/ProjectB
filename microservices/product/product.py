@@ -4,7 +4,7 @@ import os
 import jwt
 from datetime import datetime, timedelta
 from functools import wraps
-import pymysql
+import mysql.connector
 
 app = Flask(__name__)
 
@@ -37,7 +37,7 @@ def token_required(f):
 
 def check_credentials(username, password):
     # Connect to the MySQL database
-    cnx = pymysql.connect(user='phenix', password='password', host='db', database='wordpress_db', port=33060, auth_plugin='caching_sha2_password')
+    cnx = mysql.connector.connect(user='phenix', password='password', host='db', database='wordpress_db', port=33060)
     cursor = cnx.cursor()
 
     # Check if the username, password, and role are correct
