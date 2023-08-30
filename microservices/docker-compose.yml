@@ -30,4 +30,4 @@ services:
 
 networks:
   vagrant_my-network:
-    external: true
+    driver: bridge
