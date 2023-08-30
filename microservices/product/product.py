@@ -39,7 +39,7 @@ import mysql.connector
 
 def check_credentials(username, password):
     # Connect to the MySQL database on the first machine
-    cnx = mysql.connector.connect(user='root', password='password', host='192.168.10.10', database='wordpress_db')
+    cnx = mysql.connector.connect(user='phenix', password='password', host='192.168.10.10', database='wordpress_db')
 
     cursor = cnx.cursor()
 
