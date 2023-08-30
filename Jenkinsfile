@@ -9,11 +9,13 @@ pipeline {
       }
     }
 
-    stage('Remove Containers Running on Ports 8080 and 9090') {
+    stage('Remove The Old Containers and Images') {
       steps {
         script {
           sh 'docker rm -f product_container'
           sh 'docker rm -f order_container'
+          sh 'docker rmi -f product_image'
+          sh 'docker rmi -f order_image'
         }
       }
     }
