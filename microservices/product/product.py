@@ -5,7 +5,6 @@ import pymysql
 import os
 from datetime import datetime, timedelta
 import jwt
-import requests
 
 
 app = Flask(__name__)
@@ -61,7 +60,7 @@ def get_token():
 
 @app.route('/add_product', methods=['POST'])
 @token_required
-def add_product(current_user):
+def add_product():
     # Get the product data from the request
     product_data = request.json
 
@@ -79,7 +78,8 @@ def add_product(current_user):
 
     # Set up the API endpoint and headers
     url = f'{api_url}/wp-json/wc/v3/products'
-    headers = {'Content-Type': 'application/json', 'Authorization': f'Bearer {request.headers["Authorization"].split(" ")[1]}'}
+    auth_header = request.headers.get('Authorization', '').split(' ')
+    headers = {'Content-Type': 'application/json', 'Authorization': f'Bearer {auth_header[1]}'}
 
     # Send the POST request to add the product
     response = oauth.post(url, headers=headers, json=product_data)
