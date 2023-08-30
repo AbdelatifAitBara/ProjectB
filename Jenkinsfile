@@ -9,13 +9,11 @@ pipeline {
       }
     }
 
-    stage('Remove The Old Containers and Images') {
+    stage('Remove The Old Containers') {
       steps {
         script {
           sh 'docker rm -f product_container'
           sh 'docker rm -f order_container'
-          sh 'docker rmi -f product_image'
-          sh 'docker rmi -f order_image'
         }
       }
     }
@@ -34,13 +32,10 @@ pipeline {
       }
     }
 
-/*    
-    stage('Product Microservice Test') {
+    stage('Delete Unused Docker Images') {
       steps {
-        sh 'sleep 6'
-        sh 'python3 -m unittest test_product.py'
+        sh 'docker system prune --all --force'
       }
     }
-*/    
   }
 }
