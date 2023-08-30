@@ -35,13 +35,16 @@ def token_required(f):
 
     return decorated
 
+import mysql.connector
+
 def check_credentials(username, password):
-    # Connect to the MySQL database
-    cnx = mysql.connector.connect(user='phenix', password='password', host='db', database='wordpress_db', port=33060)
+    # Connect to the MySQL database on the first machine
+    cnx = mysql.connector.connect(user='root', password='password', host='192.168.10.10', database='wordpress_db')
+
     cursor = cnx.cursor()
 
     # Check if the username, password, and role are correct
-    query = f"SELECT role FROM users WHERE username='{username}' AND password='{password}' AND role='Shop manager'"
+    query = f"SELECT u.ID, u.user_login, u.user_email, m.meta_value FROM wp_users u JOIN wp_usermeta m ON u.ID = m.user_id WHERE m.meta_key = 'wp_capabilities' AND u.user_login='{username}' AND u.user_pass='{password}' AND m.meta_value LIKE '%shop_manager%'"
     cursor.execute(query)
     result = cursor.fetchone()
 
@@ -51,6 +54,7 @@ def check_credentials(username, password):
 
     # Return True if the credentials are correct, otherwise False
     return result is not None
+
 
 @app.route('/token', methods=['POST'])
 def get_token():
