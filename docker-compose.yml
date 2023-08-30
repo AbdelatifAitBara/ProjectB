@@ -5,8 +5,10 @@ services:
     container_name: db
     restart: unless-stopped
     environment:
-      - MYSQL_DATABASE=wordpress
-      - MYSQL_ROOT_PASSWORD=your_mysql_root_password
+      - MYSQL_DATABASE=wordpress_db
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_USER=phenix
+      - MYSQL_PASSWORD=password 
     volumes:
       - dbdata:/var/lib/mysql
     networks:
@@ -22,9 +24,9 @@ services:
       - 8080:80
     environment:
       - WORDPRESS_DB_HOST=db
-      - WORDPRESS_DB_NAME=wordpress
-      - WORDPRESS_DB_USER=root
-      - WORDPRESS_DB_PASSWORD=your_mysql_root_password
+      - WORDPRESS_DB_NAME=wordpress_db
+      - WORDPRESS_DB_USER=phenix
+      - WORDPRESS_DB_PASSWORD=password 
     volumes:
       - wpdata:/var/www/html
     networks:

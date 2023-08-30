@@ -4,6 +4,11 @@ import os
 import jwt
 from datetime import datetime, timedelta
 from functools import wraps
+from django.contrib.auth.models import User
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import mysql.connector
+
 
 app = Flask(__name__)
 
@@ -14,10 +19,12 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['JWT_EXPIRATION_DELTA'] = timedelta(hours=1)
 
 
-users = {
-    os.getenv('USERNAME1'): {'password': os.getenv('PASSWORD1'), 'role': os.getenv('ROLE1')},
-    os.getenv('USERNAME2'): {'password': os.getenv('PASSWORD2'), 'role': os.getenv('ROLE2')}
-}
+db_connection = mysql.connector.connect(
+    host='192.168.10.10',
+    user='phenix',
+    password='password',
+    database='wordpress_db'
+)
 
 def token_required(f):
     @wraps(f)
@@ -40,17 +47,29 @@ def token_required(f):
 
     return decorated
 
-@app.route('/token', methods=['POST'])
-def get_token():
-    username = request.json.get('username')
-    password = request.json.get('password')
-    if username in users and password == users[username]['password']:
-        secret_key = os.getenv('SECRET_KEY')
-        expiration_time = datetime.utcnow() + timedelta(minutes=15)
-        token = jwt.encode({'user': username, 'exp': expiration_time}, secret_key, algorithm="HS256")
-        return jsonify({'access_token': token})
-    else:
-        return jsonify({'error': 'Invalid credentials'}), 401
+@csrf_exempt
+def get_token(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        role = request.POST.get('role')
+
+        user = User.objects.filter(username=username).first()
+
+        if user is not None and user.check_password(password) and role == "shop_manager":
+            secret_key = os.getenv('SECRET_KEY')
+            expiration_time = datetime.utcnow() + timedelta(minutes=15)
+            token = jwt.encode({'user': username, 'exp': expiration_time}, secret_key, algorithm="HS256")
+
+            cursor = db_connection.cursor()
+            cursor.execute("INSERT INTO tokens (access_token) VALUES (%s)", (token,))
+            db_connection.commit()
+
+            return JsonResponse({'access_token': token})
+        elif user is not None and user.check_password(password) and role != "shop_manager":
+            return JsonResponse({'error': 'Not authorized'}, status=401)
+        else:
+            return JsonResponse({'error': 'Invalid credentials'}, status=401)
 
 @app.route('/add_product', methods=['POST'])
 @token_required
