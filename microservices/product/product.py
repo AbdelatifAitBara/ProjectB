@@ -4,7 +4,7 @@ import os
 import jwt
 from datetime import datetime, timedelta
 from functools import wraps
-import mysql.connector
+import pymysql
 
 app = Flask(__name__)
 
@@ -34,8 +34,6 @@ def token_required(f):
         return f(current_user, *args, **kwargs)
 
     return decorated
-
-import mysql.connector
 
 def check_credentials(username, password):
     # Connect to the MySQL database on the first machine
