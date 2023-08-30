@@ -23,7 +23,5 @@ ENV SECRET_KEY='sk_fYVw52zywDRVAgsC8yUi2TXFRu1MmtPK'
 
 ENV NAME World
 
-LABEL git_commit=$GIT_COMMIT
-
 # Run the command to start the order.py script
 CMD ["python", "product.py"]

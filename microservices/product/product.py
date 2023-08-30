@@ -14,12 +14,6 @@ api_url = os.getenv('API_URL')
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['JWT_EXPIRATION_DELTA'] = timedelta(hours=1)
 
-
-users = {
-    os.getenv('USERNAME1'): {'password': os.getenv('PASSWORD1'), 'role': os.getenv('ROLE1')},
-    os.getenv('USERNAME2'): {'password': os.getenv('PASSWORD2'), 'role': os.getenv('ROLE2')}
-}
-
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
@@ -41,11 +35,29 @@ def token_required(f):
 
     return decorated
 
+def check_credentials(username, password):
+    # Connect to the MySQL database
+    cnx = mysql.connector.connect(user='phenix', password='password',
+                                  host='192.168.10.10', database='wordpress_db')
+    cursor = cnx.cursor()
+
+    # Check if the username, password, and role are correct
+    query = f"SELECT role FROM users WHERE username='{username}' AND password='{password}' AND role='Shop manager'"
+    cursor.execute(query)
+    result = cursor.fetchone()
+
+    # Close the database connection
+    cursor.close()
+    cnx.close()
+
+    # Return True if the credentials are correct, otherwise False
+    return result is not None
+
 @app.route('/token', methods=['POST'])
 def get_token():
     username = request.json.get('username')
     password = request.json.get('password')
-    if username in users and password == users[username]['password']:
+    if check_credentials(username, password):
         secret_key = os.getenv('SECRET_KEY')
         expiration_time = datetime.utcnow() + timedelta(minutes=15)
         token = jwt.encode({'user': username, 'exp': expiration_time}, secret_key, algorithm="HS256")
