@@ -11,8 +11,6 @@ services:
       - MYSQL_PASSWORD=password 
     volumes:
       - dbdata:/var/lib/mysql
-    networks:
-      - my-network
 
   wordpress:
     depends_on:
@@ -29,12 +27,7 @@ services:
       - WORDPRESS_DB_PASSWORD=password 
     volumes:
       - wpdata:/var/www/html
-    networks:
-      - my-network
 
 volumes:
   dbdata:
   wpdata:
-
-networks:
-  my-network:
