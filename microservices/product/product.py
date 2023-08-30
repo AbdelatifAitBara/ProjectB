@@ -67,9 +67,9 @@ def add_product(current_user):
         if not value:
             return jsonify({'error': f'{key} is required.'}), 400
 
-    # Check if regular_price field contains only numbers
-    if not product_data['regular_price'].isnumeric():
-        return jsonify({'error': 'Regular price should only contain numbers.'}), 400
+    # Check if regular_price field contains only numbers and points
+    if not all(char.isdigit() or char == '.' for char in product_data['regular_price']):
+        return jsonify({'error': 'Regular price should only contain numbers and points.'}), 400
 
     # Set up the OAuth1Session for authentication
     oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
