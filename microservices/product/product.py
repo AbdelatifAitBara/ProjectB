@@ -39,7 +39,7 @@ def check_credentials(username, password):
     # Connect to the MySQL database using X protocol
     session = mysqlx.get_session({
         'host': '192.168.10.10',
-        'port': 33060,
+        'port': 3306,
         'user': 'root',
         'password': 'password'
     })
