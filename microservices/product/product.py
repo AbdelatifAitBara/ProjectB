@@ -29,6 +29,13 @@ def add_product():
         if isinstance(product_data[field], str) and any(char in product_data[field] for char in suspicious_chars):
             abort(400, "Input contains suspicious characters")
 
+    # Check for valid price format
+    if 'regular_price' in product_data:
+        try:
+            float(product_data['regular_price'])
+        except ValueError:
+            abort(400, "regular_price must be in the format of price")
+
     # Set up the OAuth1Session for authentication
     oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
 
@@ -49,7 +56,7 @@ def add_product():
         return jsonify({'message': 'Product added successfully.', 'product_id': product_id}), 201
     else:
         abort(response.status_code, response.text)
-
+        
 @app.route('/delete_product/<product_id>', methods=['DELETE'])
 def delete_product(product_id):
     # Set up the OAuth1Session for authentication
