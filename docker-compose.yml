@@ -1,35 +1,38 @@
 version: '3'
+
 services:
   db:
-    image: mysql:8.0
-    container_name: db
-    restart: unless-stopped
-    ports:
-      - 3306:3306
-    environment:
-      - MYSQL_DATABASE=wordpress_db
-      - MYSQL_ROOT_PASSWORD=password
-      - MYSQL_USER=phenix
-      - MYSQL_PASSWORD=password 
+    image: mysql:5.7
     volumes:
-      - dbdata:/var/lib/mysql
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: wordpress_db
+      MYSQL_USER: phenix
+      MYSQL_PASSWORD: password
+    networks:
+      - wordpress_network
 
   wordpress:
     depends_on:
       - db
     image: wordpress:latest
-    container_name: wordpress
-    restart: unless-stopped
     ports:
-      - 8080:80
+      - "8888:80"
+    restart: always
     environment:
-      - WORDPRESS_DB_HOST=db
-      - WORDPRESS_DB_NAME=wordpress_db
-      - WORDPRESS_DB_USER=phenix
-      - WORDPRESS_DB_PASSWORD=password 
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: phenix
+      WORDPRESS_DB_PASSWORD: password
+      WORDPRESS_DB_NAME: wordpress_db
     volumes:
-      - wpdata:/var/www/html
+      - ./wp-content:/var/www/html/wp-content
+    networks:
+      - wordpress_network
+
+networks:
+  wordpress_network:
 
 volumes:
-  dbdata:
-  wpdata:
+  db_data:
