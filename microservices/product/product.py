@@ -23,8 +23,12 @@ def add_product():
     if not all(char.isdigit() or char == '.' for char in product_data['regular_price']):
         return jsonify({'error': 'Regular price should only contain numbers and points.'}), 400
 
+    # Get the customer_key and customer_secret from the request headers
+    customer_key = request.headers.get('customer_key')
+    customer_secret = request.headers.get('customer_secret')
+
     # Set up the OAuth1Session for authentication
-    oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
+    oauth = OAuth1Session(client_key=customer_key, client_secret=customer_secret)
 
     # Set up the API endpoint and headers
     url = f'{api_url}/wp-json/wc/v3/products'
@@ -41,6 +45,7 @@ def add_product():
         return jsonify({'message': 'Product added successfully.', 'product_id': product_id}), 201
     else:
         return jsonify({'error': 'Failed to add product.'}), 400
+
 
 
 
