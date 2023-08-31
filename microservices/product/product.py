@@ -89,7 +89,7 @@ def get_products():
 
     # Send the GET request to retrieve all products
     try:
-        response = oauth.get(api_url + '/products', headers=headers)
+        response = oauth.get(api_url, headers=headers)
         response.raise_for_status()
     except Exception as e:
         abort(400, str(e))
