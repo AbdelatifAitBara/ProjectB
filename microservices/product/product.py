@@ -27,11 +27,11 @@ def add_product():
     customer_key = request.headers.get('customer_key')
     customer_secret = request.headers.get('customer_secret')
 
-
     # Set up the OAuth1Session for authentication
     oauth = OAuth1Session(client_key=customer_key, client_secret=customer_secret)
 
     # Set up the API endpoint and headers
+
     url = f'{api_url}/wp-json/wc/v3/products'
     auth_header = request.headers.get('Authorization', '').split(' ')
     headers = {'Content-Type': 'application/json'}
