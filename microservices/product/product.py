@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, abort
 from requests_oauthlib import OAuth1Session
 import os
 
@@ -17,11 +17,14 @@ def add_product():
     oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
 
     # Set up the API endpoint and headers
-    url = f'{api_url}/wp-json/wc/v3/products'
     headers = {'Content-Type': 'application/json'}
 
     # Send the POST request to add the product
-    response = oauth.post(url, headers=headers, json=product_data)
+    try:
+        response = oauth.post(api_url, headers=headers, json=product_data)
+        response.raise_for_status()
+    except Exception as e:
+        abort(400, str(e))
 
     # Handle the response from the WooCommerce API
     if response.status_code == 201:
@@ -29,7 +32,7 @@ def add_product():
         product_id = response.json()['id']
         return jsonify({'message': 'Product added successfully.', 'product_id': product_id}), 201
     else:
-        return jsonify({'error': 'Failed to add product.'}), 400
+        abort(response.status_code, response.text)
 
 @app.route('/delete_product/<product_id>', methods=['DELETE'])
 def delete_product(product_id):
@@ -37,17 +40,20 @@ def delete_product(product_id):
     oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
 
     # Set up the API endpoint and headers
-    url = f'{api_url}/{product_id}'
     headers = {'Content-Type': 'application/json'}
 
     # Send the DELETE request to delete the product
-    response = oauth.delete(url, headers=headers)
+    try:
+        response = oauth.delete(f'{api_url}/{product_id}', headers=headers)
+        response.raise_for_status()
+    except Exception as e:
+        abort(400, str(e))
 
     # Handle the response from the WooCommerce API
     if response.status_code == 200:
         return jsonify({'message': 'Product deleted successfully.'}), 200
     else:
-        return jsonify({'error': 'Failed to delete product.'}), 400
+        abort(response.status_code, response.text)
 
 @app.route('/update_product/<product_id>', methods=['PUT'])
 def update_product(product_id):
@@ -58,17 +64,20 @@ def update_product(product_id):
     oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
 
     # Set up the API endpoint and headers
-    url = f'{api_url}/{product_id}'
     headers = {'Content-Type': 'application/json'}
 
     # Send the PUT request to update the product
-    response = oauth.put(url, headers=headers, json=product_data)
+    try:
+        response = oauth.put(f'{api_url}/{product_id}', headers=headers, json=product_data)
+        response.raise_for_status()
+    except Exception as e:
+        abort(400, str(e))
 
     # Handle the response from the WooCommerce API
     if response.status_code == 200:
         return jsonify({'message': 'Product updated successfully.'}), 200
     else:
-        return jsonify({'error': 'Failed to update product.'}), 400
+        abort(response.status_code, response.text)
 
 @app.route('/get_product/<product_id>', methods=['GET'])
 def get_product(product_id):
@@ -80,14 +89,30 @@ def get_product(product_id):
     headers = {'Content-Type': 'application/json'}
 
     # Send the GET request to retrieve the product
-    response = oauth.get(url, headers=headers)
+    try:
+        response = oauth.get(f'{api_url}/{product_id}', headers=headers)
+        response.raise_for_status()
+    except Exception as e:
+        abort(400, str(e))
 
     # Handle the response from the WooCommerce API
     if response.status_code == 200:
         product = response.json()
         return jsonify(product), 200
     else:
-        return jsonify({'error': 'Failed to retrieve product.'}), 400
+        abort(response.status_code, response.text)
+
+@app.errorhandler(400)
+def bad_request(error):
+    return jsonify({'error': str(error)}), 400
+
+@app.errorhandler(404)
+def not_found(error):
+    return jsonify({'error': 'Resource not found.'}), 404
+
+@app.errorhandler(500)
+def internal_server_error(error):
+    return jsonify({'error': 'Internal server error.'}), 500
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=8080)
