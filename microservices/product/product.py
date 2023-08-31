@@ -27,23 +27,32 @@ def add_product():
     customer_key = request.headers.get('customer_key')
     customer_secret = request.headers.get('customer_secret')
 
+    # Check if customer_key and customer_secret are present
+    if not customer_key or not customer_secret:
+        return jsonify({'error': 'Customer key and customer secret are required.'}), 400
+
     # Set up the OAuth1Session for authentication
     oauth = OAuth1Session(client_key=customer_key, client_secret=customer_secret)
 
     # Set up the API endpoint and headers
     url = f'{api_url}/wp-json/wc/v3/products'
+    auth_header = request.headers.get('Authorization', '').split(' ')
     headers = {'Content-Type': 'application/json'}
 
-    # Send the POST request to add the product
-    response = oauth.post(url, headers=headers, json=product_data)
+    # Check if product_data is not None before sending the POST request
+    if product_data is not None:
+        # Send the POST request to add the product
+        response = oauth.post(url, headers=headers, json=product_data)
 
-    # Handle the response from the WooCommerce API
-    if response.status_code == 201:
-        # Extract the product_id from the response body
-        product_id = response.json()['id']
-        return jsonify({'message': 'Product added successfully.', 'product_id': product_id}), 201
+        # Handle the response from the WooCommerce API
+        if response.status_code == 201:
+            # Extract the product_id from the response body
+            product_id = response.json()['id']
+            return jsonify({'message': 'Product added successfully.', 'product_id': product_id}), 201
+        else:
+            return jsonify({'error': 'Failed to add product.'}), 400
     else:
-        return jsonify({'error': 'Failed to add product.'}), 400
+        return jsonify({'error': 'Invalid product data.'}), 400
 
 
 
