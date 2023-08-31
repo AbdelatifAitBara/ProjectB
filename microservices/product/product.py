@@ -14,19 +14,19 @@ def add_product():
     product_data = request.json
 
     # Check for empty fields
-    required_fields = ['name', 'regular_price', 'short_description', 'description', 'images']
+    required_fields = ['name', 'short_description', 'description', 'images']
     for field in required_fields:
         if field not in product_data or not product_data[field]:
             abort(400, f"Missing or empty field: {field}")
 
     # Validate regular_price
-    if not isinstance(product_data['regular_price'], (int, float)):
+    if 'regular_price' not in product_data or not isinstance(product_data['regular_price'], (int, float)):
         abort(400, "regular_price must be a number")
 
     # Check for suspicious input
     suspicious_chars = ['<', '>', ';', "'", '"', '(', ')', '{', '}', '[', ']', '|', '&', '$', '#', '%', '@', '!', '`']
     for field in product_data:
-        if any(char in product_data[field] for char in suspicious_chars):
+        if isinstance(product_data[field], str) and any(char in product_data[field] for char in suspicious_chars):
             abort(400, "Input contains suspicious characters")
 
     # Set up the OAuth1Session for authentication
