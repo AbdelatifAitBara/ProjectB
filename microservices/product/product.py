@@ -27,6 +27,10 @@ def add_product():
     customer_key = request.headers.get('customer_key')
     customer_secret = request.headers.get('customer_secret')
 
+    # Check if customer_key and customer_secret are present
+    if not customer_key or not customer_secret:
+        return jsonify({'error': 'Customer key and customer secret are required.'}), 400
+
     # Set up the OAuth1Session for authentication
     oauth = OAuth1Session(client_key=customer_key, client_secret=customer_secret)
 
