@@ -85,9 +85,8 @@ def get_product(product_id):
     oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
 
     # Set up the API endpoint and  headers 
-    url = f'{api_url}/{product_id}'
     headers = {'Content-Type': 'application/json'}
-
+    
     # Send the GET request to retrieve the product
     try:
         response = oauth.get(f'{api_url}/{product_id}', headers=headers)
