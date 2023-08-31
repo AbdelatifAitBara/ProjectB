@@ -19,7 +19,7 @@ def validate_product_data(product_data):
 
     # Check for special characters
     for key, value in product_data.items():
-        if isinstance(value, str) and not value.isalnum():
+        if isinstance(value, str) and not value.isalnum() and key != 'regular_price':
             abort(400, f'Special characters are not allowed in {key}.')
 
     # Check for excessively long input
