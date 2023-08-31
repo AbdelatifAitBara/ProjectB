@@ -78,6 +78,28 @@ def update_product(product_id):
         return jsonify({'message': 'Product updated successfully.'}), 200
     else:
         abort(response.status_code, response.text)
+        
+@app.route('/get_products', methods=['GET'])
+def get_products():
+    # Set up the OAuth1Session for authentication
+    oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
+
+    # Set up the API endpoint and headers
+    headers = {'Content-Type': 'application/json'}
+
+    # Send the GET request to retrieve all products
+    try:
+        response = oauth.get(api_url + '/products', headers=headers)
+        response.raise_for_status()
+    except Exception as e:
+        abort(400, str(e))
+
+    # Handle the response from the WooCommerce API
+    if response.status_code == 200:
+        products = response.json()
+        return jsonify(products), 200
+    else:
+        abort(response.status_code, response.text)
 
 @app.route('/get_product/<product_id>', methods=['GET'])
 def get_product(product_id):
