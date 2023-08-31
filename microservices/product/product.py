@@ -1,14 +1,12 @@
-from functools import wraps
 from flask import Flask, request, jsonify
 from requests_oauthlib import OAuth1Session
 import os
-from datetime import datetime, timedelta
-import jwt
+
 
 app = Flask(__name__)
 
-consumer_key = os.getenv('CONSUMER_KEY')
-consumer_secret = os.getenv('CONSUMER_SECRET')
+#consumer_key = os.getenv('CONSUMER_KEY')
+#consumer_secret = os.getenv('CONSUMER_SECRET')
 api_url = os.getenv('API_URL')
 
 @app.route('/add_product', methods=['POST'])
