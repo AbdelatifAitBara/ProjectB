@@ -32,8 +32,7 @@ def add_product():
 
     # Set up the API endpoint and headers
     url = f'{api_url}/wp-json/wc/v3/products'
-    auth_header = request.headers.get('Authorization', '').split(' ')
-    headers = {'Content-Type': 'application/json', 'Authorization': f'Bearer {auth_header[1]}'}
+    headers = {'Content-Type': 'application/json'}
 
     # Send the POST request to add the product
     response = oauth.post(url, headers=headers, json=product_data)
