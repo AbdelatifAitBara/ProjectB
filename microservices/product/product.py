@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request, abort
 from requests_oauthlib import OAuth1Session
 import os
+import re
 
 app = Flask(__name__)
 
@@ -10,6 +11,42 @@ api_url = os.getenv('API_URL')
 
 @app.route('/add_product', methods=['POST'])
 def add_product():
+    # Get the product data from the request
+    product_data = request.json
+
+    # Define the required fields
+    required_fields = ['name', 'type', 'regular_price', 'short_description', 'description', 'images']
+
+    # Check for empty required fields
+    for field in required_fields:
+        if field not in product_data or not product_data[field]:
+            abort(400, f"Missing or empty field: {field}")
+
+    # Sanitize input fields
+    for field in product_data:
+        if isinstance(product_data[field], str):
+            product_data[field] = re.sub(r'[<>\';"(){}[\]|&$#%@!`]', '', product_data[field])
+
+    # Set up the OAuth1Session for authentication
+    oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
+
+    # Set up the API endpoint and headers
+    headers = {'Content-Type': 'application/json'}
+
+    # Send the POST request to add the product
+    try:
+        response = oauth.post(api_url, headers=headers, json=product_data)
+        response.raise_for_status()
+    except Exception as e:
+        abort(400, str(e))
+
+    # Handle the response from the WooCommerce API
+    if response.status_code == 201:
+        # Extract the product_id from the response body
+        product_id = response.json()['id']
+        return jsonify({'message': 'Product added successfully.', 'product_id': product_id}), 201
+    else:
+        abort(response.status_code, response.text)
     # Get the product data from the request
     product_data = request.json
 
