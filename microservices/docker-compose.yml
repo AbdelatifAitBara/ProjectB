@@ -14,21 +14,8 @@ services:
     image: product_image:${GIT_COMMIT}
     networks:
       - vagrant_wordpress_network
-    secrets:
-      - mysql_database_user
-      - mysql_database_password
-      - mysql_database_db
-      - mysql_database_host
-
-secrets:
-  mysql_database_user:
-    file: ./product/secrets/mysql_database_user.txt
-  mysql_database_password:
-    file: ./product/secrets/mysql_database_password.txt
-  mysql_database_db:
-    file: ./product/secrets/mysql_database_db.txt
-  mysql_database_host:
-    file: ./product/secrets/mysql_database_host.txt
+    env_file:
+      - ./product/secrets.env
 
 networks:
   vagrant_wordpress_network:
