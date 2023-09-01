@@ -4,7 +4,7 @@ FROM python:3.8-slim-buster
 WORKDIR /app
 
 # Copy the current directory contents into the container at /app
-COPY product.py /app
+COPY order.py /app
 COPY requirements.txt /app
 
 # Install any needed packages specified in requirements.txt
@@ -12,8 +12,8 @@ COPY requirements.txt /app
 RUN pip install --trusted-host pypi.python.org -r requirements.txt
 
 
-# Make port 8080 available to the world outside this container
-EXPOSE 8080
+# Make port 9090 available to the world outside this container
+EXPOSE 9090
 
 # Define environment variables
 
@@ -25,4 +25,4 @@ ENV SECRET_KEY='sk_fYVw52zywDRVAgsC8yUi2TXFRu1MmtPK'
 ENV NAME World
 
 # Run the command to start the order.py script
-CMD ["python", "product.py"]
+CMD ["python", "order.py"]
