@@ -76,6 +76,12 @@ def add_order():
     # Get the order data from the request
     order_data = request.json
 
+    # Check if the regular price is a number
+    try:
+        float(order_data['regular_price'])
+    except ValueError:
+        abort(400, 'Regular price must be a number')
+
     token = request.headers.get('Authorization')
     
     if not token_authorized(token):
@@ -101,7 +107,7 @@ def add_order():
         return jsonify({'message': 'Order added successfully.', 'order_id': order_id}), 201
     else:
         abort(response.status_code, response.text)
-
+        
 @app.route('/delete_order/<int:order_id>', methods=['DELETE'])
 def delete_order(order_id):
     token = request.headers.get('Authorization')
