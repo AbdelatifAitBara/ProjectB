@@ -12,7 +12,7 @@ services:
     container_name: Product_Container
     image: product_image:${GIT_COMMIT}
     networks:
-      - wordpress_network
+      - vagrant_wordpress_network
 
   order:
     build:
@@ -26,8 +26,8 @@ services:
     container_name: Order_Container
     image: order_image:${GIT_COMMIT}
     networks:
-      - wordpress_network
+      - vagrant_wordpress_network
 
 networks:
-  wordpress_network:
+  vagrant_wordpress_network:
     external: true
