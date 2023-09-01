@@ -84,7 +84,7 @@ def add_product():
     token = request.headers.get('Authorization')
     
     if not token_authorized(token):
-        return jsonify({'message': 'Authentication failed'}), 401
+        return jsonify({'message': 'Authentication failed, your token has expired or is invalid'}), 401
     
     # Check if required fields are present and not empty
     required_fields = ['name', 'regular_price', 'description', 'short_description', 'images']

@@ -21,7 +21,6 @@ app.config['MYSQL_DATABASE_PASSWORD'] = 'password'
 app.config['MYSQL_DATABASE_DB'] = 'wordpress_db'
 app.config['MYSQL_DATABASE_HOST'] = 'db'
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-
 @app.route('/token', methods=['POST'])
 def query():
     try:
@@ -56,6 +55,9 @@ def query():
 # Define a function to check if the token is authorized
 def token_authorized(token):
     try:
+        decoded_token = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
+        if datetime.utcnow() > datetime.fromtimestamp(decoded_token['exp']):
+            return False
         with pymysql.connect(
             host=app.config['MYSQL_DATABASE_HOST'],
             user=app.config['MYSQL_DATABASE_USER'],
