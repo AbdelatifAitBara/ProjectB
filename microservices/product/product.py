@@ -116,7 +116,7 @@ def add_product():
         return jsonify({'message': 'Authentication failed'}), 401
     
     # Check if required fields are present and not empty
-    required_fields = ['name', 'price', 'description', 'short_description', 'images']
+    required_fields = ['name', 'regular_price', 'description', 'short_description', 'images']
     for field in required_fields:
         if field not in product_data or not product_data[field]:
             return jsonify({'message': f'{field} is a required field'}), 400
