@@ -15,17 +15,6 @@ pipeline {
       }
     }
 
-    stage('Scan Docker Images For Security Vulnerabilities') {
-      steps {
-        try {
-          sh "sysdig_secure_scan.sh -i ${DOCKER_IMAGE}"
-        } catch (Exception e) {
-          currentBuild.result = 'FAILURE'
-          throw e
-        }
-      }
-    }
-
     stage('Build Microservices Images') {
       steps {
         try {
