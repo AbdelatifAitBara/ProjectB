@@ -18,16 +18,15 @@ services:
       - mysql_database_password
       - mysql_database_db
       - mysql_database_host
-      
 secrets:
   mysql_database_user:
-    file: ./secrets/mysql_database_user.txt
+    file: ./product/secrets/mysql_database_user.txt
   mysql_database_password:
-    file: ./secrets/mysql_database_password.txt
+    file: ./product/secrets/mysql_database_password.txt
   mysql_database_db:
-    file: ./secrets/mysql_database_db.txt
+    file: ./product/secrets/mysql_database_db.txt
   mysql_database_host:
-    file: ./secrets/mysql_database_host.txt
+    file: ./product/secrets/mysql_database_host.txt
 
 
 networks:
