@@ -11,6 +11,8 @@ services:
     restart: always
     container_name: Product_Container
     image: product_image:${GIT_COMMIT}
+    networks:
+      - wordpress_network
 
   order:
     build:
@@ -23,3 +25,9 @@ services:
     restart: always
     container_name: Order_Container
     image: order_image:${GIT_COMMIT}
+    networks:
+      - wordpress_network
+
+networks:
+  wordpress_network:
+    external: true
