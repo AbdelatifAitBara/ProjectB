@@ -27,7 +27,6 @@ pipeline {
       }
     }
 
-    
     stage('Deploy Microservices Containers') { 
       steps {
         // Deploy your microservices using Docker-compose
