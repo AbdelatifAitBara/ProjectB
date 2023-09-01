@@ -101,11 +101,11 @@ def add_product():
         return jsonify({'message': 'regular_price must be a valid integer or float'}), 400
     
     # Check for suspicious characters in input fields
-    suspicious_chars = re.compile(r'[^\w\s]')
+    suspicious_chars = re.compile(r'[&,@,"\',`_,\\\]\[}{=<>\?!#~-]')
     for field in product_data:
         if isinstance(product_data[field], str) and suspicious_chars.search(product_data[field]):
             return jsonify({'message': f'{field} contains unacceptable characters'}), 400
-    
+        
     # Set up the OAuth1Session for authentication
     oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
 
