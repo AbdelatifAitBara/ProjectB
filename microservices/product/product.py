@@ -15,11 +15,11 @@ API_URL = os.getenv('API_URL')
 consumer_key = os.getenv('CONSUMER_KEY')
 consumer_secret = os.getenv('CONSUMER_SECRET')
 
-app.config['MYSQL_DATABASE_USER'] = os.getenv('MYSQL_DATABASE_USER')
-app.config['MYSQL_DATABASE_PASSWORD'] = os.getenv('MYSQL_DATABASE_PASSWORD')
-app.config['MYSQL_DATABASE_DB'] = os.getenv('MYSQL_DATABASE_DB')
-app.config['MYSQL_DATABASE_HOST'] = os.getenv('MYSQL_DATABASE_HOST')
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+MYSQL_DATABASE_USER = os.getenv('MYSQL_DATABASE_USER')
+MYSQL_DATABASE_PASSWORD = os.getenv('MYSQL_DATABASE_PASSWORD')
+MYSQL_DATABASE_DB = os.getenv('MYSQL_DATABASE_DB')
+MYSQL_DATABASE_HOST = os.getenv('MYSQL_DATABASE_HOST')
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 
 
@@ -30,10 +30,10 @@ def query():
         data = json.loads(request.data)
         consumer_secret = data['consumer_secret']
         with pymysql.connect(
-            host=app.config['MYSQL_DATABASE_HOST'],
-            user=app.config['MYSQL_DATABASE_USER'],
-            password=app.config['MYSQL_DATABASE_PASSWORD'],
-            db=app.config['MYSQL_DATABASE_DB']
+            host=MYSQL_DATABASE_HOST,
+            user=MYSQL_DATABASE_USER,
+            password=MYSQL_DATABASE_PASSWORD,
+            db=MYSQL_DATABASE_DB
         ) as conn:
             with conn.cursor() as cur:
                 cur.execute("SELECT COUNT(*) FROM wp_woocommerce_api_keys WHERE consumer_secret=%s", (consumer_secret,))
