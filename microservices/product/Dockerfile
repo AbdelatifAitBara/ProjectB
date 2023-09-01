@@ -6,19 +6,6 @@ WORKDIR /app
 # Copy the current directory contents into the container at /app
 COPY product.py /app
 COPY requirements.txt /app
-COPY secrets.env /app/secrets.env
-
-# Create environment variables using Docker secrets
-
-
-ENV MYSQL_DATABASE_USER_FILE=/run/secrets/mysql_database_user
-ENV MYSQL_DATABASE_PASSWORD_FILE=/run/secrets/mysql_database_password
-ENV MYSQL_DATABASE_DB_FILE=/run/secrets/mysql_database_db
-ENV MYSQL_DATABASE_HOST_FILE=/run/secrets/mysql_database_host
-ENV SECRET_KEY_FILE=/run/secrets/secret_key
-ENV API_URL_FILE=/run/secrets/api_url
-ENV CONSUMER_KEY_FILE=/run/secrets/consumer_key
-ENV CONSUMER_SECRET_FILE=/run/secrets/consumer_secret
 
 # Install any needed packages specified in requirements.txt
 

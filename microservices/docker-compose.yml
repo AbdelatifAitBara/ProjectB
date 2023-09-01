@@ -1,5 +1,4 @@
-version: '3.1'
-
+version: '3'
 services:
   product:
     build:
@@ -14,9 +13,21 @@ services:
     image: product_image:${GIT_COMMIT}
     networks:
       - vagrant_wordpress_network
-    env_file:
-      - ./product/secrets.env
+
+  order:
+    build:
+      context: ./order
+      dockerfile: Dockerfile
+      args:
+        GIT_COMMIT: $$(git --git-dir=/home/vagrant/agent/ProjectB/.git rev-parse --short HEAD)
+    ports:
+      - 9090:9090
+    restart: always
+    container_name: Order_Container
+    image: order_image:${GIT_COMMIT}
+    networks:
+      - vagrant_wordpress_network
 
 networks:
   vagrant_wordpress_network:
-    driver: bridge
+    external: true
