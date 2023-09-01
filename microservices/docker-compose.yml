@@ -14,10 +14,10 @@ services:
     networks:
       - vagrant_wordpress_network
     environment:
-      - MYSQL_DATABASE_USER_FILE=/run/secrets/mysql_database_user
-      - MYSQL_DATABASE_PASSWORD_FILE=/run/secrets/mysql_database_password
-      - MYSQL_DATABASE_DB_FILE=/run/secrets/mysql_database_db
-      - MYSQL_DATABASE_HOST_FILE=/run/secrets/mysql_database_host
+      - MYSQL_DATABASE_USER_FILE=/run/secrets/MYSQL_DATABASE_USER
+      - MYSQL_DATABASE_PASSWORD_FILE=/run/secrets/MYSQL_DATABASE_PASSWORD
+      - MYSQL_DATABASE_DB_FILE=/run/secrets/MYSQL_DATABASE_DB
+      - MYSQL_DATABASE_HOST_FILE=/run/secrets/MYSQL_DATABASE_HOST
 
     secrets:
       - MYSQL_DATABASE_USER
