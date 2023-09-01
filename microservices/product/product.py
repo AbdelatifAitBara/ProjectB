@@ -7,6 +7,7 @@ import jwt
 from functools import wraps
 from datetime import datetime, timedelta
 import os
+import re 
 
 app = Flask(__name__)
 CORS(app)
@@ -73,6 +74,55 @@ def token_authorized(token):
         return False
     
     
+@app.route('/add_product', methods=['POST'])
+def add_product():
+    # Get the product data from the request
+    product_data = request.json
+
+    token = request.headers.get('Authorization')
+    
+    if not token_authorized(token):
+        return jsonify({'message': 'Authentication failed'}), 401
+    
+    # Check if required fields are present and not empty
+    required_fields = ['name', 'regular_price', 'description', 'short_description', 'images']
+    for field in required_fields:
+        if field not in product_data or not product_data[field]:
+            return jsonify({'message': f'{field} is a required field'}), 400
+    
+    # Filter out suspicious characters from regular_price
+    product_data['regular_price'] = re.sub(r'[^\d\.]', '', product_data['regular_price'])
+    
+    # Check if regular_price is a valid float or integer
+    try:
+        float(product_data['regular_price'])
+    except ValueError:
+        return jsonify({'message': 'regular_price must be a valid integer or float'}), 400
+    
+    # Set up the OAuth1Session for authentication
+    oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
+
+    # Set up the API endpoint and headers
+    headers = {'Content-Type': 'application/json'}
+
+    # Send the POST request to add the product
+    try:
+        response = oauth.post(API_URL, headers=headers, json=product_data)
+        response.raise_for_status()
+    except requests.exceptions.HTTPError as e:
+        error_message = e.response.json()['message']
+        return jsonify({'message': f'Error adding product: {error_message}'}), e.response.status_code
+    except Exception as e:
+        return jsonify({'message': f'Error adding product: {str(e)}'}), 500
+
+    # Handle the response from the WooCommerce API
+    if response.status_code == 201:
+        # Extract the product_id from the response body
+        product_id = response.json()['id']
+        return jsonify({'message': 'Product added successfully.', 'product_id': product_id}), 201
+    else:
+        return jsonify({'message': 'Error adding product.'}), 500
+
 @app.route('/get_product/<int:product_id>', methods=['GET'])
 def get_product(product_id):
     token = request.headers.get('Authorization')
@@ -103,47 +153,6 @@ def get_product(product_id):
         return jsonify(product_data), 200
     else:
         return jsonify({'message': 'Error getting product.'}), 500
-
-
-@app.route('/add_product', methods=['POST'])
-def add_product():
-    # Get the product data from the request
-    product_data = request.json
-
-    token = request.headers.get('Authorization')
-    
-    if not token_authorized(token):
-        return jsonify({'message': 'Authentication failed'}), 401
-    
-    # Check if required fields are present and not empty
-    required_fields = ['name', 'regular_price', 'description', 'short_description', 'images']
-    for field in required_fields:
-        if field not in product_data or not product_data[field]:
-            return jsonify({'message': f'{field} is a required field'}), 400
-    
-    # Set up the OAuth1Session for authentication
-    oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
-
-    # Set up the API endpoint and headers
-    headers = {'Content-Type': 'application/json'}
-
-    # Send the POST request to add the product
-    try:
-        response = oauth.post(API_URL, headers=headers, json=product_data)
-        response.raise_for_status()
-    except requests.exceptions.HTTPError as e:
-        error_message = e.response.json()['message']
-        return jsonify({'message': f'Error adding product: {error_message}'}), e.response.status_code
-    except Exception as e:
-        return jsonify({'message': f'Error adding product: {str(e)}'}), 500
-
-    # Handle the response from the WooCommerce API
-    if response.status_code == 201:
-        # Extract the product_id from the response body
-        product_id = response.json()['id']
-        return jsonify({'message': 'Product added successfully.', 'product_id': product_id}), 201
-    else:
-        return jsonify({'message': 'Error adding product.'}), 500
 
 
 @app.route('/update_product/<int:product_id>', methods=['PUT'])
