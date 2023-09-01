@@ -9,15 +9,6 @@ pipeline {
       }
     }
 
-    stage('Remove The Old Containers') {
-      steps {
-        script {
-          sh 'docker rm -f product_container'
-          sh 'docker rm -f order_container'
-        }
-      }
-    }
-
     stage('Build Microservices Images') {
       steps {
         // Build your microservices using Docker-compose
@@ -29,6 +20,7 @@ pipeline {
       steps {
         // Deploy your microservices using Docker-compose
         input message: 'Approve deployment?', ok: 'Deploy'
+        sh 'docker-compose -f microservices/docker-compose.yml down'
         sh 'docker-compose -f microservices/docker-compose.yml up -d'
       }
     }
