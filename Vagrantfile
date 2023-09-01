@@ -4,14 +4,14 @@ Vagrant.configure("2") do |config|
   config.vm.box_download_insecure = false
   config.ssh.insert_key = true
 
-  config.vm.define "JenkinsAgent" do |woo|
-    woo.vm.hostname = "JenkinsAgent"
+  config.vm.define "Production" do |woo|
+    woo.vm.hostname = "Production"
     woo.vm.network "private_network", ip: "192.168.10.10"
 
     woo.vm.provider "virtualbox" do |vb|
       vb.memory = 3048
       vb.cpus = 2
-      vb.name = "JenkinsAgent"
+      vb.name = "Production"
     end
 
     woo.vm.provision "shell", inline: <<-SHELL

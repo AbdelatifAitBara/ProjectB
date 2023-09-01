@@ -28,6 +28,7 @@ pipeline {
     stage('Deploy Microservices Containers') { 
       steps {
         // Deploy your microservices using Docker-compose
+        input message: 'Approve deployment?', ok: 'Deploy'
         sh 'docker-compose -f microservices/docker-compose.yml up -d'
       }
     }
