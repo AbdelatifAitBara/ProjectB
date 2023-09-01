@@ -1,4 +1,5 @@
 version: '3.1'
+
 services:
   product:
     build:
@@ -18,6 +19,7 @@ services:
       - mysql_database_password
       - mysql_database_db
       - mysql_database_host
+
 secrets:
   mysql_database_user:
     file: ./product/secrets/mysql_database_user.txt
@@ -27,7 +29,6 @@ secrets:
     file: ./product/secrets/mysql_database_db.txt
   mysql_database_host:
     file: ./product/secrets/mysql_database_host.txt
-
 
 networks:
   vagrant_wordpress_network:
