@@ -17,12 +17,7 @@ pipeline {
 
     stage('Build Microservices Images') {
       steps {
-        try {
           sh "docker-compose -f ${DOCKER_COMPOSE_FILE} build"
-        } catch (Exception e) {
-          currentBuild.result = 'FAILURE'
-          throw e
-        }
       }
     }
 
@@ -30,12 +25,8 @@ pipeline {
       steps {
         input message: 'Approve deployment?', ok: 'Deploy'
         sh "docker-compose -f ${DOCKER_COMPOSE_FILE} down"
-        try {
-          sh "docker-compose -f ${DOCKER_COMPOSE_FILE} up -d"
-        } catch (Exception e) {
-          currentBuild.result = 'FAILURE'
-          throw e
-        }
+        sh "docker-compose -f ${DOCKER_COMPOSE_FILE} up -d"
+        
       }
     }
 
