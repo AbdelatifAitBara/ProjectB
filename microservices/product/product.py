@@ -6,9 +6,11 @@ import json
 import jwt
 from functools import wraps
 from datetime import datetime, timedelta
-import os
+from dotenv import load_dotenv
+
 
 app = Flask(__name__)
+load_dotenv()
 CORS(app)
 
 app.config['MYSQL_DATABASE_USER'] = os.getenv('DB_HOST')
