@@ -12,7 +12,7 @@ import os
 
 app = Flask(__name__)
 
-api_url = os.getenv('API_URL')
+API_URL = os.getenv('API_URL')
 consumer_key = os.getenv('CONSUMER_KEY')
 consumer_secret = os.getenv('CONSUMER_SECRET')
 
