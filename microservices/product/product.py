@@ -11,17 +11,14 @@ import os
 app = Flask(__name__)
 CORS(app)
 
-app.config['MYSQL_DATABASE_USER'] = os.getenv('DB_HOST')
-app.config['MYSQL_DATABASE_PASSWORD'] = os.getenv('DB_PASSWORD')
-app.config['MYSQL_DATABASE_DB'] = os.getenv('DB_NAME')
-app.config['MYSQL_DATABASE_HOST'] = os.getenv('DB_HOST')
 
-
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 API_URL = os.getenv('API_URL')
 consumer_key = os.getenv('CONSUMER_KEY')
 consumer_secret = os.getenv('CONSUMER_SECRET')
+
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+
 
 
 @app.route('/token', methods=['POST'])
@@ -30,10 +27,10 @@ def query():
         data = json.loads(request.data)
         consumer_secret = data['consumer_secret']
         with pymysql.connect(
-            host=app.config['MYSQL_DATABASE_HOST'],
-            user=app.config['MYSQL_DATABASE_USER'],
-            password=app.config['MYSQL_DATABASE_PASSWORD'],
-            db=app.config['MYSQL_DATABASE_DB']
+            host=os.getenv('MYSQL_DATABASE_HOST'),
+            user=os.getenv('MYSQL_DATABASE_USER'),
+            password=os.getenv('MYSQL_DATABASE_PASSWORD'),
+            db=os.getenv('MYSQL_DATABASE_DB')
         ) as conn:
             with conn.cursor() as cur:
                 cur.execute("SELECT COUNT(*) FROM wp_woocommerce_api_keys WHERE consumer_secret=%s", (consumer_secret,))
@@ -59,10 +56,10 @@ def query():
 def token_authorized(token):
     try:
         with pymysql.connect(
-            host=app.config['MYSQL_DATABASE_HOST'],
-            user=app.config['MYSQL_DATABASE_USER'],
-            password=app.config['MYSQL_DATABASE_PASSWORD'],
-            db=app.config['MYSQL_DATABASE_DB']
+            host=os.getenv('MYSQL_DATABASE_HOST'),
+            user=os.getenv('MYSQL_DATABASE_USER'),
+            password=os.getenv('MYSQL_DATABASE_PASSWORD'),
+            db=os.getenv('MYSQL_DATABASE_DB')
         ) as conn:
             with conn.cursor() as cur:
                 cur.execute("SELECT COUNT(*) FROM access_tokens_product WHERE token=%s", (token,))
