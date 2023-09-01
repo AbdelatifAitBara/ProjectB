@@ -7,7 +7,6 @@ import jwt
 from functools import wraps
 from datetime import datetime, timedelta
 import os
-import re 
 
 app = Flask(__name__)
 CORS(app)
@@ -21,7 +20,6 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 API_URL = os.getenv('API_URL')
 consumer_key = os.getenv('CONSUMER_KEY')
 consumer_secret = os.getenv('CONSUMER_SECRET')
-
 
 @app.route('/token', methods=['POST'])
 def query():
@@ -46,7 +44,7 @@ def query():
                     }
                     token = jwt.encode(payload, app.config['SECRET_KEY'], algorithm='HS256')
                     # Save token to db
-                    cur.execute("INSERT INTO access_tokens_product (token) VALUES (%s)", (token,))
+                    cur.execute("INSERT INTO access_tokens_order (token) VALUES (%s)", (token,))
                     conn.commit()
                     return jsonify({'access_token': token, 'token_type': 'bearer', 'expires_in': 120})
                 else:
@@ -64,7 +62,7 @@ def token_authorized(token):
             db=app.config['MYSQL_DATABASE_DB']
         ) as conn:
             with conn.cursor() as cur:
-                cur.execute("SELECT COUNT(*) FROM access_tokens_product WHERE token=%s", (token,))
+                cur.execute("SELECT COUNT(*) FROM access_tokens_order WHERE token=%s", (token,))
                 count = cur.fetchone()[0]
         if count > 0:
             return True
@@ -72,32 +70,22 @@ def token_authorized(token):
             return False
     except:
         return False
-    
-    
-@app.route('/add_product', methods=['POST'])
-def add_product():
-    # Get the product data from the request
-    product_data = request.json
+
+@app.route('/add_order', methods=['POST'])
+def add_order():
+    # Get the order data from the request
+    order_data = request.json
+
+    # Check if the regular price is a number
+    try:
+        float(order_data['regular_price'])
+    except ValueError:
+        abort(400, 'Regular price must be a number')
 
     token = request.headers.get('Authorization')
     
     if not token_authorized(token):
         return jsonify({'message': 'Authentication failed'}), 401
-    
-    # Check if required fields are present and not empty
-    required_fields = ['name', 'regular_price', 'description', 'short_description', 'images']
-    for field in required_fields:
-        if field not in product_data or not product_data[field]:
-            return jsonify({'message': f'{field} is a required field'}), 400
-    
-    # Filter out suspicious characters from regular_price
-    product_data['regular_price'] = re.sub(r'[^\d\.]', '', product_data['regular_price'])
-    
-    # Check if regular_price is a valid float or integer
-    try:
-        float(product_data['regular_price'])
-    except ValueError:
-        return jsonify({'message': 'regular_price must be a valid integer or float'}), 400
     
     # Set up the OAuth1Session for authentication
     oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
@@ -105,26 +93,23 @@ def add_product():
     # Set up the API endpoint and headers
     headers = {'Content-Type': 'application/json'}
 
-    # Send the POST request to add the product
+    # Send the POST request to add the order
     try:
-        response = oauth.post(API_URL, headers=headers, json=product_data)
+        response = oauth.post(API_URL, headers=headers, json=order_data)
         response.raise_for_status()
-    except requests.exceptions.HTTPError as e:
-        error_message = e.response.json()['message']
-        return jsonify({'message': f'Error adding product: {error_message}'}), e.response.status_code
     except Exception as e:
-        return jsonify({'message': f'Error adding product: {str(e)}'}), 500
+        abort(400, str(e))
 
     # Handle the response from the WooCommerce API
     if response.status_code == 201:
-        # Extract the product_id from the response body
-        product_id = response.json()['id']
-        return jsonify({'message': 'Product added successfully.', 'product_id': product_id}), 201
+        # Extract the order_id from the response body
+        order_id = response.json()['id']
+        return jsonify({'message': 'Order added successfully.', 'order_id': order_id}), 201
     else:
-        return jsonify({'message': 'Error adding product.'}), 500
-
-@app.route('/get_product/<int:product_id>', methods=['GET'])
-def get_product(product_id):
+        abort(response.status_code, response.text)
+        
+@app.route('/delete_order/<int:order_id>', methods=['DELETE'])
+def delete_order(order_id):
     token = request.headers.get('Authorization')
     
     if not token_authorized(token):
@@ -134,90 +119,79 @@ def get_product(product_id):
     oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
 
     # Set up the API endpoint and headers
-    endpoint = f"{API_URL}/{product_id}"
+    endpoint = f"{API_URL}/{order_id}"
     headers = {'Content-Type': 'application/json'}
 
-    # Send the GET request to retrieve the product
-    try:
-        response = oauth.get(endpoint, headers=headers)
-        response.raise_for_status()
-    except requests.exceptions.HTTPError as e:
-        error_message = e.response.json()['message']
-        return jsonify({'message': f'Error getting product: {error_message}'}), e.response.status_code
-    except Exception as e:
-        return jsonify({'message': f'Error getting product: {str(e)}'}), 500
-
-    # Handle the response from the WooCommerce API
-    if response.status_code == 200:
-        product_data = response.json()
-        return jsonify(product_data), 200
-    else:
-        return jsonify({'message': 'Error getting product.'}), 500
-
-
-@app.route('/update_product/<int:product_id>', methods=['PUT'])
-def update_product(product_id):
-    # Get the updated product data from the request
-    product_data = request.json
-
-    token = request.headers.get('Authorization')
-    
-    if not token_authorized(token):
-        return jsonify({'message': 'Authentication failed'}), 401
-    
-    # Set up the OAuth1Session for authentication
-    oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
-
-    # Set up the API endpoint and headers
-    endpoint = f"{API_URL}/{product_id}"
-    headers = {'Content-Type': 'application/json'}
-
-    # Send the PUT request to update the product
-    try:
-        response = oauth.put(endpoint, headers=headers, json=product_data)
-        response.raise_for_status()
-    except requests.exceptions.HTTPError as e:
-        error_message = e.response.json()['message']
-        return jsonify({'message': f'Error updating product: {error_message}'}), e.response.status_code
-    except Exception as e:
-        return jsonify({'message': f'Error updating product: {str(e)}'}), 500
-
-    # Handle the response from the WooCommerce API
-    if response.status_code == 200:
-        return jsonify({'message': 'Product updated successfully.'}), 200
-    else:
-        return jsonify({'message': 'Error updating product.'}), 500
-
-
-@app.route('/delete_product/<int:product_id>', methods=['DELETE'])
-def delete_product(product_id):
-    token = request.headers.get('Authorization')
-    
-    if not token_authorized(token):
-        return jsonify({'message': 'Authentication failed'}), 401
-    
-    # Set up the OAuth1Session for authentication
-    oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
-
-    # Set up the API endpoint and headers
-    endpoint = f"{API_URL}/{product_id}"
-    headers = {'Content-Type': 'application/json'}
-
-    # Send the DELETE request to delete the product
+    # Send the DELETE request to delete the order
     try:
         response = oauth.delete(endpoint, headers=headers)
         response.raise_for_status()
-    except requests.exceptions.HTTPError as e:
-        error_message = e.response.json()['message']
-        return jsonify({'message': f'Error deleting product: {error_message}'}), e.response.status_code
     except Exception as e:
-        return jsonify({'message': f'Error deleting product: {str(e)}'}), 500
+        abort(400, str(e))
 
     # Handle the response from the WooCommerce API
     if response.status_code == 200:
-        return jsonify({'message': 'Product deleted successfully.'}), 200
+        return jsonify({'message': 'Order deleted successfully.'}), 200
     else:
-        return jsonify({'message': 'Error deleting product.'}), 500
+        abort(response.status_code, response.text)
+
+@app.route('/update_order/<int:order_id>', methods=['PUT'])
+def update_order(order_id):
+    # Get the updated order data from the request
+    order_data = request.json
+
+    token = request.headers.get('Authorization')
+    
+    if not token_authorized(token):
+        return jsonify({'message': 'Authentication failed'}), 401
+    
+    # Set up the OAuth1Session for authentication
+    oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
+
+    # Set up the API endpoint and headers
+    endpoint = f"{API_URL}/{order_id}"
+    headers = {'Content-Type': 'application/json'}
+
+    # Send the PUT request to update the order
+    try:
+        response = oauth.put(endpoint, headers=headers, json=order_data)
+        response.raise_for_status()
+    except Exception as e:
+        abort(400, str(e))
+
+    # Handle the response from the WooCommerce API
+    if response.status_code == 200:
+        return jsonify({'message': 'Order updated successfully.'}), 200
+    else:
+        abort(response.status_code, response.text)
+
+@app.route('/get_order/<int:order_id>', methods=['GET'])
+def get_order(order_id):
+    token = request.headers.get('Authorization')
+    
+    if not token_authorized(token):
+        return jsonify({'message': 'Authentication failed'}), 401
+    
+    # Set up the OAuth1Session for authentication
+    oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
+
+    # Set up the API endpoint and headers
+    endpoint = f"{API_URL}/{order_id}"
+    headers = {'Content-Type': 'application/json'}
+
+    # Send the GET request to retrieve the order
+    try:
+        response = oauth.get(endpoint, headers=headers)
+        response.raise_for_status()
+    except Exception as e:
+        abort(400, str(e))
+
+    # Handle the response from the WooCommerce API
+    if response.status_code == 200:
+        order_data = response.json()
+        return jsonify(order_data), 200
+    else:
+        abort(response.status_code, response.text)
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=8080)
+    app.run(debug=True, host='0.0.0.0', port=9090)
