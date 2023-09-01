@@ -14,4 +14,5 @@
 - Test AAB branch Lotfi 🤍
 - Product Works 100% With TOKEN Protection.
 - Order Works 100% With TOKEN Protection.
+- Token Valid only for 2 minutes Works 100%
 - Microservices Stable V1.3
