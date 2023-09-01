@@ -9,12 +9,24 @@ pipeline {
       }
     }
 
+    
+    stage('Scan Docker Images For Security Vulnerabilities') {
+      steps {
+        sysdigSecureScan(
+          image: 'python:3.8-slim-buster',
+          failBuildOnPolicyViolation: true,
+          breakOnFail: true
+        )
+      }
+    }
+
     stage('Build Microservices Images') {
       steps {
         // Build your microservices using Docker-compose
         sh 'docker-compose -f microservices/docker-compose.yml build'
       }
     }
+
     
     stage('Deploy Microservices Containers') { 
       steps {
