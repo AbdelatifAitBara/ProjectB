@@ -73,9 +73,6 @@ def token_authorized(token):
             return False
     except:
         return False
-    
-
-import re
 
 @app.route('/add_product', methods=['POST'])
 def add_product():

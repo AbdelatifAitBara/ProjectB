@@ -1,85 +1,105 @@
 import unittest
-import requests
 import json
+from app import app
 
-
-class TestAPI(unittest.TestCase):
+class TestAddProduct(unittest.TestCase):
     def setUp(self):
-        self.base_url = 'http://192.168.10.30:8080'
-        self.consumer_key = 'ck_dee05a6912d2c948e9607abb9e6174b330e04e6b'
-        self.consumer_secret = 'cs_685e63b42008ef7ecb2ec9fc534b6b607fdee5ee'
+        self.app = app.test_client()
+        self.app.testing = True
 
     def test_add_product(self):
-        # Define the product data to add
+        # Define the product data
         product_data = {
             'name': 'Test Product',
-            'type': 'simple',
-            'regular_price': '10.00'
+            'regular_price': '10.99',
+            'description': 'This is a test product',
+            'short_description': 'Test product',
+            'images': [
+                {
+                    'src': 'https://example.com/image.jpg'
+                }
+            ]
         }
 
-        # Send the POST request to add the product
-        response = requests.post(
-            f'{self.base_url}/add_product',
-            headers={'Content-Type': 'application/json'},
-            json=product_data,
-            auth=requests.auth.HTTPBasicAuth(self.consumer_key, self.consumer_secret)
-        )
+        # Send a POST request to the /add_product endpoint with the product data
+        response = self.app.post('/add_product', headers={'Authorization': 'Bearer test_token'}, json=product_data)
 
-        # Check that the response is valid
-        self.assertEqual(response.status_code, 201)  # Corrected status code
+        # Verify that the response status code is 201
+        self.assertEqual(response.status_code, 201)
 
-    def test_delete_product(self):
-        # Define the product ID to delete
-        product_id = 1
+        # Verify that the response contains the product_id
+        response_data = json.loads(response.data)
+        self.assertIn('product_id', response_data)
 
-        # Send the DELETE request to delete the product
-        response = requests.delete(
-            f'{self.base_url}/delete_product/{product_id}',
-            headers={'Content-Type': 'application/json'},
-            auth=requests.auth.HTTPBasicAuth(self.consumer_key, self.consumer_secret)
-        )
-
-        # Check that the response is valid
-        self.assertIn(response.status_code, [200, 400])
-
-    def test_update_product(self):
-        # Define the product ID to update
-        product_id = 1
-
-        # Define the product data to update
+    def test_add_product_missing_fields(self):
+        # Define the product data with missing fields
         product_data = {
-            'name': 'Updated Product',
-            'regular_price': '15.00'
+            'name': 'Test Product',
+            'regular_price': '10.99',
+            'description': '',
+            'short_description': '',
+            'images': []
         }
 
-        # Send the PUT request to update the product
-        response = requests.put(
-            f'{self.base_url}/update_product/{product_id}',
-            headers={'Content-Type': 'application/json'},
-            json=product_data,
-            auth=requests.auth.HTTPBasicAuth(self.consumer_key, self.consumer_secret)
-        )
+        # Send a POST request to the /add_product endpoint with the product data
+        response = self.app.post('/add_product', headers={'Authorization': 'Bearer test_token'}, json=product_data)
 
-        # Check that the response is valid
-        self.assertIn(response.status_code, [200, 400])
+        # Verify that the response status code is 400
+        self.assertEqual(response.status_code, 400)
 
-    def test_get_product(self):
-        # Define the product ID to retrieve
-        product_id = 1
+        # Verify that the response contains the error message
+        response_data = json.loads(response.data)
+        self.assertIn('description is a required field', response_data['message'])
+        self.assertIn('short_description is a required field', response_data['message'])
+        self.assertIn('images is a required field', response_data['message'])
 
-        # Send the GET request to retrieve the product
-        response = requests.get(
-            f'{self.base_url}/get_product/{product_id}',
-            headers={'Content-Type': 'application/json'},
-            auth=requests.auth.HTTPBasicAuth(self.consumer_key, self.consumer_secret)
-        )
+    def test_add_product_invalid_price(self):
+        # Define the product data with an invalid price
+        product_data = {
+            'name': 'Test Product',
+            'regular_price': 'invalid',
+            'description': 'This is a test product',
+            'short_description': 'Test product',
+            'images': [
+                {
+                    'src': 'https://example.com/image.jpg'
+                }
+            ]
+        }
 
-        # Check that the response is valid
-        if response.status_code == 200:
-            self.assertIn('id', response.json())
-        else:
-            self.assertEqual(response.status_code, 400)
-            self.assertIn('error', response.json())
+        # Send a POST request to the /add_product endpoint with the product data
+        response = self.app.post('/add_product', headers={'Authorization': 'Bearer test_token'}, json=product_data)
+
+        # Verify that the response status code is 400
+        self.assertEqual(response.status_code, 400)
+
+        # Verify that the response contains the error message
+        response_data = json.loads(response.data)
+        self.assertIn('regular_price must be a valid integer or float', response_data['message'])
+
+    def test_add_product_invalid_characters(self):
+        # Define the product data with invalid characters
+        product_data = {
+            'name': 'Test Product',
+            'regular_price': '10.99',
+            'description': 'This is a test product with & invalid characters',
+            'short_description': 'Test product',
+            'images': [
+                {
+                    'src': 'https://example.com/image.jpg'
+                }
+            ]
+        }
+
+        # Send a POST request to the /add_product endpoint with the product data
+        response = self.app.post('/add_product', headers={'Authorization': 'Bearer test_token'}, json=product_data)
+
+        # Verify that the response status code is 400
+        self.assertEqual(response.status_code, 400)
+
+        # Verify that the response contains the error message
+        response_data = json.loads(response.data)
+        self.assertIn('description contains unacceptable characters', response_data['message'])
 
 if __name__ == '__main__':
     unittest.main()
