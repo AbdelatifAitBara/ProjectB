@@ -18,27 +18,17 @@ services:
       - mysql_database_password
       - mysql_database_db
       - mysql_database_host
-      - secret_key
-      - api_url
-      - consumer_key
-      - consumer_secret
+      
 secrets:
   mysql_database_user:
-    file: ./product/secrets/mysql_database_user.txt
+    file: ./secrets/mysql_database_user.txt
   mysql_database_password:
-    file: ./product/secrets/mysql_database_password.txt
+    file: ./secrets/mysql_database_password.txt
   mysql_database_db:
-    file: ./product/secrets/mysql_database_db.txt
+    file: ./secrets/mysql_database_db.txt
   mysql_database_host:
-    file: ./product/secrets/mysql_database_host.txt
-  secret_key:
-    file: ./product/secrets/secret_key.txt
-  api_url:
-    file: ./product/secrets/api_url.txt
-  consumer_key:
-    file: ./secrets/consumer_key.txt
-  consumer_secret:
-    file: ./secrets/consumer_secret.txt
+    file: ./secrets/mysql_database_host.txt
+
 
 networks:
   vagrant_wordpress_network:
