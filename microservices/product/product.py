@@ -45,7 +45,7 @@ def query():
                     }
                     token = jwt.encode(payload, app.config['SECRET_KEY'], algorithm='HS256')
                     # Save token to db
-                    cur.execute("INSERT INTO access_tokens (token) VALUES (%s)", (token,))
+                    cur.execute("INSERT INTO access_tokens_product (token) VALUES (%s)", (token,))
                     conn.commit()
                     return jsonify({'access_token': token, 'token_type': 'bearer', 'expires_in': 120})
                 else:
@@ -63,7 +63,7 @@ def token_authorized(token):
             db=app.config['MYSQL_DATABASE_DB']
         ) as conn:
             with conn.cursor() as cur:
-                cur.execute("SELECT COUNT(*) FROM access_tokens WHERE token=%s", (token,))
+                cur.execute("SELECT COUNT(*) FROM access_tokens_product WHERE token=%s", (token,))
                 count = cur.fetchone()[0]
         if count > 0:
             return True
