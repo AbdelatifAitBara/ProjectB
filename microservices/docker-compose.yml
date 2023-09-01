@@ -1,4 +1,4 @@
-version: '3'
+version: '3.1'
 services:
   product:
     build:
@@ -13,32 +13,33 @@ services:
     image: product_image:${GIT_COMMIT}
     networks:
       - vagrant_wordpress_network
-    environment:
-      - MYSQL_DATABASE_USER_FILE=/run/secrets/MYSQL_DATABASE_USER
-      - MYSQL_DATABASE_PASSWORD_FILE=/run/secrets/MYSQL_DATABASE_PASSWORD
-      - MYSQL_DATABASE_DB_FILE=/run/secrets/MYSQL_DATABASE_DB
-      - MYSQL_DATABASE_HOST_FILE=/run/secrets/MYSQL_DATABASE_HOST
-
     secrets:
-      - MYSQL_DATABASE_USER
-      - MYSQL_DATABASE_PASSWORD
-      - MYSQL_DATABASE_DB
-      - MYSQL_DATABASE_HOST
-
-  order:
-    build:
-      context: ./order
-      dockerfile: Dockerfile
-      args:
-        GIT_COMMIT: $$(git --git-dir=/home/vagrant/agent/ProjectB/.git rev-parse --short HEAD)
-    ports:
-      - 9090:9090
-    restart: always
-    container_name: Order_Container
-    image: order_image:${GIT_COMMIT}
-    networks:
-      - vagrant_wordpress_network
+      - mysql_database_user
+      - mysql_database_password
+      - mysql_database_db
+      - mysql_database_host
+      - secret_key
+      - api_url
+      - consumer_key
+      - consumer_secret
+secrets:
+  mysql_database_user:
+    file: ./secrets/mysql_database_user.txt
+  mysql_database_password:
+    file: ./secrets/mysql_database_password.txt
+  mysql_database_db:
+    file: ./secrets/mysql_database_db.txt
+  mysql_database_host:
+    file: ./secrets/mysql_database_host.txt
+  secret_key:
+    file: ./secrets/secret_key.txt
+  api_url:
+    file: ./secrets/api_url.txt
+  consumer_key:
+    file: ./secrets/consumer_key.txt
+  consumer_secret:
+    file: ./secrets/consumer_secret.txt
 
 networks:
   vagrant_wordpress_network:
-    external: true
+    driver: bridge
