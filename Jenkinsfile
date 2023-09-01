@@ -18,11 +18,7 @@ pipeline {
     stage('Scan Docker Images For Security Vulnerabilities') {
       steps {
         try {
-          sysdigSecureScan(
-            image: DOCKER_IMAGE,
-            failBuildOnPolicyViolation: true,
-            breakOnFail: true
-          )
+          sh "sysdig_secure_scan.sh -i ${DOCKER_IMAGE}"
         } catch (Exception e) {
           currentBuild.result = 'FAILURE'
           throw e
