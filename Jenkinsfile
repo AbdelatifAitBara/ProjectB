@@ -4,8 +4,8 @@ pipeline {
   stages {
     stage('Clone Git Repository') {
       steps {
-        sh 'rm -rf /home/vagrant/agent/ProjectB/'
-        sh 'git -C /home/vagrant/agent/ clone --recursive git@github.com:AbdelatifAitBara/ProjectB.git'
+        sh 'rm -rf /home/jenkins/ProjectB/'
+        sh 'git -C /home/jenkins clone --recursive git@github.com:AbdelatifAitBara/ProjectB.git'
       }
     }
 

@@ -24,6 +24,8 @@ Vagrant.configure("2") do |config|
       sudo -E apt update
       sudo -E apt install docker-ce=5:20.10.24~3-0~ubuntu-$CODENAME docker-ce-cli=5:20.10.24~3-0~ubuntu-$CODENAME containerd.io docker-compose -y
       sudo usermod -a -G docker vagrant
+      sudo useradd -m jenkins
+      sudo usermod -aG docker jenkins`
       sudo systemctl enable docker
       sudo systemctl start docker
       sudo apt install openjdk-17-jdk -y
@@ -31,7 +33,7 @@ Vagrant.configure("2") do |config|
         echo "Docker failed to start."
         exit 1
       fi
-      ssh-keyscan github.com >> ~/.ssh/known_hosts
+      sudo ssh-keyscan github.com >> ~/.ssh/known_hosts
       sudo apt install openjdk-17-jdk -y
       sudo apt install python3-pip -y
       pip install -U mock
