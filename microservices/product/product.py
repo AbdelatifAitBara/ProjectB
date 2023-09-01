@@ -11,11 +11,21 @@ import os
 app = Flask(__name__)
 CORS(app)
 
-app.config['MYSQL_DATABASE_USER'] = 'phenix'
-app.config['MYSQL_DATABASE_PASSWORD'] = 'password'
-app.config['MYSQL_DATABASE_DB'] = 'wordpress_db'
-app.config['MYSQL_DATABASE_HOST'] = 'db'
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+# Read the environment variables from the corresponding files
+
+
+with open('/run/secrets/mysql_database_user', 'r') as f:
+    app.config['MYSQL_DATABASE_USER'] = f.read().strip()
+
+with open('/run/secrets/mysql_database_password', 'r') as f:
+    app.config['MYSQL_DATABASE_PASSWORD'] = f.read().strip()
+
+with open('/run/secrets/mysql_database_db', 'r') as f:
+    app.config['MYSQL_DATABASE_DB'] = f.read().strip()
+
+with open('/run/secrets/mysql_database_host', 'r') as f:
+    app.config['MYSQL_DATABASE_HOST'] = f.read().strip()
+
 
 API_URL = os.getenv('API_URL')
 consumer_key = os.getenv('CONSUMER_KEY')

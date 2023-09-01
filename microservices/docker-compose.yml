@@ -13,6 +13,24 @@ services:
     image: product_image:${GIT_COMMIT}
     networks:
       - vagrant_wordpress_network
+    environment:
+      - MYSQL_DATABASE_USER_FILE=/run/secrets/mysql_database_user
+      - MYSQL_DATABASE_PASSWORD_FILE=/run/secrets/mysql_database_password
+      - MYSQL_DATABASE_DB_FILE=/run/secrets/mysql_database_db
+      - MYSQL_DATABASE_HOST_FILE=/run/secrets/mysql_database_host
+      - SECRET_KEY_FILE=/run/secrets/secret_key
+      - API_URL_FILE=/run/secrets/api_url
+      - CONSUMER_KEY_FILE=/run/secrets/consumer_key
+      - CONSUMER_SECRET_FILE=/run/secrets/consumer_secret
+    secrets:
+      - mysql_database_user
+      - mysql_database_password
+      - mysql_database_db
+      - mysql_database_host
+      - secret_key
+      - api_url
+      - consumer_key
+      - consumer_secret
 
   order:
     build:
