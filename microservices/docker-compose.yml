@@ -24,17 +24,17 @@ services:
       - consumer_secret
 secrets:
   mysql_database_user:
-    file: ./secrets/mysql_database_user.txt
+    file: ./product/secrets/mysql_database_user.txt
   mysql_database_password:
-    file: ./secrets/mysql_database_password.txt
+    file: ./product/secrets/mysql_database_password.txt
   mysql_database_db:
-    file: ./secrets/mysql_database_db.txt
+    file: ./product/secrets/mysql_database_db.txt
   mysql_database_host:
-    file: ./secrets/mysql_database_host.txt
+    file: ./product/secrets/mysql_database_host.txt
   secret_key:
-    file: ./secrets/secret_key.txt
+    file: ./product/secrets/secret_key.txt
   api_url:
-    file: ./secrets/api_url.txt
+    file: ./product/secrets/api_url.txt
   consumer_key:
     file: ./secrets/consumer_key.txt
   consumer_secret:
