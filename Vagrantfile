@@ -17,17 +17,17 @@ Vagrant.configure("2") do |config|
     woo.vm.provision "shell", inline: <<-SHELL
       #!/bin/bash
       sudo -E apt-get update
-      sudo apt-get install nginx -y
-      mkdir /home/vagrant/ssl
-      cp /vagrant/ssl_generate.sh /home/vagrant/ssl
-      sudo apt-get install dos2unix
-      dos2unix /home/vagrant/ssl/ssl_generate.sh
-      chmod +x /home/vagrant/ssl/ssl_generate.sh
-      cd /home/vagrant/ssl
-      sudo bash /home/vagrant/ssl/ssl_generate.sh cert
-      sudo rm /etc/nginx/nginx.conf
-      sudo cp /vagrant/nginx.conf /etc/nginx/nginx.conf
-      sudo systemctl restart nginx
+      sudo apt-get install ufw -y
+      sudo ufw default deny incoming
+      sudo ufw default allow outgoing
+      sudo ufw allow 8080
+      sudo ufw allow 80
+      sudo ufw allow 9090
+      sudo ufw allow 443
+      sudo ufw allow 22
+      sudo ufw allow 3306
+      sudo ufw allow 8888
+      sudo ufw enable
       sudo -E apt install apt-transport-https ca-certificates curl software-properties-common -y
       curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo -E apt-key add -
       CODENAME=$(lsb_release -cs)
@@ -39,12 +39,9 @@ Vagrant.configure("2") do |config|
       sudo usermod -aG docker jenkins
       sudo systemctl enable docker
       sudo systemctl start docker
-      sudo apt install openjdk-17-jdk -y
-      if ! docker info >/dev/null 2>&1; then
-        echo "Docker failed to start."
-        exit 1
-      fi
-      sudo ssh-keyscan github.com >> ~/.ssh/known_hosts
+      cp /vagrant/default.conf /home/vagrant/default.conf
+      sudo docker run -d --network vagrant_wordpress_network --restart always --name reverse_proxy -p 80:80 -v /home/vagrant/default.conf:/etc/nginx/conf.d/default.conf nginx
+      sudo docker restart reverse_proxy
       sudo apt install openjdk-17-jdk -y
       sudo apt install python3-pip -y
       pip install -U mock
@@ -96,10 +93,6 @@ Vagrant.configure("2") do |config|
       sudo usermod -a -G docker vagrant
       sudo systemctl enable docker
       sudo systemctl start docker
-      if ! docker info >/dev/null 2>&1; then
-        echo "Docker failed to start."
-        exit 1
-      fi
       docker container run -d -p 5555:8080 --restart always -v jenkinsvol1:/var/jenkins_home --name Jenkins_Container jenkins/jenkins:lts
     SHELL
   end
