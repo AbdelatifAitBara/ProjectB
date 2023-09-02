@@ -162,38 +162,6 @@ def get_product(product_id):
     else:
         return jsonify({'message': 'Error getting product.'}), 500
 
-
-    # Get the updated product data from the request
-    product_data = request.json
-
-    token = request.headers.get('Authorization')
-    
-    if not token_authorized(token):
-        return jsonify({'message': 'Authentication failed'}), 401
-    
-    # Set up the OAuth1Session for authentication
-    oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
-
-    # Set up the API endpoint and headers
-    endpoint = f"{API_URL}/{product_id}"
-    headers = {'Content-Type': 'application/json'}
-
-    # Send the PUT request to update the product
-    try:
-        response = oauth.put(endpoint, headers=headers, json=product_data)
-        response.raise_for_status()
-    except requests.exceptions.HTTPError as e:
-        error_message = e.response.json()['message']
-        return jsonify({'message': f'Error updating product: {error_message}'}), e.response.status_code
-    except Exception as e:
-        return jsonify({'message': f'Error updating product: {str(e)}'}), 500
-
-    # Handle the response from the WooCommerce API
-    if response.status_code == 200:
-        return jsonify({'message': 'Product updated successfully.'}), 200
-    else:
-        return jsonify({'message': 'Error updating product.'}), 500
-
 @app.route('/update_product/<int:product_id>', methods=['PUT'])
 def update_product(product_id):
     # Get the updated product data from the request
