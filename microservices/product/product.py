@@ -23,6 +23,18 @@ API_URL = os.getenv('API_URL')
 consumer_key = os.getenv('CONSUMER_KEY')
 consumer_secret = os.getenv('CONSUMER_SECRET')
 
+# Create a table to store the access tokens for the product if it doesn't exist
+
+with pymysql.connect(
+    host=app.config['MYSQL_DATABASE_HOST'],
+    user=app.config['MYSQL_DATABASE_USER'],
+    password=app.config['MYSQL_DATABASE_PASSWORD'],
+    db=app.config['MYSQL_DATABASE_DB']
+) as conn:
+    with conn.cursor() as cur:
+        cur.execute("CREATE TABLE IF NOT EXISTS access_tokens_product (id INT(11) NOT NULL AUTO_INCREMENT, token VARCHAR(255) NOT NULL, PRIMARY KEY (id));")
+        conn.commit()
+
 @app.route('/product_token', methods=['POST'])
 def query():
     try:
