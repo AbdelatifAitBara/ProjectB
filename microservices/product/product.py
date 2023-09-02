@@ -23,7 +23,7 @@ API_URL = os.getenv('API_URL')
 consumer_key = os.getenv('CONSUMER_KEY')
 consumer_secret = os.getenv('CONSUMER_SECRET')
 
-@app.route('/token', methods=['POST'])
+@app.route('/product_token', methods=['POST'])
 def query():
     try:
         data = json.loads(request.data)

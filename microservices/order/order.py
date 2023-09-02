@@ -21,7 +21,7 @@ app.config['MYSQL_DATABASE_PASSWORD'] = 'password'
 app.config['MYSQL_DATABASE_DB'] = 'wordpress_db'
 app.config['MYSQL_DATABASE_HOST'] = 'db'
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-@app.route('/token', methods=['POST'])
+@app.route('/order_token', methods=['POST'])
 def query():
     try:
         data = json.loads(request.data)
