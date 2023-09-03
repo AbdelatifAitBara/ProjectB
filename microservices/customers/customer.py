@@ -1,4 +1,5 @@
 from flask import Flask, abort, jsonify, request
+import requests
 from requests_oauthlib import OAuth1Session
 import pymysql
 from flask_cors import CORS
