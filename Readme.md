@@ -67,12 +67,11 @@ Orders Microservice:
 
 ```
 
-- Test AAB branch Lotfi 
+- Customer Works 100% With TOKEN Protection.
 - Product Works 100% With TOKEN Protection.
 - Order Works 100% With TOKEN Protection.
 - Token Valid only for 2 minutes Works 100%
 - Reverse Proxy Works 100%.
-- All On HTTPS 💥💢💥
 
 
 [![Made with Love](https://img.shields.io/badge/Made%20with-Love-red)](https://github.com/AbdelatifAitBara/ProjectB)
