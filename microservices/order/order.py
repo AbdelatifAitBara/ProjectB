@@ -100,7 +100,7 @@ def add_order():
         return jsonify({'message': 'Authentication failed'}), 401
     
     # Check if required fields are present and not empty
-    required_fields = ['customer_name', 'customer_email']
+    required_fields = ['billing', 'shipping', 'line_items']
     for field in required_fields:
         if field not in order_data or not order_data[field]:
             return jsonify({'message': f'{field} is a required field'}), 400
