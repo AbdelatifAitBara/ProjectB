@@ -242,7 +242,7 @@ def get_users():
     
     # Send the GET request to retrieve the users
     try:
-        response = oauth.get(API_URL + '/users', headers=headers)
+        response = oauth.get(API_URL, headers=headers)
         response.raise_for_status()
     except requests.exceptions.HTTPError as e:
         error_message = e.response.json()['message']
