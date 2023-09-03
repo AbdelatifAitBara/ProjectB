@@ -39,9 +39,9 @@ Vagrant.configure("2") do |config|
       sudo usermod -aG docker jenkins
       sudo systemctl enable docker
       sudo systemctl start docker
-      cp /vagrant/default.conf /home/vagrant/default.conf
-      sudo docker run -d --network vagrant_wordpress_network --restart always --name reverse_proxy -p 80:80 -v /home/vagrant/default.conf:/etc/nginx/conf.d/default.conf nginx
-      sudo docker restart reverse_proxy
+      sudo apt install haproxy -y
+      sudo cp /vagrant/haproxy.cfg /etc/haproxy/haproxy.cfg
+      sudo systemctl enable haproxy
       sudo apt install openjdk-17-jdk -y
       sudo apt install python3-pip -y
       pip install -U mock
