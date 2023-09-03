@@ -17,7 +17,7 @@ EXPOSE 9090
 
 # Define environment variables
 
-ENV API_URL='https://192.168.10.10:8888/wp-json/wc/v3/orders'
+ENV API_URL='https://192.168.10.10/wp-json/wc/v3/orders'
 ENV CONSUMER_KEY='ck_1c8542dd8bb7b15edcde59f03607dd8375c21d11'
 ENV CONSUMER_SECRET='cs_3da5306a5a407cc26d692e15c8ebf0db93f78421'
 ENV SECRET_KEY='sk_fYVw52zywDRVAgsC8yUi2TXFRu1MmtPK'
