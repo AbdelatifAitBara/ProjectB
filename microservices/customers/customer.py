@@ -170,12 +170,6 @@ def update_user(user_id):
     if not customer_token_authorized(token):
         return jsonify({'message': 'Authentication failed'}), 401
     
-    # Check if required fields are present and not empty
-    required_fields = ['first_name', 'last_name', 'email', 'password', 'username', 'phone']
-    for field in required_fields:
-        if field not in user_data or not user_data[field]:
-            return jsonify({'message': f'{field} is a required field'}), 400
-    
     # Set up the OAuth1Session for authentication
     oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
     
