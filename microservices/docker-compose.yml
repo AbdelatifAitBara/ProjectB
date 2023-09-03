@@ -1,5 +1,20 @@
 version: '3'
 services:
+
+  consumer:
+    build:
+      context: ./consumer
+      dockerfile: Dockerfile
+      args:
+        GIT_COMMIT: $$(git --git-dir=/home/vagrant/agent/ProjectB/.git rev-parse --short HEAD)
+    ports:
+      - 7070:7070
+    restart: always
+    container_name: Consumer_Container
+    image: consumer_image:${GIT_COMMIT}
+    networks:
+      - vagrant_wordpress_network
+
   product:
     build:
       context: ./product
