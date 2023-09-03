@@ -120,9 +120,13 @@ def add_product():
         
     # Set up the OAuth1Session for authentication
     oauth = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret)
+    
 
     # Set up the API endpoint and headers
     headers = {'Content-Type': 'application/json'}
+    
+    # Disable SSL certificate verification
+    oauth.verify = False
 
     # Send the POST request to add the product
     try:
