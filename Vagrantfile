@@ -40,7 +40,6 @@ Vagrant.configure("2") do |config|
       sudo systemctl enable docker
       sudo systemctl start docker
       sudo apt install haproxy -y
-      sudo cp /vagrant/haproxy.cfg /etc/haproxy/haproxy.cfg
       sudo systemctl enable haproxy
       sudo apt install openjdk-17-jdk -y
       sudo apt install python3-pip -y
@@ -73,17 +72,6 @@ Vagrant.configure("2") do |config|
     master.vm.provision "shell", inline: <<-SHELL
       #!/bin/bash
       sudo apt-get update
-      sudo apt-get install nginx -y
-      mkdir /home/vagrant/ssl
-      cp /vagrant/ssl_generate.sh /home/vagrant/ssl
-      sudo apt-get install dos2unix
-      dos2unix /home/vagrant/ssl/ssl_generate.sh
-      chmod +x /home/vagrant/ssl/ssl_generate.sh
-      cd /home/vagrant/ssl
-      sudo bash /home/vagrant/ssl/ssl_generate.sh cert
-      sudo rm /etc/nginx/nginx.conf
-      sudo cp /vagrant/nginx.conf /etc/nginx/nginx.conf
-      sudo systemctl restart nginx
       sudo -E apt install apt-transport-https ca-certificates curl software-properties-common -y
       curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo -E apt-key add -
       CODENAME=$(lsb_release -cs)
