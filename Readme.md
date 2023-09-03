@@ -38,7 +38,17 @@ Containers IPs:
 ```
 API END POINTS: 
 
-Product Microservice: 
+
+Users Microservice: 
+
+    Generate Token  :  http://192.168.10.10/customer_token
+    Add New User    :  http://192.168.10.10/add_customer
+    Update User     :  http://192.168.10.10/update_user/<id>
+    Delete User     :  http://192.168.10.10/delete_user/<id>
+    Get User        :  http://192.168.10.10/get_user/<id>
+    Get Users       :  http://192.168.10.10/get_users
+
+Products Microservice: 
 
 
     Generate Token  :  http://192.168.10.10/token_product
@@ -47,7 +57,7 @@ Product Microservice:
     Delete Product  :  http://192.168.10.10:8080/delete_product/<id>
     Get Product     :  http://192.168.10.10/get_product/<id>
 
-Order Microservice: 
+Orders Microservice: 
 
     Generate Token  :  http://192.168.10.10/token_order
     Add Order       :  http://192.168.10.10/add_order
