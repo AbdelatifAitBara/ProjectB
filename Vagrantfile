@@ -41,6 +41,9 @@ Vagrant.configure("2") do |config|
       sudo systemctl start docker
       sudo apt install haproxy -y
       sudo systemctl enable haproxy
+      sudo systemctl start haproxy
+      cp /home/vagrant/haproxy.cfg /etc/haproxy/haproxy.cfg
+      sudo systemctl restart haproxy
       sudo apt install openjdk-17-jdk -y
       sudo apt install python3-pip -y
       pip install -U mock
