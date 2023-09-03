@@ -35,8 +35,7 @@ Vagrant.configure("2") do |config|
       sudo -E apt update
       sudo -E apt install docker-ce=5:20.10.24~3-0~ubuntu-$CODENAME docker-ce-cli=5:20.10.24~3-0~ubuntu-$CODENAME containerd.io docker-compose -y
       sudo usermod -a -G docker vagrant
-      sudo useradd -m jenkins
-      sudo usermod -aG docker jenkins
+      sudo useradd -m -d /home/jenkin -G docker jenkin
       sudo systemctl enable docker
       sudo systemctl start docker
       sudo apt install haproxy -y
