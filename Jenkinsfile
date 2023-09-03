@@ -3,7 +3,7 @@ pipeline {
   
   environment {
     PROJECT_DIR = '/home/jenkins/ProjectB'
-    PROJECT_FOLDER = '/home/jenkins/'
+    PROJECT_FOLDER = 'ProjectB'
     DOCKER_COMPOSE_FILE = 'microservices/docker-compose.yml'
     DOCKER_IMAGE = 'python:3.8-slim-buster'
   }
@@ -11,7 +11,7 @@ pipeline {
   stages {
     stage('Clone Git Repository') {
       steps {
-        sh "rm -drf * ${PROJECT_FOLDER}"
+        sh "rm -rf ${PROJECT_DIR}"
         sh "mkdir -p ${PROJECT_DIR}"
         sh "git -C ${PROJECT_DIR} clone --recursive git@github.com:AbdelatifAitBara/ProjectB.git"
       }
