@@ -144,7 +144,7 @@ def delete_user(user_id):
     
     # Send the DELETE request to remove the user
     try:
-        response = oauth.delete(API_URL + f'/users/{user_id}', headers=headers)
+        response = oauth.delete(f"{API_URL}/{user_id}", headers=headers)
         response.raise_for_status()
     except requests.exceptions.HTTPError as e:
         error_message = e.response.json()['message']
@@ -178,7 +178,7 @@ def update_user(user_id):
     
     # Send the PUT request to update the user
     try:
-        response = oauth.put(API_URL + f'/users/{user_id}', headers=headers, json=user_data)
+        response = oauth.put(f"{API_URL}/{user_id}", headers=headers, json=user_data)
         response.raise_for_status()
     except requests.exceptions.HTTPError as e:
         error_message = e.response.json()['message']
