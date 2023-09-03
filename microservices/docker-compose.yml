@@ -3,7 +3,7 @@ services:
 
   consumer:
     build:
-      context: ./costumers
+      context: ./customers
       dockerfile: Dockerfile
       args:
         GIT_COMMIT: $$(git --git-dir=/home/vagrant/agent/ProjectB/.git rev-parse --short HEAD)
