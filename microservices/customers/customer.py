@@ -110,7 +110,7 @@ def add_customer():
 
     # Send the POST request to add the customer
     try:
-        response = oauth.post(API_URL + '/customers', headers=headers, json=customer_data)
+        response = oauth.post(API_URL, headers=headers, json=customer_data)
         response.raise_for_status()
     except requests.exceptions.HTTPError as e:
         error_message = e.response.json()['message']
