@@ -82,8 +82,8 @@ Vagrant.configure("2") do |config|
       curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo -E apt-key add -
       CODENAME=$(lsb_release -cs)
       sudo -E add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $CODENAME stable"
-      sudo -E apt update   
-      sudo -E apt install docker-ce docker-ce-cli containerd.io -y
+      sudo -E apt update
+      sudo -E apt install docker-ce=5:20.10.24~3-0~ubuntu-$CODENAME docker-ce-cli=5:20.10.24~3-0~ubuntu-$CODENAME containerd.io docker-compose -y
       sudo usermod -a -G docker vagrant
       sudo systemctl enable docker
       sudo systemctl start docker
