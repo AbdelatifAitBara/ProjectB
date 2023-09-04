@@ -11,13 +11,12 @@ COPY zabbix_agentd.conf /etc/zabbix/zabbix_agentd.conf
 # Install required dependencies
 RUN apt-get update && apt-get install -y wget
 
-# Download Zabbix agent package
-RUN wget wget https://repo.zabbix.com/zabbix/6.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.0-4+ubuntu22.04_all.deb
+# Download and install the Zabbix agent
+RUN wget https://repo.zabbix.com/zabbix/5.4/debian/pool/main/z/zabbix-release/zabbix-release_5.4-1+debian10_all.deb \
+    && dpkg -i zabbix-release_5.4-1+debian10_all.deb \
+    && apt-get update && apt-get install -y zabbix-agent
 
-# Install Zabbix agent package
-
-RUN dpkg -i zabbix-release_6.0-4+ubuntu22.04_all.deb && apt-get update && apt-get install -y zabbix-agent2 zabbix-agent2-plugin-*
-
+    
 # Install any other needed packages specified in requirements.txt
 RUN pip install --trusted-host pypi.python.org -r requirements.txt
 
