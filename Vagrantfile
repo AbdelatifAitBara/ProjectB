@@ -16,7 +16,7 @@ Vagrant.configure("2") do |config|
 
     woo.vm.provision "shell", inline: <<-SHELL
       #!/bin/bash
-      sudo -E apt-get update
+      sudo apt update && sudo apt upgrade -y
       sudo apt-get install ufw -y
       sudo ufw default deny incoming
       sudo ufw default allow outgoing
@@ -43,6 +43,10 @@ Vagrant.configure("2") do |config|
       sudo systemctl start haproxy
       cp /home/vagrant/haproxy.cfg /etc/haproxy/haproxy.cfg
       sudo systemctl restart haproxy
+      sudo apt install apache2 php php-mysql php-mysqlnd php-ldap php-bcmath php-mbstring php-gd php-pdo php-xml libapache2-mod-php
+      sudo apt install apache -y
+      sudo systemctl enable apache2
+      sudo systemctl start apache2
       sudo apt install openjdk-17-jdk -y
       sudo apt install python3-pip -y
       pip install -U mock

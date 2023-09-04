@@ -1,0 +1,61 @@
+version: '3.4'
+
+services:
+  zabbix-server:
+    image: zabbix/zabbix-server-pgsql:latest
+    restart: always
+    environment:
+      DB_SERVER_HOST: postgres
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix
+      POSTGRES_DB: zabbix
+    ports:
+      - 10051:10051
+    networks:
+      - vagrant_wordpress_network
+    depends_on:
+      - postgres
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
+  zabbix-web:
+    image: zabbix/zabbix-web-nginx-pgsql:latest
+    restart: always
+    environment:
+      DB_SERVER_HOST: postgres
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix
+      POSTGRES_DB: zabbix
+      ZBX_SERVER_HOST: zabbix-server
+      PHP_TZ: Europe/Paris
+    ports:
+      - 6060:8080
+    networks:
+      - vagrant_wordpress_network
+    depends_on:
+      - zabbix-server
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
+  postgres:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix
+      POSTGRES_DB: zabbix
+    networks:
+      - vagrant_wordpress_network
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - zabbix-db:/var/lib/postgresql/data
+
+volumes:
+  zabbix-db:
+
+networks:
+  vagrant_wordpress_network:
+    external: true
