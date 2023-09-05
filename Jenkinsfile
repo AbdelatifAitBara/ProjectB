@@ -54,7 +54,7 @@ pipeline {
       }
       steps {
         sh "docker swarm init --advertise-addr 10.0.2.15"
-        sh "cd promgrafnode && docker-compose up -d"
+        sh "cd promgrafnode && docker stack deploy -c docker-compose.yml observability-stack"
       }
     }
 
