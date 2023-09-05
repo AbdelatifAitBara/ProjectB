@@ -4,7 +4,7 @@ pipeline {
   environment {
     PROJECT_DIR = '/home/jenkins/ProjectB'
     PROJECT_FOLDER = 'ProjectB'
-    DOCKER_COMPOSE_FILE = 'microservices/docker-compose.yml'
+    DOCKER_COMPOSE_FILE_MICROSERVICES = 'microservices/docker-compose.yml'
   }
 
   stages {
@@ -12,7 +12,7 @@ pipeline {
       steps {
         sh "rm -rf ${PROJECT_DIR}"
         sh "mkdir -p ${PROJECT_DIR}"
-        sh "git -C ${PROJECT_DIR} clone --recursive git@github.com:AbdelatifAitBara/ProjectB.git"
+        sh "git clone -c --recursive git@github.com:AbdelatifAitBara/ProjectB.git ${PROJECT_DIR}"
       }
     }
 
@@ -44,7 +44,7 @@ pipeline {
       steps {
         sh "rm -rf ${PROJECT_DIR}"
         sh "mkdir -p ${PROJECT_DIR}"
-        sh "git -C ${PROJECT_DIR} clone --recursive git@github.com:AbdelatifAitBara/ProjectB.git"
+        sh "git clone --recursive git@github.com:AbdelatifAitBara/ProjectB.git ${PROJECT_DIR}"
       }
     }
 
