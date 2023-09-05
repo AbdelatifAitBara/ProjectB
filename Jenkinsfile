@@ -1,11 +1,10 @@
 pipeline {
-  agent any
+  agent { label 'Production_Machine' }
   
   environment {
     PROJECT_DIR = '/home/jenkins/ProjectB'
     PROJECT_FOLDER = 'ProjectB'
     DOCKER_COMPOSE_FILE = 'microservices/docker-compose.yml'
-    DOCKER_IMAGE = 'python:3.8-slim-buster'
   }
 
   stages {

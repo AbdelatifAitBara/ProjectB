@@ -110,6 +110,7 @@ config.vm.define "Observability" do |master|
     CODENAME=$(lsb_release -cs)
     sudo -E add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $CODENAME stable"
     sudo -E apt update
+    sudo apt install openjdk-17-jdk -y
     sudo -E apt install docker-ce=5:20.10.24~3-0~ubuntu-$CODENAME docker-ce-cli=5:20.10.24~3-0~ubuntu-$CODENAME containerd.io docker-compose -y
     sudo usermod -a -G docker vagrant
     sudo systemctl enable docker
