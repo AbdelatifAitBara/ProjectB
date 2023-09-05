@@ -47,8 +47,8 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - ./grafana/provisioning:/etc/grafana/provisioning/datasources
-      - ./grafana:/var/lib/grafana
+      - /etc/grafana/provisioning/dashboards:/etc/grafana/provisioning/datasources
+      - /var/lib/grafana:/var/lib/grafana
     environment:
       - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
     networks:
