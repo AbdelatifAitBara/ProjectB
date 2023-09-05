@@ -35,7 +35,7 @@ Vagrant.configure("2") do |config|
       sudo -E apt update
       sudo -E apt install docker-ce=5:20.10.24~3-0~ubuntu-$CODENAME docker-ce-cli=5:20.10.24~3-0~ubuntu-$CODENAME containerd.io docker-compose -y
       sudo usermod -a -G docker vagrant
-      sudo useradd -m -d /home/jenkin -G docker jenkin
+      sudo useradd -m -d /home/jenkins -G docker jenkins
       sudo systemctl enable docker
       sudo systemctl start docker
       sudo apt install haproxy -y
@@ -51,6 +51,7 @@ Vagrant.configure("2") do |config|
       sudo apt install python3-pip -y
       pip install -U mock
       pip install nose
+      sudo timedatectl set-timezone Europe/Paris
     SHELL
 
     woo.vm.provision "file", source: "docker-compose.yml", destination: "/home/vagrant/docker-compose.yml"
@@ -88,6 +89,37 @@ Vagrant.configure("2") do |config|
       sudo systemctl enable docker
       sudo systemctl start docker
       docker container run -d -p 5555:8080 --restart always -v jenkinsvol1:/var/jenkins_home --name Jenkins_Container jenkins/jenkins:lts
+      sudo timedatectl set-timezone Europe/Paris
     SHELL
   end
+
+# Deploy Observability Machine
+
+config.vm.define "Observability" do |master|
+  master.vm.hostname = "Observability"
+  master.vm.network "private_network", ip: "192.168.10.30"
+
+  master.vm.provider "virtualbox" do |vb|
+    vb.memory = 2048
+    vb.cpus = 2
+    vb.name = "Observability"
+  end
+
+  master.vm.provision "shell", inline: <<-SHELL
+    #!/bin/bash
+    sudo apt-get update
+    sudo -E apt install apt-transport-https ca-certificates curl software-properties-common -y
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo -E apt-key add -
+    CODENAME=$(lsb_release -cs)
+    sudo -E add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $CODENAME stable"
+    sudo -E apt update
+    sudo -E apt install docker-ce=5:20.10.24~3-0~ubuntu-$CODENAME docker-ce-cli=5:20.10.24~3-0~ubuntu-$CODENAME containerd.io docker-compose -y
+    sudo usermod -a -G docker vagrant
+    sudo systemctl enable docker
+    sudo systemctl start docker
+    docker run -d -p 9000:9000 --name Portainer_Container --restart always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data -e TZ=Europe/Paris portainer/portainer-ce
+    sudo timedatectl set-timezone Europe/Paris
+  SHELL
+end
+
 end
