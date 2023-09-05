@@ -23,23 +23,12 @@ pipeline {
       }
     }
 
-    stage('Leave Swarm') {
-      steps {
-        sh "docker swarm leave --force || true" // leave the swarm if already joined
-      }
-    }
-
-    stage('Initialize The swarm') {
-      steps {
-        sh "docker swarm init --advertise-addr 10.0.2.15" // 
-        sh "docker network create --driver overlay microservice"
-      }
-    }
-
-    stage('Deploy Microservices Stack') {
+    stage('Deploy Microservices Containers') {
       steps {
         input message: 'Approve deployment?', ok: 'Deploy'
-        sh "docker stack deploy -c ${DOCKER_COMPOSE_FILE} production-microservices" // deploy the stack to the swarm
+        sh "docker-compose -f ${DOCKER_COMPOSE_FILE} down"
+        sh "docker-compose -f ${DOCKER_COMPOSE_FILE} up -d"
+        
       }
     }
 
