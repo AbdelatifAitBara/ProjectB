@@ -53,7 +53,6 @@ pipeline {
         label 'Observability'
       }
       steps {
-        sh "docker stack rm observability-stack"
         sh "docker swarm leave --force"
         sh "docker swarm init --advertise-addr 10.0.2.15"
         sh "docker network create --driver overlay --attachable monitoring"
