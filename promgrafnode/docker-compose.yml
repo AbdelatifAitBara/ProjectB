@@ -23,10 +23,10 @@ services:
 
   prometheus:
     image: prom/prometheus:latest
-    user: "1000"
+    user: "1001"
     environment:
-      - PUID=1000
-      - PGID=1000
+      - PUID=1001
+      - PGID=1001
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
       - ./prometheus:/prometheus
@@ -43,7 +43,7 @@ services:
 
   grafana:
     image: grafana/grafana:latest
-    user: "1000"
+    user: "1001"
     ports:
       - 3000:3000
     volumes:
