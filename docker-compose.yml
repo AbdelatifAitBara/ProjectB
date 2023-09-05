@@ -12,7 +12,7 @@ services:
       MYSQL_USER: phenix
       MYSQL_PASSWORD: password
     networks:
-      - wordpress_network
+      - vagrant_wordpress_network
 
   wordpress:
     depends_on:
@@ -29,10 +29,12 @@ services:
     volumes:
       - ./wp-content:/var/www/html/wp-content
     networks:
-      - wordpress_network
+      - vagrant_wordpress_network
 
-networks:
-  wordpress_network:
 
 volumes:
   db_data:
+
+networks:
+  vagrant_wordpress_network:
+    external: true

@@ -9,7 +9,7 @@ Vagrant.configure("2") do |config|
     woo.vm.network "private_network", ip: "192.168.10.10"
 
     woo.vm.provider "virtualbox" do |vb|
-      vb.memory = 3048
+      vb.memory = 4096
       vb.cpus = 2
       vb.name = "Production"
     end
@@ -35,6 +35,7 @@ Vagrant.configure("2") do |config|
       sudo -E apt update
       sudo -E apt install docker-ce=5:20.10.24~3-0~ubuntu-$CODENAME docker-ce-cli=5:20.10.24~3-0~ubuntu-$CODENAME containerd.io docker-compose -y
       sudo usermod -a -G docker vagrant
+      docker network create -d bridge vagrant_wordpress_network
       sudo useradd -m -d /home/jenkins -G docker jenkins
       sudo systemctl enable docker
       sudo systemctl start docker
@@ -67,7 +68,7 @@ Vagrant.configure("2") do |config|
     master.vm.network "private_network", ip: "192.168.10.20"
   
     master.vm.provider "virtualbox" do |vb|
-      vb.memory = 3048
+      vb.memory = 2048
       vb.cpus = 2
       vb.name = "JenkinsMaster"
     end
