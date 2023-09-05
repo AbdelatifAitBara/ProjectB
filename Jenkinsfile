@@ -29,6 +29,12 @@ pipeline {
       }
     }
 
+    stage('Create Overlay Network') {
+      steps {
+        sh "docker network create --driver overlay microservice"
+      }
+    }
+
     stage('Deploy Microservices Stack') {
       steps {
         input message: 'Approve deployment?', ok: 'Deploy'
