@@ -1,15 +1,12 @@
+
 version: '3.8'
-networks:
-  monitoring:
-    driver: bridge
+
 volumes:
   prometheus_data: {}
-services:
 
+services:
   node-exporter:
     image: prom/node-exporter:latest
-    container_name: node-exporter
-    restart: unless-stopped
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
@@ -23,18 +20,16 @@ services:
       - 9100:9100
     networks:
       - monitoring
-      
+
   prometheus:
     image: prom/prometheus:latest
     user: "1000"
     environment:
       - PUID=1000
       - PGID=1000
-    container_name: prometheus
-    restart: unless-stopped
     volumes:
-      - ~/promgrafnode/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-      - ~/promgrafnode/prometheus:/prometheus
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus:/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
@@ -45,20 +40,20 @@ services:
       - 9090:9090
     networks:
       - monitoring
-    depends_on:
-      - node-exporter
 
   grafana:
     image: grafana/grafana:latest
     user: "1000"
-    container_name: grafana
     ports:
       - 3000:3000
-    restart: unless-stopped
     volumes:
-      - ~/promgrafnode/grafana/provisioning/datasources:/etc/grafana/provisionin                                                      g/datasources
-      - ~/promgrafnode/grafana:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning/datasources
+      - ./grafana:/var/lib/grafana
+    environment:
+      - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
     networks:
       - monitoring
-    depends_on:
-      - prometheus
+
+networks:
+  monitoring:
+    external: true
