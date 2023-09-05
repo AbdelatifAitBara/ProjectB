@@ -41,12 +41,8 @@ Vagrant.configure("2") do |config|
       sudo apt install haproxy -y
       sudo systemctl enable haproxy
       sudo systemctl start haproxy
-      cp /home/vagrant/haproxy.cfg /etc/haproxy/haproxy.cfg
+      cp /home/vagrant/haproxy_micro.cfg /etc/haproxy/haproxy.cfg
       sudo systemctl restart haproxy
-      sudo apt install apache2 php php-mysql php-mysqlnd php-ldap php-bcmath php-mbstring php-gd php-pdo php-xml libapache2-mod-php
-      sudo apt install apache -y
-      sudo systemctl enable apache2
-      sudo systemctl start apache2
       sudo apt install openjdk-17-jdk -y
       sudo apt install python3-pip -y
       pip install -U mock
@@ -117,7 +113,7 @@ config.vm.define "Observability" do |master|
     sudo usermod -a -G docker vagrant
     sudo systemctl enable docker
     sudo systemctl start docker
-    docker run -d -p 9000:9000 --name Portainer_Container --restart always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data -e TZ=Europe/Paris portainer/portainer-ce
+    docker run -d -p 1010:9000 --name portainer --restart always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data -e TZ=Europe/Paris portainer/portainer-ce
     sudo timedatectl set-timezone Europe/Paris
   SHELL
 end
