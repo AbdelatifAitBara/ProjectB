@@ -32,7 +32,7 @@ pipeline {
     stage('Deploy Microservices Stack') {
       steps {
         input message: 'Approve deployment?', ok: 'Deploy'
-        sh "docker swarm init" // initialize the swarm
+        sh "docker swarm init --advertise-addr 10.0.2.15" // initialize the swarm
         sh "docker stack deploy -c ${DOCKER_COMPOSE_FILE} production-microservices" // deploy the stack to the swarm
       }
     }
