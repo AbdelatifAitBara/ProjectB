@@ -5,6 +5,7 @@ pipeline {
     PROJECT_DIR = '/home/jenkins/ProjectB'
     PROJECT_FOLDER = 'ProjectB'
     DOCKER_COMPOSE_FILE = 'microservices/docker-compose.yml'
+    DOCKER_IMAGE = 'python:3.8-slim-buster'
   }
 
   stages {
@@ -22,11 +23,17 @@ pipeline {
       }
     }
 
-    stage('Deploy Microservices Containers') {
+    stage('Leave Swarm') {
+      steps {
+        sh "docker swarm leave --force || true" // leave the swarm if already joined
+      }
+    }
+
+    stage('Deploy Microservices Stack') {
       steps {
         input message: 'Approve deployment?', ok: 'Deploy'
         sh "docker swarm init" // initialize the swarm
-        sh "docker stack deploy -c ${DOCKER_COMPOSE_FILE} production-stacks" // deploy the stack to the swarm
+        sh "docker stack deploy -c ${DOCKER_COMPOSE_FILE} production-microservices" // deploy the stack to the swarm
       }
     }
 
