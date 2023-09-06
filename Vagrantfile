@@ -118,6 +118,7 @@ config.vm.define "Observability" do |master|
     sudo systemctl start docker
     docker swarm init --advertise-addr 10.0.2.15
     docker network create --driver overlay monitoring
+    docker stack deploy --compose-file /home/vagrant/observability-swarm/docker-compose.yml observability-stack
   SHELL
 end
 

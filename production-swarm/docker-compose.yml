@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:5.7
+    volumes:
+      - db_data:/var/lib/mysql
+    deploy:
+      replicas: 2
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: wordpress_db
+      MYSQL_USER: phenix
+      MYSQL_PASSWORD: password
+    networks:
+      - production-network
+
+  wordpress:
+    image: wordpress:latest
+    user: "1000"
+    ports:
+      - "8888:80"
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: phenix
+      WORDPRESS_DB_PASSWORD: password
+      WORDPRESS_DB_NAME: wordpress_db
+    volumes:
+      - wp_data:/var/www/html/wp-content
+    deploy:
+      replicas: 2
+    networks:
+      - production-network
+
+
+volumes:
+  db_data:
+  wp_data:
+
+networks:
+  production-network:
+    external: true
