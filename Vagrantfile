@@ -68,7 +68,7 @@ Vagrant.configure("2") do |config|
     master.vm.network "private_network", ip: "192.168.10.20"
   
     master.vm.provider "virtualbox" do |vb|
-      vb.memory = 2048
+      vb.memory = 3048
       vb.cpus = 2
       vb.name = "JenkinsMaster"
     end
@@ -98,7 +98,7 @@ config.vm.define "Observability" do |master|
   master.vm.network "private_network", ip: "192.168.10.30"
 
   master.vm.provider "virtualbox" do |vb|
-    vb.memory = 2048
+    vb.memory = 3048
     vb.cpus = 2
     vb.name = "Observability"
   end

@@ -10,7 +10,7 @@ services:
     volumes:
       - jenkinsvol1:/var/jenkins_home
     deploy:
-      replicas: 2
+      replicas: 1 
 volumes:
   jenkinsvol1:
 

@@ -21,7 +21,7 @@ services:
     networks:
       - monitoring
     deploy:
-      replicas: 2
+      replicas: 1
 
   prometheus:
     image: prom/prometheus:latest
@@ -43,7 +43,7 @@ services:
     networks:
       - monitoring
     deploy:
-      replicas: 2
+      replicas: 1
 
   grafana:
     image: grafana/grafana:latest
@@ -58,7 +58,7 @@ services:
     networks:
       - monitoring
     deploy:
-      replicas: 2
+      replicas: 1
 
   portainer:
     image: portainer/portainer-ce
@@ -71,7 +71,7 @@ services:
     environment:
       - TZ=Europe/Paris
     deploy:
-      replicas: 2
+      replicas: 1
     networks:
       - monitoring
 
