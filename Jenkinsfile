@@ -56,11 +56,11 @@ pipeline {
           def isSwarm = sh(returnStdout: true, script: 'docker info --format "{{.Swarm.LocalNodeState}}"').trim()
           
           if (isSwarm == "inactive") {
-            sh """
+            sh '''
               docker swarm init --advertise-addr 10.0.2.15
               docker network create --driver overlay --attachable monitoring
               cd promgrafnode && docker stack deploy -c docker-compose.yml observability-stack
-            """
+            '''
           } else {
             echo "The swarm is already active."
             echo "Do you want to leave it and deploy a new observability-stack with an improvement function?"
@@ -77,6 +77,30 @@ pipeline {
               echo "No new observability-stack will be deployed."
             }
           }
+        }
+      }
+    }
+
+
+    stage('Keep Pipeline Running') {
+      agent {
+        label 'Observability'
+      }
+      steps {
+        script {
+          // Check if there are any running containers
+          def runningContainers = sh(returnStdout: true, script: 'docker ps --filter "status=running" --format "{{.ID}}"').trim()
+          
+          if (runningContainers) {
+            echo "Running containers found. Keeping the pipeline running..."
+          } else {
+            echo "No running containers found. Stopping the pipeline..."
+            currentBuild.result = 'SUCCESS' // Mark the build as success
+            error('No running containers found. Pipeline stopped.')
+          }
+          
+          // Delete all exited containers
+          sh 'docker ps --filter "status=exited" --format "{{.ID}}" | xargs -r docker rm'
         }
       }
     }
