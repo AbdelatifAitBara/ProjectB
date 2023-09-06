@@ -36,29 +36,6 @@ pipeline {
       }
     }
 
-    stage('Clone Git Repository (Observability)') {
-      agent {
-        label 'Observability'
-      }
-      steps {
-        sh "rm -rf ${PROJECT_DIR}"
-        sh "mkdir -p ${PROJECT_DIR}"
-        sh "git clone --recursive git@github.com:AbdelatifAitBara/ProjectB.git ${PROJECT_DIR}"
-      }
-    }
-
-    stage('Start Swarm Cluster for Observability Stack') {
-      agent {
-        label 'Observability'
-      }
-      steps {
-        script {
-              sh "docker stack deploy -c /home/jenkins/ProjectB/promgrafnode/docker-compose.yml observability-stack"
-        }
-      }
-    }
-  }
-
   post {
     failure {
       echo "Build failed: ${currentBuild.result}"

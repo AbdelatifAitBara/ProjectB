@@ -39,14 +39,15 @@ Vagrant.configure("2") do |config|
       sudo useradd -m -d /home/jenkins -G docker jenkins
       sudo systemctl enable docker
       sudo systemctl start docker
-      cp /home/vagrant/production-swarm/docker-compose.yml /home/vagrant/production-swarm/docker-compose.yml
+      mkdir /home/vagrant/production-swarm
+      cp /vagrant/production-swarm/docker-compose.yml /home/vagrant/production-swarm/docker-compose.yml
       docker swarm init --advertise-addr 10.0.2.15
       docker network create --driver overlay production-network
-      docker stack deploy --compose-file /home/vagrant/production-swarm/docker-compose.yml jenkins-stack
+      docker stack deploy --compose-file /home/vagrant/production-swarm/docker-compose.yml production-stack
       sudo apt install haproxy -y
       sudo systemctl enable haproxy
       sudo systemctl start haproxy
-      cp /home/vagrant/haproxy_micro.cfg /etc/haproxy/haproxy.cfg
+      cp /vagrant/haproxy_micro.cfg /etc/haproxy/haproxy.cfg
       sudo systemctl restart haproxy
       sudo apt install openjdk-17-jdk -y
       sudo apt install python3-pip -y
@@ -56,19 +57,18 @@ Vagrant.configure("2") do |config|
     SHELL
   end
 
-
-# Deploy Jenkins Master
+  # Deploy Jenkins Master
 
   config.vm.define "JenkinsMaster" do |master|
     master.vm.hostname = "JenkinsMaster"
     master.vm.network "private_network", ip: "192.168.10.20"
-  
+
     master.vm.provider "virtualbox" do |vb|
       vb.memory = 3048
       vb.cpus = 2
       vb.name = "JenkinsMaster"
     end
-  
+
     master.vm.provision "shell", inline: <<-SHELL
       #!/bin/bash
       sudo apt-get update
@@ -82,46 +82,47 @@ Vagrant.configure("2") do |config|
       sudo apt install haproxy -y
       sudo systemctl enable haproxy
       sudo systemctl start haproxy
-      cp /home/vagrant/haproxy_Jenkins.cfg /etc/haproxy/haproxy.cfg
+      cp /vagrant/haproxy_Jenkins.cfg /etc/haproxy/haproxy.cfg
       sudo systemctl restart haproxy
       sudo systemctl enable docker
       sudo systemctl start docker
-      cp /home/vagrant/jenkins-swarm/docker-compose.yml /home/vagrant/jenkins-swarm/docker-compose.yml
+      mkdir /home/vagrant/jenkins-swarm
+      cp /vagrant/jenkins-swarm/docker-compose.yml /home/vagrant/jenkins-swarm/docker-compose.yml
       docker swarm init --advertise-addr 10.0.2.15
       docker network create --driver overlay jenkins-network
       docker stack deploy --compose-file /home/vagrant/jenkins-swarm/docker-compose.yml jenkins-stack
     SHELL
   end
 
-# Deploy Observability Machine
+  # Deploy Observability Machine
 
-config.vm.define "Observability" do |master|
-  master.vm.hostname = "Observability"
-  master.vm.network "private_network", ip: "192.168.10.30"
+  config.vm.define "Observability" do |master|
+    master.vm.hostname = "Observability"
+    master.vm.network "private_network", ip: "192.168.10.30"
 
-  master.vm.provider "virtualbox" do |vb|
-    vb.memory = 3048
-    vb.cpus = 2
-    vb.name = "Observability"
+    master.vm.provider "virtualbox" do |vb|
+      vb.memory = 3048
+      vb.cpus = 2
+      vb.name = "Observability"
+    end
+
+    master.vm.provision "shell", inline: <<-SHELL
+      #!/bin/bash
+      sudo apt-get update
+      sudo -E apt install apt-transport-https ca-certificates curl software-properties-common -y
+      curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo -E apt-key add -
+      CODENAME=$(lsb_release -cs)
+      sudo -E add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $CODENAME stable"
+      sudo -E apt update
+      sudo apt install openjdk-17-jdk -y
+      sudo -E apt install docker-ce=5:20.10.24~3-0~ubuntu-$CODENAME docker-ce-cli=5:20.10.24~3-0~ubuntu-$CODENAME containerd.io docker-compose -y
+      sudo usermod -a -G docker vagrant
+      sudo systemctl enable docker
+      sudo systemctl start docker
+      docker swarm init --advertise-addr 10.0.2.15
+      docker network create --driver overlay monitoring
+      docker stack deploy --compose-file /home/vagrant/observability-swarm/docker-compose.yml observability-stack
+    SHELL
+    config.vm.provision "file", source: "./observability-swarm", destination: "/home/vagrant/observability-swarm"
   end
-
-  master.vm.provision "shell", inline: <<-SHELL
-    #!/bin/bash
-    sudo apt-get update
-    sudo -E apt install apt-transport-https ca-certificates curl software-properties-common -y
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo -E apt-key add -
-    CODENAME=$(lsb_release -cs)
-    sudo -E add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $CODENAME stable"
-    sudo -E apt update
-    sudo apt install openjdk-17-jdk -y
-    sudo -E apt install docker-ce=5:20.10.24~3-0~ubuntu-$CODENAME docker-ce-cli=5:20.10.24~3-0~ubuntu-$CODENAME containerd.io docker-compose -y
-    sudo usermod -a -G docker vagrant
-    sudo systemctl enable docker
-    sudo systemctl start docker
-    docker swarm init --advertise-addr 10.0.2.15
-    docker network create --driver overlay monitoring
-    docker stack deploy --compose-file /home/vagrant/observability-swarm/docker-compose.yml observability-stack
-  SHELL
-end
-
 end

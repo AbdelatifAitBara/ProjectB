@@ -1,1 +1,0 @@
-0 * * * * docker ps -a --filter "status=exited" | awk '{print $1}' | xargs -r docker rm
