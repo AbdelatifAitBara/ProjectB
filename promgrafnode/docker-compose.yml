@@ -23,6 +23,7 @@ services:
     deploy:
       replicas: 2
 
+
   prometheus:
     image: prom/prometheus:latest
     user: "1001"
