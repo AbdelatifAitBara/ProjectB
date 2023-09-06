@@ -10,7 +10,11 @@
 
 
 
+<<<<<<< HEAD
 [![Microservices Stable V2.0](https://img.shields.io/badge/Microservices-Stable%20V1.5-blueviolet)]([https://github.com/AbdelatifAitBara/ProjectB](https://github.com/AbdelatifAitBara/ProjectB/tree/09104a37f45ccdeda8ecf9ff4d28c390e9b821ad))
+=======
+[![Microservices Stable V2.0](https://img.shields.io/badge/Microservices-Stable%20V2.0-blueviolet)](https://github.com/AbdelatifAitBara/ProjectB/tree/09104a37f45ccdeda8ecf9ff4d28c390e9b821ad)
+>>>>>>> 11367577211a6bfcba53a841d8dac60292ff5d69
 
 
 ```

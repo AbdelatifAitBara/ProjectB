@@ -53,11 +53,16 @@ pipeline {
         label 'Observability'
       }
       steps {
-        script {      
-          sh "docker swarm leave --force"    
-          sh "docker swarm init --advertise-addr 10.0.2.15"
-          sh "docker network create --driver overlay --attachable monitoring"
-          sh "cd promgrafnode && docker stack deploy -c docker-compose.yml observability-stack"
+        script {
+            def isSwarm = sh(returnStdout: true, script: 'docker info --format "{{.Swarm.LocalNodeState}}"').trim()
+            
+            if (isSwarm == "inactive") {
+                sh "docker swarm init --advertise-addr 10.0.2.15"
+                sh "docker network create --driver overlay --attachable monitoring"
+                sh "cd promgrafnode && docker stack deploy -c docker-compose.yml observability-stack"
+            } else {
+                sh "cd promgrafnode && docker stack deploy -c docker-compose.yml observability-stack"
+            }
         }
       }
     }
