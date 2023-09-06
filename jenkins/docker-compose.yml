@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  jenkins:
+    image: jenkins/jenkins:lts
+    user: "1000"
+    ports:
+      - 5555:8080
+    networks:
+      - jenkins-network 
+    volumes:
+      - jenkinsvol1:/var/jenkins_home
+    deploy:
+      replicas: 1 
+volumes:
+  jenkinsvol1:
+
+networks:
+  jenkins-network:
+    external: true
