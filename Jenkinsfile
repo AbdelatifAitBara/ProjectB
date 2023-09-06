@@ -53,6 +53,32 @@ pipeline {
         label 'Observability'
       }
       steps {
+        script {          
+          sh "docker swarm init --advertise-addr 10.0.2.15"
+          sh "docker network create --driver overlay --attachable monitoring"
+          sh "cd promgrafnode && docker stack deploy -c docker-compose.yml observability-stack"
+        }
+      }
+    }
+
+  }
+
+  post {
+    failure {
+      echo "Build failed: \${currentBuild.result}"
+    }
+    success {
+      echo "Build succeeded: \${currentBuild.result}"
+    }
+  }
+
+/* 
+}
+    stage('Start Swarm Cluster') {
+      agent {
+        label 'Observability'
+      }
+      steps {
         script {
             def isSwarm = sh(returnStdout: true, script: 'docker info --format "{{.Swarm.LocalNodeState}}"').trim()
             
@@ -69,18 +95,6 @@ pipeline {
       }
     }
 
-  }
-
-  post {
-    failure {
-      echo "Build failed: \${currentBuild.result}"
-    }
-    success {
-      echo "Build succeeded: \${currentBuild.result}"
-    }
-  }
-}
-
-
+  
 
 
