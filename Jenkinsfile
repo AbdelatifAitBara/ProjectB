@@ -44,4 +44,5 @@ pipeline {
       echo "Build succeeded: ${currentBuild.result}"
     }
   }
+  }
 }
