@@ -35,14 +35,14 @@ pipeline {
         sh 'docker system prune --all --force'
       }
     }
+  }
 
-    post {
-      failure {
-        echo "Build failed: ${currentBuild.result}"
-      }
-      success {
-        echo "Build succeeded: ${currentBuild.result}"
-      }
+  post {
+    failure {
+      echo "Build failed: ${currentBuild.result}"
+    }
+    success {
+      echo "Build succeeded: ${currentBuild.result}"
     }
   }
 }
