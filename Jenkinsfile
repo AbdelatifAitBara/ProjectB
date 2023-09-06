@@ -80,30 +80,6 @@ pipeline {
         }
       }
     }
-
-
-    stage('Keep Pipeline Running') {
-      agent {
-        label 'Observability'
-      }
-      steps {
-        script {
-          // Check if there are any running containers
-          def runningContainers = sh(returnStdout: true, script: 'docker ps --filter "status=running" --format "{{.ID}}"').trim()
-          
-          if (runningContainers) {
-            echo "Running containers found. Keeping the pipeline running..."
-          } else {
-            echo "No running containers found. Stopping the pipeline..."
-            currentBuild.result = 'SUCCESS' // Mark the build as success
-            error('No running containers found. Pipeline stopped.')
-          }
-          
-          // Delete all exited containers
-          sh 'docker ps --filter "status=exited" --format "{{.ID}}" | xargs -r docker rm'
-        }
-      }
-    }
   }
 
   post {
