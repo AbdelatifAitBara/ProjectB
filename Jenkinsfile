@@ -56,13 +56,26 @@ pipeline {
           def isSwarm = sh(returnStdout: true, script: 'docker info --format "{{.Swarm.LocalNodeState}}"').trim()
           
           if (isSwarm == "inactive") {
-            sh "docker swarm init --advertise-addr 10.0.2.15"
-            sh "docker network create --driver overlay --attachable monitoring"
-            sh "cd promgrafnode && docker stack deploy -c docker-compose.yml observability-stack"
+            sh """
+              docker swarm init --advertise-addr 10.0.2.15
+              docker network create --driver overlay --attachable monitoring
+              cd promgrafnode && docker stack deploy -c docker-compose.yml observability-stack
+            """
           } else {
             echo "The swarm is already active."
             echo "Do you want to leave it and deploy a new observability-stack with an improvement function?"
-            sh "cd promgrafnode && docker stack deploy -c docker-compose.yml observability-stack"
+            
+            input message: 'Deploy new observability-stack?', parameters: [
+              choice(choices: ['Yes', 'No'], description: 'Choose whether to deploy a new observability-stack or not', name: 'DEPLOY_NEW_STACK')
+            ]
+            
+            def deployNewStack = env.DEPLOY_NEW_STACK
+            
+            if (deployNewStack == 'Yes') {
+              sh "cd promgrafnode && docker stack deploy -c docker-compose.yml observability-stack"
+            } else {
+              echo "No new observability-stack will be deployed."
+            }
           }
         }
       }
