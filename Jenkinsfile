@@ -36,13 +36,13 @@ pipeline {
       }
     }
 
-  post {
-    failure {
-      echo "Build failed: ${currentBuild.result}"
+    post {
+      failure {
+        echo "Build failed: ${currentBuild.result}"
+      }
+      success {
+        echo "Build succeeded: ${currentBuild.result}"
+      }
     }
-    success {
-      echo "Build succeeded: ${currentBuild.result}"
-    }
-  }
   }
 }
