@@ -48,6 +48,7 @@ pipeline {
       }
     }
 
+
     stage('Start Swarm Cluster') {
       agent {
         label 'Observability'
@@ -61,6 +62,8 @@ pipeline {
                 sh "docker network create --driver overlay --attachable monitoring"
                 sh "cd promgrafnode && docker stack deploy -c docker-compose.yml observability-stack"
             } else {
+                echo "The swarm is already active."
+                echo "Do you want to leave it and deploy a new observability-stack with an improvement function?"
                 sh "cd promgrafnode && docker stack deploy -c docker-compose.yml observability-stack"
             }
         }
