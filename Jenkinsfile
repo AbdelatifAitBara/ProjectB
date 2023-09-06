@@ -22,7 +22,7 @@ pipeline {
       }
     }
 
-    stage('Deploy Microservices Containers') {
+    stage('Deploy Microservices Stack') {
       steps {
         input message: 'Approve deployment?', ok: 'Deploy'
         sh "docker stack rm microservices-stack"
