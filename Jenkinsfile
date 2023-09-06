@@ -48,7 +48,6 @@ pipeline {
       }
     }
 
-
     stage('Start Swarm Cluster') {
       agent {
         label 'Observability'
@@ -81,3 +80,7 @@ pipeline {
     }
   }
 }
+
+
+
+
