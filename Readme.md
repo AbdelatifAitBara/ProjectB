@@ -77,7 +77,7 @@ Orders Microservice:
 - Token Valid only for 2 minutes Works 100%
 - Reverse Proxy Works 100%.
 - Jenkins on HTTPS.
-- Observability with Swarm Works 100%.
+- Observability with Swarm With approvement Works 100%.
 - 
 
 
