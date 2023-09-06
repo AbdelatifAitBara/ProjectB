@@ -75,5 +75,6 @@ Orders Microservice:
 - Jenkins on HTTPS.
 - Observability with Swarm WORKS 100%
 - Jenkins Server with Swarm WORKS 100%
+- Project TEST 1
 
 [![Made with Love](https://img.shields.io/badge/Made%20with-Love-red)](https://github.com/AbdelatifAitBara/ProjectB)
