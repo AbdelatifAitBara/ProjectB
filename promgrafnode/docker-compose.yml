@@ -1,8 +1,8 @@
-
 version: '3.8'
 
 volumes:
   prometheus_data: {}
+  portainer_data: {}
 
 services:
   node-exporter:
@@ -40,6 +40,8 @@ services:
       - 9090:9090
     networks:
       - monitoring
+    deploy:
+      replicas: 2
 
   grafana:
     image: grafana/grafana:latest
@@ -51,6 +53,21 @@ services:
       - ./grafana:/var/lib/grafana
     environment:
       - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
+    networks:
+      - monitoring
+
+  portainer:
+    image: portainer/portainer-ce
+    command: -H unix:///var/run/docker.sock
+    ports:
+      - 1010:9000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    environment:
+      - TZ=Europe/Paris
+    deploy:
+      replicas: 2
     networks:
       - monitoring
 
