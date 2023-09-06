@@ -25,8 +25,8 @@ pipeline {
     stage('Deploy Microservices Containers') {
       steps {
         input message: 'Approve deployment?', ok: 'Deploy'
-        sh "docker-compose -f ${DOCKER_COMPOSE_FILE_MICROSERVICES} down"
-        sh "docker-compose -f ${DOCKER_COMPOSE_FILE_MICROSERVICES} up -d"
+        sh "docker stack rm microservices-stack"
+        sh "docker stack deploy -c ${DOCKER_COMPOSE_FILE_MICROSERVICES} microservices-stack"
       }
     }
 

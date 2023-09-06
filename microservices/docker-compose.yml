@@ -13,7 +13,9 @@ services:
     container_name: Consumer_Container
     image: consumer_image:${GIT_COMMIT}
     networks:
-      - vagrant_wordpress_network
+      - production-network
+    deploy:
+      replicas: 1
 
   product:
     build:
@@ -27,7 +29,9 @@ services:
     container_name: Product_Container
     image: product_image:${GIT_COMMIT}
     networks:
-      - vagrant_wordpress_network
+      - production-network
+    deploy:
+      replicas: 1
 
   order:
     build:
@@ -41,8 +45,10 @@ services:
     container_name: Order_Container
     image: order_image:${GIT_COMMIT}
     networks:
-      - vagrant_wordpress_network
+      - production-network
+    deploy:
+      replicas: 1
 
 networks:
-  vagrant_wordpress_network:
+  production-network:
     external: true
