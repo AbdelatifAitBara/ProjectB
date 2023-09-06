@@ -39,6 +39,10 @@ Vagrant.configure("2") do |config|
       sudo useradd -m -d /home/jenkins -G docker jenkins
       sudo systemctl enable docker
       sudo systemctl start docker
+      cp /home/vagrant/production-swarm/docker-compose.yml /home/vagrant/production-swarm/docker-compose.yml
+      docker swarm init --advertise-addr 10.0.2.15
+      docker network create --driver overlay production-network
+      docker stack deploy --compose-file /home/vagrant/production-swarm/docker-compose.yml jenkins-stack
       sudo apt install haproxy -y
       sudo systemctl enable haproxy
       sudo systemctl start haproxy
@@ -49,14 +53,6 @@ Vagrant.configure("2") do |config|
       pip install -U mock
       pip install nose
       sudo timedatectl set-timezone Europe/Paris
-    SHELL
-
-    woo.vm.provision "file", source: "docker-compose.yml", destination: "/home/vagrant/docker-compose.yml"
-
-    woo.vm.provision "shell", inline: <<-SHELL
-      #!/bin/bash
-      cd /home/vagrant
-      sudo docker-compose up -d
     SHELL
   end
 
@@ -90,6 +86,7 @@ Vagrant.configure("2") do |config|
       sudo systemctl restart haproxy
       sudo systemctl enable docker
       sudo systemctl start docker
+      cp /home/vagrant/jenkins-swarm/docker-compose.yml /home/vagrant/jenkins-swarm/docker-compose.yml
       docker swarm init --advertise-addr 10.0.2.15
       docker network create --driver overlay jenkins-network
       docker stack deploy --compose-file /home/vagrant/jenkins-swarm/docker-compose.yml jenkins-stack
