@@ -72,6 +72,8 @@ pipeline {
     }
   }
 
+}
+
 /* 
 }
     stage('Start Swarm Cluster') {
