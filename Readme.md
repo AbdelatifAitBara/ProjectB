@@ -78,5 +78,6 @@ Orders Microservice:
 - Reverse Proxy Works 100%.
 - Jenkins on HTTPS.
 - Observability with Swarm With approvement Works 100%.
+- 2 Replicas for all TEST
 
 [![Made with Love](https://img.shields.io/badge/Made%20with-Love-red)](https://github.com/AbdelatifAitBara/ProjectB)
