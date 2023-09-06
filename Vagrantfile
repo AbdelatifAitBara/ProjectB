@@ -87,9 +87,7 @@ Vagrant.configure("2") do |config|
       sudo systemctl start docker
       docker swarm init --advertise-addr 10.0.2.15
       docker network create --driver overlay jenkins-network
-      
-      docker container run -d -p 5555:8080 --restart always -v jenkinsvol1:/var/jenkins_home --name Jenkins_Container jenkins/jenkins:lts
-      sudo timedatectl set-timezone Europe/Paris
+      docker stack deploy --compose-file /home/vagrant/jenkins-swarm/docker-compose.yml jenkins-stack
     SHELL
   end
 
