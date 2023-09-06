@@ -72,7 +72,7 @@ pipeline {
             def deployNewStack = env.DEPLOY_NEW_STACK
             
             if (deployNewStack == 'Yes') {
-              sh "cd promgrafnode && docker stack deploy -c docker-compose.yml observability-stack"
+              sh "docker stack deploy -c /home/jenkins/ProjectB/promgrafnode/docker-compose.yml observability-stack"
             } else {
               echo "No new observability-stack will be deployed."
             }
