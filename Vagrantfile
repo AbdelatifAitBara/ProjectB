@@ -115,8 +115,8 @@ config.vm.define "Observability" do |master|
     sudo usermod -a -G docker vagrant
     sudo systemctl enable docker
     sudo systemctl start docker
-    docker run -d -p 1010:9000 --name portainer --restart always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data -e TZ=Europe/Paris portainer/portainer-ce
-    sudo timedatectl set-timezone Europe/Paris
+    docker swarm init --advertise-addr 10.0.2.15
+    docker network create --driver overlay monitoring
   SHELL
 end
 

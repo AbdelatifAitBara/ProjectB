@@ -47,7 +47,7 @@ pipeline {
       }
     }
 
-    stage('Start Swarm Cluster') {
+    stage('Start Swarm Cluster for Observability Stack') {
       agent {
         label 'Observability'
       }
