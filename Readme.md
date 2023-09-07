@@ -1,4 +1,4 @@
-[![Beta Version](https://img.shields.io/badge/Beta-Version%20v1.0-orange.svg)](https://github.com/AbdelatifAitBara/ProjectB/tree/8a82fc980648d161495f33690f15eb3ddb151f48)
+[![Beta Version](https://img.shields.io/badge/Beta-Version%20v2.0-orange.svg)](https://github.com/AbdelatifAitBara/ProjectB/tree/53d115d42e8474a9218a6787ba8522f9e5a17146)
 
 
 [![Build using these technologies](https://img.shields.io/badge/Build%20using%20these%20technologies-brightgreen)](https://github.com/AbdelatifAitBara/ProjectB)
