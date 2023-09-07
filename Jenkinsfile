@@ -4,7 +4,7 @@ pipeline {
   environment {
     PROJECT_DIR = '/home/jenkins/ProjectB'
     PROJECT_FOLDER = 'ProjectB'
-    DOCKER_COMPOSE_FILE_MICROSERVICES = 'microservices/docker-compose.yml'
+    DOCKER_COMPOSE_FILE_MICROSERVICES = '/home/jenkins/ProjectB/microservices/docker-compose.yml'
   }
 
   stages {
