@@ -10,11 +10,10 @@ services:
     ports:
       - 7070:7070
     restart: always
+    container_name: Consumer_Container
     image: consumer_image:${GIT_COMMIT}
     networks:
       - production-network
-    deploy:
-      replicas: 2
   
   product:
     build:
@@ -25,11 +24,10 @@ services:
     ports:
       - 8080:8080
     restart: unless-stopped
+    container_name: Product_Container
     image: product_image:${GIT_COMMIT}
     networks:
       - production-network
-    deploy:
-      replicas: 2
 
   order:
     build:
@@ -40,11 +38,11 @@ services:
     ports:
       - 9090:9090
     restart: unless-stopped
+    container_name: Order_Container
     image: order_image:${GIT_COMMIT}
     networks:
       - production-network
-    deploy:
-      replicas: 2
+
 
 networks:
   production-network:
