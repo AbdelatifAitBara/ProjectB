@@ -1,0 +1,38 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: "prometheus"
+    scrape_interval: 10s
+    static_configs:
+      - targets: ["192.168.10.30:9090"]
+
+  - job_name: "node-vm1"
+    scrape_interval: 5s
+    static_configs:
+      - targets: ["192.168.10.10:9100"]
+
+  - job_name: "node-vm2"
+    scrape_interval: 5s
+    static_configs:
+      - targets: ["192.168.10.20:9100"]
+
+  - job_name: "node-vm3"
+    scrape_interval: 5s
+    static_configs:
+      - targets: ["192.168.10.30:9100"]
+
+  - job_name: "cadvisor-microservice-machine"
+    scrape_interval: 5s
+    static_configs:
+      - targets: ["192.168.10.10:8081"]
+
+  - job_name: "cadvisor-jenkins-machine"
+    scrape_interval: 5s
+    static_configs:
+      - targets: ["192.168.10.20:8081"]
+
+  - job_name: "cadvisor-observability-machine"
+    scrape_interval: 5s
+    static_configs:
+      - targets: ["192.168.10.30:8081"]

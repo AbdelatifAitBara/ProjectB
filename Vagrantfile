@@ -9,7 +9,7 @@ Vagrant.configure("2") do |config|
     woo.vm.network "private_network", ip: "192.168.10.10"
 
     woo.vm.provider "virtualbox" do |vb|
-      vb.memory = 4096
+      vb.memory = 5552
       vb.cpus = 2
       vb.name = "Production"
     end
@@ -34,16 +34,16 @@ Vagrant.configure("2") do |config|
       sudo -E add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $CODENAME stable"
       sudo -E apt update
       sudo -E apt install docker-ce=5:20.10.24~3-0~ubuntu-$CODENAME docker-ce-cli=5:20.10.24~3-0~ubuntu-$CODENAME containerd.io docker-compose -y
-      sudo usermod -a -G docker vagrant
+      sudo usermod -aG docker vagrant
       docker network create -d bridge vagrant_wordpress_network
       sudo useradd -m -d /home/jenkins -G docker jenkins
       sudo systemctl enable docker
       sudo systemctl start docker
-      mkdir /home/vagrant/production-swarm
-      cp /vagrant/production-swarm/docker-compose.yml /home/vagrant/production-swarm/docker-compose.yml
-      docker swarm init --advertise-addr 10.0.2.15
-      docker network create --driver overlay production-network
-      docker stack deploy --compose-file /home/vagrant/production-swarm/docker-compose.yml production-stack
+      sudo chown $USER:docker /var/run/docker.sock
+      mkdir /home/vagrant/production-compose
+      cp /vagrant/production-compose/docker-compose.yml /home/vagrant/production-compose
+      docker network create production-network
+      docker-compose -f /home/vagrant/production-compose/docker-compose.yml up -d
       sudo apt install haproxy -y
       sudo systemctl enable haproxy
       sudo systemctl start haproxy
@@ -54,6 +54,7 @@ Vagrant.configure("2") do |config|
       pip install -U mock
       pip install nose
       sudo timedatectl set-timezone Europe/Paris
+      sudo touch /etc/cloud/cloud-init.disabled
     SHELL
   end
 
@@ -79,6 +80,7 @@ Vagrant.configure("2") do |config|
       sudo -E apt update
       sudo -E apt install docker-ce=5:20.10.24~3-0~ubuntu-$CODENAME docker-ce-cli=5:20.10.24~3-0~ubuntu-$CODENAME containerd.io docker-compose -y
       sudo usermod -a -G docker vagrant
+      sudo chown $USER:docker /var/run/docker.sock
       mkdir /home/vagrant/ssl
       cp /vagrant/ssl_generate.sh /home/vagrant/ssl
       chmod +x /home/vagrant/ssl/ssl_generate.sh
@@ -92,27 +94,28 @@ Vagrant.configure("2") do |config|
       sudo systemctl restart haproxy
       sudo systemctl enable docker
       sudo systemctl start docker
-      mkdir /home/vagrant/jenkins-swarm
-      cp /vagrant/jenkins-swarm/docker-compose.yml /home/vagrant/jenkins-swarm/docker-compose.yml
-      docker swarm init --advertise-addr 10.0.2.15
-      docker network create --driver overlay jenkins-network
-      docker stack deploy --compose-file /home/vagrant/jenkins-swarm/docker-compose.yml jenkins-stack
+      sudo chown $USER:docker /var/run/docker.sock
+      mkdir /home/vagrant/jenkins-compose
+      docker network create jenkins-network
+      cp /vagrant/jenkins-compose/docker-compose.yml /home/vagrant/jenkins-compose
+      docker-compose -f /home/vagrant/jenkins-compose/docker-compose.yml up -d
+      sudo touch /etc/cloud/cloud-init.disabled
     SHELL
   end
 
   # Deploy Observability Machine
 
-  config.vm.define "Observability" do |master|
-    master.vm.hostname = "Observability"
-    master.vm.network "private_network", ip: "192.168.10.30"
-
-    master.vm.provider "virtualbox" do |vb|
-      vb.memory = 3048
+  config.vm.define "Observability" do |observa|
+    observa.vm.hostname = "Observability"
+    observa.vm.network "private_network", ip: "192.168.10.30"
+  
+    observa.vm.provider "virtualbox" do |vb|
+      vb.memory = 5552
       vb.cpus = 2
       vb.name = "Observability"
     end
-
-    master.vm.provision "shell", inline: <<-SHELL
+  
+    observa.vm.provision "shell", inline: <<-SHELL
       #!/bin/bash
       sudo apt-get update
       sudo -E apt install apt-transport-https ca-certificates curl software-properties-common -y
@@ -123,12 +126,16 @@ Vagrant.configure("2") do |config|
       sudo apt install openjdk-17-jdk -y
       sudo -E apt install docker-ce=5:20.10.24~3-0~ubuntu-$CODENAME docker-ce-cli=5:20.10.24~3-0~ubuntu-$CODENAME containerd.io docker-compose -y
       sudo usermod -a -G docker vagrant
+      sudo chown $USER:docker /var/run/docker.sock
       sudo systemctl enable docker
       sudo systemctl start docker
-      docker swarm init --advertise-addr 10.0.2.15
-      docker network create --driver overlay monitoring
-      docker stack deploy --compose-file /home/vagrant/observability-swarm/docker-compose.yml observability-stack
+      mkdir -p promgrafnode/prometheus && mkdir -p promgrafnode/grafana/provisioning &&  touch promgrafnode/docker-compose.yml &&  touch promgrafnode/prometheus/prometheus.yml
+      cp /vagrant/observability-compose/docker-compose.yml /home/vagrant/promgrafnode/docker-compose.yml
+      cp /vagrant/observability-compose/prometheus/prometheus.yml /home/vagrant/promgrafnode/prometheus/prometheus.yml
+      docker network create observability-network
+      docker-compose -f /home/vagrant/promgrafnode/docker-compose.yml up -d
+      sudo touch /etc/cloud/cloud-init.disabled
     SHELL
-    config.vm.provision "file", source: "./observability-swarm", destination: "/home/vagrant/observability-swarm"
   end
+
 end

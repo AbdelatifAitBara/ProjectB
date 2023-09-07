@@ -1,7 +1,9 @@
 version: '3.8'
 services:
+
   jenkins:
     image: jenkins/jenkins:lts
+    container_name: Jenkins_Container
     user: "1000"
     ports:
       - 5555:8080
@@ -9,11 +11,11 @@ services:
       - jenkins-network 
     volumes:
       - jenkinsvol1:/var/jenkins_home
-    deploy:
-      replicas: 1 
+    restart: unless-stopped
 
   node-exporter: 
     image: prom/node-exporter:latest 
+    container_name: Node_Exporter_Container_VM2
     user: "1000"
     volumes: 
       - /proc:/host/proc:ro 
@@ -28,23 +30,33 @@ services:
       - 9100:9100 
     networks: 
       - jenkins-network
-    deploy:
-      replicas: 1
+    restart: unless-stopped
 
   cadvisor: 
-    image: gcr.io/cadvisor/cadvisor:latest
-    user: "1000" 
+    image: gcr.io/cadvisor/cadvisor:latest 
+    container_name: Cadvisor_Container_VM2
     ports: 
       - 8081:8080 
-    networks: 
+    networks:
       - jenkins-network
     volumes: 
       - /:/rootfs:ro 
       - /var/run:/var/run:rw 
       - /sys:/sys:ro 
       - /var/lib/docker/:/var/lib/docker:ro 
-    deploy:
-      replicas: 1
+    restart: unless-stopped
+    depends_on: 
+      - redis
+    
+
+  redis: 
+    image: redis:latest 
+    container_name: Redis_Container_VM2
+    ports: 
+      - 6379:6379 
+    networks: 
+      - jenkins-network
+    restart: unless-stopped
 
 volumes:
   jenkinsvol1:
