@@ -15,7 +15,7 @@ services:
       MYSQL_DATABASE: wordpress_db
       MYSQL_USER: phenix
       MYSQL_PASSWORD: password
-    restart: unless-stopped
+    restart: always
 
   wordpress:
     depends_on:
@@ -33,9 +33,8 @@ services:
       - WORDPRESS_DB_NAME=wordpress_db
       - WORDPRESS_DB_USER=phenix
       - WORDPRESS_DB_PASSWORD=password
-    restart: unless-stopped
-    deploy:
-      replicas: 2
+    restart: always
+
 
 
   node-exporter: 
@@ -55,7 +54,7 @@ services:
       - 9100:9100 
     networks: 
       - production-network
-    restart: unless-stopped
+    restart: always
 
   cadvisor: 
     image: gcr.io/cadvisor/cadvisor:latest 
@@ -69,6 +68,7 @@ services:
       - /var/run:/var/run:rw 
       - /sys:/sys:ro 
       - /var/lib/docker/:/var/lib/docker:ro 
+    restart: always
     depends_on: 
       - redis 
   
@@ -80,6 +80,7 @@ services:
       - 6379:6379 
     networks: 
       - production-network
+    restart: always
 
 volumes:
   db_data:

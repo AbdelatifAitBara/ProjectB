@@ -16,13 +16,17 @@ Vagrant.configure("2") do |config|
 
     woo.vm.provision "shell", inline: <<-SHELL
       #!/bin/bash
-      sudo apt update && sudo apt upgrade -y
+      sudo apt update
       sudo apt-get install ufw -y
       sudo ufw default deny incoming
       sudo ufw default allow outgoing
       sudo ufw allow 8080
       sudo ufw allow 80
       sudo ufw allow 9090
+      sudo ufw allow 7070
+      sudo ufw allow 8081
+      sudo ufw allow 9100
+      sudo ufw allow 6379
       sudo ufw allow 443
       sudo ufw allow 22
       sudo ufw allow 3306
@@ -44,11 +48,6 @@ Vagrant.configure("2") do |config|
       cp /vagrant/production-compose/docker-compose.yml /home/vagrant/production-compose
       docker network create production-network
       docker-compose -f /home/vagrant/production-compose/docker-compose.yml up -d
-      sudo apt install haproxy -y
-      sudo systemctl enable haproxy
-      sudo systemctl start haproxy
-      cp /vagrant/haproxy_micro.cfg /etc/haproxy/haproxy.cfg
-      sudo systemctl restart haproxy
       sudo apt install openjdk-17-jdk -y
       sudo apt install python3-pip -y
       pip install -U mock
@@ -137,5 +136,41 @@ Vagrant.configure("2") do |config|
       sudo touch /etc/cloud/cloud-init.disabled
     SHELL
   end
+
+
+    # HAPROXY
+
+    config.vm.define "HAPROXY" do |haproxy|
+      haproxy.vm.hostname = "HAPROXY"
+      haproxy.vm.network "private_network", ip: "192.168.10.40"
+      
+
+      haproxy.vm.provider "virtualbox" do |vb|
+        vb.memory = 2048
+        vb.cpus = 2
+        vb.name = "HAPROXY"
+      end
+    
+      haproxy.vm.provision "shell", inline: <<-SHELL
+        #!/bin/bash
+        sudo apt-get update
+        sudo apt-get install ufw -y
+        sudo ufw default deny incoming
+        sudo ufw default allow outgoing
+        sudo ufw allow 22
+        sudo ufw allow 443
+        mkdir ssl
+        cp /vagrant/ssl_generate.sh /home/vagrant/ssl
+        sudo sudo apt-get install dos2unix
+        sudo dos2unix /home/vagrant/ssl/ssl_generate.sh
+        sudo chmod +x /home/vagrant/ssl/ssl_generate.sh
+        sudo bash /home/vagrant/ssl/ssl_generate.sh haproxy
+        sudo apt install haproxy -y
+        cp /vagrant/haproxy_micro.cfg /etc/haproxy/haproxy.cfg
+        cp /vagrant/haproxy /etc/default/haproxy
+        sudo systemctl restart haproxy
+        sudo touch /etc/cloud/cloud-init.disabled
+      SHELL
+    end
 
 end

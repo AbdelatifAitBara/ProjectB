@@ -1,10 +1,8 @@
-from flask import Flask, abort, jsonify, request
+from flask import Flask, jsonify, request
 from requests_oauthlib import OAuth1Session
 import pymysql
-from flask_cors import CORS
 import json
 import jwt
-from functools import wraps
 from datetime import datetime, timedelta
 import os
 

@@ -7,7 +7,7 @@ import json
 import jwt
 from datetime import datetime, timedelta
 import os
-import re 
+import re
 
 app = Flask(__name__)
 CORS(app)

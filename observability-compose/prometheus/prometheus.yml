@@ -36,3 +36,6 @@ scrape_configs:
     scrape_interval: 5s
     static_configs:
       - targets: ["192.168.10.30:8081"]
+
+rule_files:
+  - "rules.yml"
