@@ -17,10 +17,11 @@ API_URL = os.getenv('API_URL')
 consumer_key = os.getenv('CONSUMER_KEY')
 consumer_secret = os.getenv('CONSUMER_SECRET')
 
-app.config['MYSQL_DATABASE_USER'] = 'phenix'
-app.config['MYSQL_DATABASE_PASSWORD'] = 'password'
-app.config['MYSQL_DATABASE_DB'] = 'wordpress_db'
+app.config['MYSQL_DATABASE_USER'] = os.getenv('MYSQL_DATABASE_USER')
+app.config['MYSQL_DATABASE_PASSWORD'] = os.getenv('MYSQL_DATABASE_PASSWORD')
+app.config['MYSQL_DATABASE_DB'] = os.getenv('MYSQL_DATABASE_DB')
 app.config['MYSQL_DATABASE_HOST'] = 'db'
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 
