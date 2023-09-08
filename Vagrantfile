@@ -155,6 +155,7 @@ Vagrant.configure("2") do |config|
         #!/bin/bash
         sudo apt-get update
         sudo apt-get install ufw -y
+        sudo uwf enable
         sudo ufw default deny incoming
         sudo ufw default allow outgoing
         sudo ufw allow 22
