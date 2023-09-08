@@ -16,7 +16,9 @@ RUN pip install --trusted-host pypi.python.org -r requirements.txt
 EXPOSE 7070
 
 # Define environment variables
-
+ENV MYSQL_DATABASE_USER='phenix'
+ENV MYSQL_DATABASE_PASSWORD='password'
+ENV MYSQL_DATABASE_DB='wordpress_db'
 ENV API_URL='http://192.168.10.10:8888/wp-json/wc/v3/customers'
 ENV CONSUMER_KEY='ck_390eac7097f5b4ef94ea63092b1f29573b301730'
 ENV CONSUMER_SECRET='cs_5bd284f19d681f3f5a3fb19c81f67e79c3c59a1d'
