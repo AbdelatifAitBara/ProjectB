@@ -132,6 +132,9 @@ Vagrant.configure("2") do |config|
       sudo ufw enable
       sudo ufw default deny incoming
       sudo ufw default allow outgoing
+      sudo ufw allow 80
+      sudo ufw allow 443
+      sudo ufw allow 22
       sudo ufw allow 3000
       sudo ufw allow 9090
       sudo ufw allow 1010
