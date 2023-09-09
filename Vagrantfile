@@ -91,17 +91,6 @@ Vagrant.configure("2") do |config|
       sudo -E apt install docker-ce=5:20.10.24~3-0~ubuntu-$CODENAME docker-ce-cli=5:20.10.24~3-0~ubuntu-$CODENAME containerd.io docker-compose -y
       sudo usermod -a -G docker vagrant
       sudo chown $USER:docker /var/run/docker.sock
-      mkdir /home/vagrant/ssl
-      cp /vagrant/ssl_generate.sh /home/vagrant/ssl
-      chmod +x /home/vagrant/ssl/ssl_generate.sh
-      sudo sudo apt-get install dos2unix
-      sudo dos2unix /home/vagrant/ssl/ssl_generate.sh
-      sudo bash /home/vagrant/ssl/ssl_generate.sh jenkins
-      sudo apt install haproxy -y
-      cp /vagrant/haproxy_Jenkins.cfg /etc/haproxy/haproxy.cfg
-      sudo systemctl enable haproxy
-      sudo systemctl start haproxy
-      sudo systemctl restart haproxy
       sudo systemctl enable docker
       sudo systemctl start docker
       sudo chown $USER:docker /var/run/docker.sock
