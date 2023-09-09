@@ -18,20 +18,20 @@ Vagrant.configure("2") do |config|
       #!/bin/bash
       sudo apt update
       sudo apt-get install ufw -y
+      sudo ufw enable
       sudo ufw default deny incoming
       sudo ufw default allow outgoing
-      sudo ufw allow 8080
       sudo ufw allow 80
-      sudo ufw allow 9090
-      sudo ufw allow 7070
-      sudo ufw allow 8081
-      sudo ufw allow 9100
-      sudo ufw allow 6379
       sudo ufw allow 443
       sudo ufw allow 22
-      sudo ufw allow 3306
       sudo ufw allow 8888
-      sudo ufw enable
+      sudo ufw allow 3306
+      sudo ufw allow 8081
+      sudo ufw allow 6379
+      sudo ufw allow 9100
+      sudo ufw allow 7070
+      sudo ufw allow 8080
+      sudo ufw allow 9090
       sudo -E apt install apt-transport-https ca-certificates curl software-properties-common -y
       curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo -E apt-key add -
       CODENAME=$(lsb_release -cs)
@@ -39,7 +39,7 @@ Vagrant.configure("2") do |config|
       sudo -E apt update
       sudo -E apt install docker-ce=5:20.10.24~3-0~ubuntu-$CODENAME docker-ce-cli=5:20.10.24~3-0~ubuntu-$CODENAME containerd.io docker-compose -y
       sudo usermod -aG docker vagrant
-      docker network create -d bridge vagrant_wordpress_network
+      docker network create -d bridge production-network
       sudo useradd -m -d /home/jenkins -G docker jenkins
       sudo systemctl enable docker
       sudo systemctl start docker
@@ -72,6 +72,17 @@ Vagrant.configure("2") do |config|
     master.vm.provision "shell", inline: <<-SHELL
       #!/bin/bash
       sudo apt-get update
+      sudo apt-get install ufw -y
+      sudo ufw enable
+      sudo ufw default deny incoming
+      sudo ufw default allow outgoing
+      sudo ufw allow 80
+      sudo ufw allow 443
+      sudo ufw allow 22
+      sudo ufw allow 5555
+      sudo ufw allow 8081
+      sudo ufw allow 9100
+      sudo ufw allow 6379
       sudo -E apt install apt-transport-https ca-certificates curl software-properties-common -y
       curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo -E apt-key add -
       CODENAME=$(lsb_release -cs)
@@ -117,6 +128,16 @@ Vagrant.configure("2") do |config|
     observa.vm.provision "shell", inline: <<-SHELL
       #!/bin/bash
       sudo apt-get update
+      sudo apt-get install ufw -y
+      sudo ufw enable
+      sudo ufw default deny incoming
+      sudo ufw default allow outgoing
+      sudo ufw allow 3000
+      sudo ufw allow 9090
+      sudo ufw allow 1010
+      sudo ufw allow 8081
+      sudo ufw allow 9100
+      sudo ufw allow 6379
       sudo -E apt install apt-transport-https ca-certificates curl software-properties-common -y
       curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo -E apt-key add -
       CODENAME=$(lsb_release -cs)
@@ -155,11 +176,12 @@ Vagrant.configure("2") do |config|
         #!/bin/bash
         sudo apt-get update
         sudo apt-get install ufw -y
-        sudo uwf enable
+        sudo ufw enable
         sudo ufw default deny incoming
         sudo ufw default allow outgoing
-        sudo ufw allow 22
+        sudo ufw allow 80
         sudo ufw allow 443
+        sudo ufw allow 22
         mkdir ssl
         cp /vagrant/ssl_generate.sh /home/vagrant/ssl
         sudo sudo apt-get install dos2unix
