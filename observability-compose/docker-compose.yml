@@ -102,21 +102,6 @@ services:
       - observability-network
     restart: always
 
-  alertmanager:
-    image: prom/alertmanager:latest
-    container_name: Alertmanager_Container
-    user: "0:0"
-    volumes:
-      - ./config.yml:/etc/alertmanager/config.yml
-    command:
-      - '--config.file=/etc/alertmanager/config.yml'
-      - '--storage.path=/alertmanager'
-    ports:
-      - 9093:9093
-    networks:
-      - observability-network
-    restart: always
-
 networks:
   observability-network:
     external: true
