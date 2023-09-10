@@ -1,0 +1,655 @@
+{
+	"info": {
+		"_postman_id": "570503e8-862c-4ac3-bea6-f6cf683f6cb6",
+		"name": "Project B",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Customers",
+			"item": [
+				{
+					"name": "GENERATE TOKEN",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"consumer_secret\": \"cs_60eaa3d22d161ef077dff4afaf3d04ad7bf32e12\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://192.168.10.40/customer_token",
+							"protocol": "https",
+							"host": [
+								"192",
+								"168",
+								"10",
+								"40"
+							],
+							"path": [
+								"customer_token"
+							]
+						},
+						"description": "This should return a list of items, each in JSON format."
+					},
+					"response": []
+				},
+				{
+					"name": "ADD CUSTOMER",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2OTQyNjkzMjIsImlhdCI6MTY5NDI2OTIwMiwic3ViIjoiY3NfNjBlYWEzZDIyZDE2MWVmMDc3ZGZmNGFmYWYzZDA0YWQ3YmYzMmUxMiJ9.vA7H_C4CLSNDWq08wX5ILPiL46xQnVjIwbInTiG9fQs",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"abdel21@example.com\",\r\n    \"first_name\": \"Abdel\",\r\n    \"last_name\": \"Phenix\",\r\n    \"username\": \"abdelatif2\",\r\n    \"password\":\"password\",\r\n    \"billing\": {\r\n        \"first_name\": \"John\",\r\n        \"last_name\": \"Doe\",\r\n        \"company\": \"\",\r\n        \"address_1\": \"969 Market\",\r\n        \"address_2\": \"\",\r\n        \"city\": \"San Francisco\",\r\n        \"state\": \"CA\",\r\n        \"postcode\": \"94103\",\r\n        \"country\": \"US\",\r\n        \"email\": \"john.doe@example.com\",\r\n        \"phone\": \"(555) 555-5555\"\r\n    },\r\n    \"shipping\": {\r\n        \"first_name\": \"John\",\r\n        \"last_name\": \"Doe\",\r\n        \"company\": \"\",\r\n        \"address_1\": \"969 Market\",\r\n        \"address_2\": \"\",\r\n        \"city\": \"San Francisco\",\r\n        \"state\": \"CA\",\r\n        \"postcode\": \"94103\",\r\n        \"country\": \"US\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://192.168.10.40/add_customer",
+							"protocol": "https",
+							"host": [
+								"192",
+								"168",
+								"10",
+								"40"
+							],
+							"path": [
+								"add_customer"
+							]
+						},
+						"description": "This should return a list of items, each in JSON format."
+					},
+					"response": []
+				},
+				{
+					"name": "GET CUSTOMER",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2OTQyNjkzNzAsImlhdCI6MTY5NDI2OTI1MCwic3ViIjoiY3NfNjBlYWEzZDIyZDE2MWVmMDc3ZGZmNGFmYWYzZDA0YWQ3YmYzMmUxMiJ9.RbmflhbtdP4UQ8bQltESIY5Pi_1e7trYlymbdhpO5ss",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Product3\",\r\n  \"type\": \"simple\",\r\n  \"regular_price\": \"69\",\r\n  \"short_description\": \"Expérience cinématographique : image 4K Ultra HD aux couleurs éclatantes avec prise en charge des technologies Dolby Vision, HDR et HDR10+.\",\r\n  \"description\": \"Si vous avez un routeur Wi-Fi 6, nous vous recommandons Fire TV Stick 4K Max.Fire TV Stick 4K est compatible avec les TV HD et 4K UHD. Le streaming 4K nécessite une TV 4K UHD et du contenu 4K disponible.L'accès au son Dolby Atmos est disponible sur une sélection de titres Prime Video et Disney+ lorsque vous êtes connecté(e) à un appareil compatible. Les boutons des applications peuvent varier.\",\r\n  \"images\": [\r\n    {\r\n      \"src\": \"https://m.media-amazon.com/images/I/61ixhTXoScL._AC_SX679_.jpg\"\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://192.168.10.40/get_user/3",
+							"protocol": "https",
+							"host": [
+								"192",
+								"168",
+								"10",
+								"40"
+							],
+							"path": [
+								"get_user",
+								"3"
+							]
+						},
+						"description": "This should return a list of items, each in JSON format."
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE CUSTOMER",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2OTQyNjk0NjIsImlhdCI6MTY5NDI2OTM0Miwic3ViIjoiY3NfNjBlYWEzZDIyZDE2MWVmMDc3ZGZmNGFmYWYzZDA0YWQ3YmYzMmUxMiJ9.a5Pu9jGGAJA_K3OR_Sz-SPMB8bqlESB_FzfQGj9OqYY",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"force\": true,\r\n  \"reassign\": 3\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://192.168.10.40/delete_user/3",
+							"protocol": "https",
+							"host": [
+								"192",
+								"168",
+								"10",
+								"40"
+							],
+							"path": [
+								"delete_user",
+								"3"
+							]
+						},
+						"description": "This should return a list of items, each in JSON format."
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE CUSTOMER",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2OTQyNjk0NjIsImlhdCI6MTY5NDI2OTM0Miwic3ViIjoiY3NfNjBlYWEzZDIyZDE2MWVmMDc3ZGZmNGFmYWYzZDA0YWQ3YmYzMmUxMiJ9.a5Pu9jGGAJA_K3OR_Sz-SPMB8bqlESB_FzfQGj9OqYY",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"abdel21@example.com\",\r\n    \"first_name\": \"Abdel\",\r\n    \"last_name\": \"Phenix\",\r\n    \"username\": \"abdelatif2\",\r\n    \"password\":\"password\",\r\n    \"billing\": {\r\n        \"first_name\": \"John\",\r\n        \"last_name\": \"Doe\",\r\n        \"company\": \"\",\r\n        \"address_1\": \"969 Market\",\r\n        \"address_2\": \"\",\r\n        \"city\": \"San Francisco\",\r\n        \"state\": \"CA\",\r\n        \"postcode\": \"94103\",\r\n        \"country\": \"US\",\r\n        \"email\": \"john.doe@example.com\",\r\n        \"phone\": \"(555) 555-5555\"\r\n    },\r\n    \"shipping\": {\r\n        \"first_name\": \"John\",\r\n        \"last_name\": \"Doe\",\r\n        \"company\": \"\",\r\n        \"address_1\": \"969 Market\",\r\n        \"address_2\": \"\",\r\n        \"city\": \"LYON\",\r\n        \"state\": \"CA\",\r\n        \"postcode\": \"94103\",\r\n        \"country\": \"US\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://192.168.10.40/update_user/3",
+							"protocol": "https",
+							"host": [
+								"192",
+								"168",
+								"10",
+								"40"
+							],
+							"path": [
+								"update_user",
+								"3"
+							]
+						},
+						"description": "This should return a list of items, each in JSON format."
+					},
+					"response": []
+				},
+				{
+					"name": "GET ALL  CUSTOMERS",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2OTQyNjk0NjIsImlhdCI6MTY5NDI2OTM0Miwic3ViIjoiY3NfNjBlYWEzZDIyZDE2MWVmMDc3ZGZmNGFmYWYzZDA0YWQ3YmYzMmUxMiJ9.a5Pu9jGGAJA_K3OR_Sz-SPMB8bqlESB_FzfQGj9OqYY",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Product3\",\r\n  \"type\": \"simple\",\r\n  \"regular_price\": \"69\",\r\n  \"short_description\": \"Expérience cinématographique : image 4K Ultra HD aux couleurs éclatantes avec prise en charge des technologies Dolby Vision, HDR et HDR10+.\",\r\n  \"description\": \"Si vous avez un routeur Wi-Fi 6, nous vous recommandons Fire TV Stick 4K Max.Fire TV Stick 4K est compatible avec les TV HD et 4K UHD. Le streaming 4K nécessite une TV 4K UHD et du contenu 4K disponible.L'accès au son Dolby Atmos est disponible sur une sélection de titres Prime Video et Disney+ lorsque vous êtes connecté(e) à un appareil compatible. Les boutons des applications peuvent varier.\",\r\n  \"images\": [\r\n    {\r\n      \"src\": \"https://m.media-amazon.com/images/I/61ixhTXoScL._AC_SX679_.jpg\"\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://192.168.10.40/get_users",
+							"protocol": "https",
+							"host": [
+								"192",
+								"168",
+								"10",
+								"40"
+							],
+							"path": [
+								"get_users"
+							]
+						},
+						"description": "This should return a list of items, each in JSON format."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "GENERATE TOKEN",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"consumer_secret\": \"cs_60eaa3d22d161ef077dff4afaf3d04ad7bf32e12\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://192.168.10.40/product_token",
+							"protocol": "https",
+							"host": [
+								"192",
+								"168",
+								"10",
+								"40"
+							],
+							"path": [
+								"product_token"
+							]
+						},
+						"description": "This should return a list of items, each in JSON format."
+					},
+					"response": []
+				},
+				{
+					"name": "ADD PRODUCT",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2OTQyNjkxNjksImlhdCI6MTY5NDI2OTA0OSwic3ViIjoiY3NfNjBlYWEzZDIyZDE2MWVmMDc3ZGZmNGFmYWYzZDA0YWQ3YmYzMmUxMiJ9.99g5SYt4WJR2SWkuR8pR_cO9OgOL6CwvV2Lh8BYETaE",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Super Mario Bros \",\r\n  \"type\": \"simple\",\r\n  \"regular_price\": \"50\",\r\n  \"short_description\": \"Alors quils tentent de réparer une canalisation souterraine Mario et son frère Luigi tous deux plombiers se retrouvent plongés dans un nouvel univers féerique à travers un mystérieux conduit\",\r\n  \"description\": \"Mais lorsque les deux frères sont séparés Mario sengage dans une aventure trépidante pour retrouver Luigi Dans sa quête.\",\r\n  \"images\": [\r\n    {\r\n      \"src\": \"https://m.media-amazon.com/images/I/716b2fEc1TL._AC_SL1290_.jpg\"\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://192.168.10.40/add_product",
+							"protocol": "https",
+							"host": [
+								"192",
+								"168",
+								"10",
+								"40"
+							],
+							"path": [
+								"add_product"
+							]
+						},
+						"description": "This should return a list of items, each in JSON format."
+					},
+					"response": []
+				},
+				{
+					"name": "GET PRODUCT",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2OTQyNjg5MzUsImlhdCI6MTY5NDI2ODgxNSwic3ViIjoiY3NfNjBlYWEzZDIyZDE2MWVmMDc3ZGZmNGFmYWYzZDA0YWQ3YmYzMmUxMiJ9.xqgL7jT4cV-Z672Zmd-Hq5cxnoRoW91o8mqtsmmx-IY",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Product3\",\r\n  \"type\": \"simple\",\r\n  \"regular_price\": \"69\",\r\n  \"short_description\": \"Expérience cinématographique : image 4K Ultra HD aux couleurs éclatantes avec prise en charge des technologies Dolby Vision, HDR et HDR10+.\",\r\n  \"description\": \"Si vous avez un routeur Wi-Fi 6, nous vous recommandons Fire TV Stick 4K Max.Fire TV Stick 4K est compatible avec les TV HD et 4K UHD. Le streaming 4K nécessite une TV 4K UHD et du contenu 4K disponible.L'accès au son Dolby Atmos est disponible sur une sélection de titres Prime Video et Disney+ lorsque vous êtes connecté(e) à un appareil compatible. Les boutons des applications peuvent varier.\",\r\n  \"images\": [\r\n    {\r\n      \"src\": \"https://m.media-amazon.com/images/I/61ixhTXoScL._AC_SX679_.jpg\"\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://192.168.10.40/get_product/15",
+							"protocol": "https",
+							"host": [
+								"192",
+								"168",
+								"10",
+								"40"
+							],
+							"path": [
+								"get_product",
+								"15"
+							]
+						},
+						"description": "This should return a list of items, each in JSON format."
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE PRODUCT",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2OTQyNjkxNjksImlhdCI6MTY5NDI2OTA0OSwic3ViIjoiY3NfNjBlYWEzZDIyZDE2MWVmMDc3ZGZmNGFmYWYzZDA0YWQ3YmYzMmUxMiJ9.99g5SYt4WJR2SWkuR8pR_cO9OgOL6CwvV2Lh8BYETaE",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://192.168.10.40/delete_product/15",
+							"protocol": "https",
+							"host": [
+								"192",
+								"168",
+								"10",
+								"40"
+							],
+							"path": [
+								"delete_product",
+								"15"
+							]
+						},
+						"description": "This should return a list of items, each in JSON format."
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE PRODUCT",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2OTQyNjg5MzUsImlhdCI6MTY5NDI2ODgxNSwic3ViIjoiY3NfNjBlYWEzZDIyZDE2MWVmMDc3ZGZmNGFmYWYzZDA0YWQ3YmYzMmUxMiJ9.xqgL7jT4cV-Z672Zmd-Hq5cxnoRoW91o8mqtsmmx-IY",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Super Mario Bros. Le Film\",\r\n  \"type\": \"simple\",\r\n  \"regular_price\": \"20.99\",\r\n  \"short_description\": \"Alors qu'ils tentent de réparer une canalisation souterraine, Mario et son frère Luigi, tous deux plombiers, se retrouvent plongés dans un nouvel univers féerique à travers un mystérieux conduit.\",\r\n  \"description\": \"Mais lorsque les deux frères sont séparés, Mario s'engage dans une aventure trépidante pour retrouver Luigi. Dans sa quête, il peut compter sur l'aide du champignon Toad, habitant du Royaume Champignon, et les conseils avisés, en matière de techniques de combat, de la Princesse Peach, guerrière déterminée à la tête du Royaume. C'est ainsi que Mario réussit à mobiliser ses propres forces pour aller au bout de sa mission.\",\r\n  \"images\": [\r\n    {\r\n      \"src\": \"https://m.media-amazon.com/images/I/716b2fEc1TL._AC_SL1290_.jpg\"\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://192.168.10.40/update_product/15",
+							"protocol": "https",
+							"host": [
+								"192",
+								"168",
+								"10",
+								"40"
+							],
+							"path": [
+								"update_product",
+								"15"
+							]
+						},
+						"description": "This should return a list of items, each in JSON format."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Orders",
+			"item": [
+				{
+					"name": "GENERATE TOKEN",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"consumer_secret\": \"cs_60eaa3d22d161ef077dff4afaf3d04ad7bf32e12\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://192.168.10.40/order_token",
+							"protocol": "https",
+							"host": [
+								"192",
+								"168",
+								"10",
+								"40"
+							],
+							"path": [
+								"order_token"
+							]
+						},
+						"description": "This should return a list of items, each in JSON format."
+					},
+					"response": []
+				},
+				{
+					"name": "ADD ORDER",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2OTQyNjk1MjgsImlhdCI6MTY5NDI2OTQwOCwic3ViIjoiY3NfNjBlYWEzZDIyZDE2MWVmMDc3ZGZmNGFmYWYzZDA0YWQ3YmYzMmUxMiJ9._e4etura6P990bB3gR0o-fiU98eKIIKfCZX0nrBdYLU",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"customer_id\":3, \r\n  \"line_items\": [\r\n    {\r\n      \"product_id\": 18,\r\n      \"quantity\": 2\r\n    }\r\n  ],\r\n  \"billing\": {\r\n    \"first_name\": \"Abdelatif\",\r\n    \"last_name\": \"Ait\",\r\n    \"address_1\": \"123 Main St\",\r\n    \"address_2\": \"\",\r\n    \"city\": \"Anytown\",\r\n    \"state\": \"CA\",\r\n    \"postcode\": \"12345\",\r\n    \"country\": \"US\",\r\n    \"email\": \"john.doe@example.com\",\r\n    \"phone\": \"(555) 555-5555\"\r\n  },\r\n  \"shipping\": {\r\n    \"first_name\": \"Abdelatif\",\r\n    \"last_name\": \"Ait\",\r\n    \"address_1\": \"123 Main St\",\r\n    \"address_2\": \"\",\r\n    \"city\": \"Anytown\",\r\n    \"state\": \"CA\",\r\n    \"postcode\": \"12345\",\r\n    \"country\": \"US\"\r\n  }\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://192.168.10.40/add_order",
+							"protocol": "https",
+							"host": [
+								"192",
+								"168",
+								"10",
+								"40"
+							],
+							"path": [
+								"add_order"
+							]
+						},
+						"description": "This should return a list of items, each in JSON format."
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE ORDER",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2OTQyNjk2NTgsImlhdCI6MTY5NDI2OTUzOCwic3ViIjoiY3NfNjBlYWEzZDIyZDE2MWVmMDc3ZGZmNGFmYWYzZDA0YWQ3YmYzMmUxMiJ9.HmZNX-7OxbI2anHzt262ZypGPgRu33dzc22UmHAH2xg",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"customer_id\":3, \r\n  \"line_items\": [\r\n    {\r\n      \"product_id\": 18,\r\n      \"quantity\": 6\r\n    }\r\n  ],\r\n  \"billing\": {\r\n    \"first_name\": \"Abdelatif\",\r\n    \"last_name\": \"Ait\",\r\n    \"address_1\": \"123 Main St\",\r\n    \"address_2\": \"\",\r\n    \"city\": \"Anytown\",\r\n    \"state\": \"CA\",\r\n    \"postcode\": \"12345\",\r\n    \"country\": \"US\",\r\n    \"email\": \"john.doe@example.com\",\r\n    \"phone\": \"(555) 555-5555\"\r\n  },\r\n  \"shipping\": {\r\n    \"first_name\": \"Abdelatif\",\r\n    \"last_name\": \"Ait\",\r\n    \"address_1\": \"123 Main St\",\r\n    \"address_2\": \"\",\r\n    \"city\": \"Anytown\",\r\n    \"state\": \"CA\",\r\n    \"postcode\": \"12345\",\r\n    \"country\": \"US\"\r\n  }\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://192.168.10.40/update_order/19",
+							"protocol": "https",
+							"host": [
+								"192",
+								"168",
+								"10",
+								"40"
+							],
+							"path": [
+								"update_order",
+								"19"
+							]
+						},
+						"description": "This should return a list of items, each in JSON format."
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE ORDER",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2OTM3NTc4NjksImlhdCI6MTY5Mzc1Nzc0OSwic3ViIjoiY3NfOWI3MmFiN2UyMDNiOTNmZTYwMGI3NDdmYjcxMzY3YjUwNGI1MWVhYyJ9.s4ZL3Y460albp_5SiviPMWSYNvdw-g6KaH4N_bz_I7A",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"customer_id\": 1,\r\n  \"line_items\": [\r\n    {\r\n      \"product_id\": 25,\r\n      \"quantity\": 2\r\n    }\r\n  ],\r\n  \"billing\": {\r\n    \"first_name\": \"John\",\r\n    \"last_name\": \"Doe\",\r\n    \"address_1\": \"123 Main St\",\r\n    \"address_2\": \"\",\r\n    \"city\": \"Anytown\",\r\n    \"state\": \"CA\",\r\n    \"postcode\": \"12345\",\r\n    \"country\": \"US\",\r\n    \"email\": \"john.doe@example.com\",\r\n    \"phone\": \"(555) 555-5555\"\r\n  },\r\n  \"shipping\": {\r\n    \"first_name\": \"John\",\r\n    \"last_name\": \"Doe\",\r\n    \"address_1\": \"123 Main St\",\r\n    \"address_2\": \"\",\r\n    \"city\": \"Anytown\",\r\n    \"state\": \"CA\",\r\n    \"postcode\": \"12345\",\r\n    \"country\": \"US\"\r\n  }\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://192.168.10.10/delete_order/28",
+							"protocol": "http",
+							"host": [
+								"192",
+								"168",
+								"10",
+								"10"
+							],
+							"path": [
+								"delete_order",
+								"28"
+							]
+						},
+						"description": "This should return a list of items, each in JSON format."
+					},
+					"response": []
+				},
+				{
+					"name": "GET ORDER",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2OTQyNjk2NTgsImlhdCI6MTY5NDI2OTUzOCwic3ViIjoiY3NfNjBlYWEzZDIyZDE2MWVmMDc3ZGZmNGFmYWYzZDA0YWQ3YmYzMmUxMiJ9.HmZNX-7OxbI2anHzt262ZypGPgRu33dzc22UmHAH2xg",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://192.168.10.40/get_order/19",
+							"protocol": "https",
+							"host": [
+								"192",
+								"168",
+								"10",
+								"40"
+							],
+							"path": [
+								"get_order",
+								"19"
+							]
+						},
+						"description": "This should return a list of items, each in JSON format."
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
