@@ -24,7 +24,7 @@ ENV MYSQL_DATABASE_USER=$MYSQL_DATABASE_USER \
 EXPOSE 9090
 
 # Use HEALTHCHECK instruction
-HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD curl --fail http://192.168.10.10:8080/ || exit 1
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD curl --fail http://192.168.10.10:9090/ || exit 1
 
 
 # Run the command to start the order.py script
