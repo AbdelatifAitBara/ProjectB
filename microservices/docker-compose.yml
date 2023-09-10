@@ -21,6 +21,7 @@ services:
       dockerfile: Dockerfile
       args:
         GIT_COMMIT: $$(git --git-dir=/home/vagrant/agent/ProjectB/.git rev-parse --short HEAD)
+    env_file: ./products/.env
     ports:
       - 8080:8080
     restart: always
