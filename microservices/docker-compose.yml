@@ -28,15 +28,6 @@ services:
     image: product_image:${GIT_COMMIT}
     networks:
       - production-network
-    secrets:
-      - mysql_database_user
-      - mysql_database_password
-      - mysql_database_db
-      - api_url
-      - consumer_key
-      - consumer_secret
-      - secret_key
-      - name
 
   order:
     build:
@@ -52,32 +43,7 @@ services:
     networks:
       - production-network
 
-secrets:
-  mysql_database_user:
-    file: ./secrets.env
-    name: MYSQL_DATABASE_USER
-  mysql_database_password:
-    file: ./secrets.env
-    name: MYSQL_DATABASE_PASSWORD
-  mysql_database_db:
-    file: ./secrets.env
-    name: MYSQL_DATABASE_DB
-  api_url:
-    file: ./secrets.env
-    name: API_URL
-  consumer_key:
-    file: ./secrets.env
-    name: CONSUMER_KEY
-  consumer_secret:
-    file: ./secrets.env
-    name: CONSUMER_SECRET
-  secret_key:
-    file: ./secrets.env
-    name: SECRET_KEY
-  name:
-    file: ./secrets.env
-    name: NAME
-    
+
 networks:
   production-network:
     external: true
