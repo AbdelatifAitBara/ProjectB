@@ -10,16 +10,17 @@ import os
 
 app = Flask(__name__)
 
-API_URL = os.getenv('API_URL')
-consumer_key = os.getenv('CONSUMER_KEY')
-consumer_secret = os.getenv('CONSUMER_SECRET')
-
 app.config['MYSQL_DATABASE_USER'] = os.getenv('MYSQL_DATABASE_USER')
 app.config['MYSQL_DATABASE_PASSWORD'] = os.getenv('MYSQL_DATABASE_PASSWORD')
 app.config['MYSQL_DATABASE_DB'] = os.getenv('MYSQL_DATABASE_DB')
 app.config['MYSQL_DATABASE_HOST'] = os.getenv('MYSQL_DATABASE_HOST')
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+
+API_URL = os.getenv('API_URL')
+consumer_key = os.getenv('CONSUMER_KEY')
+consumer_secret = os.getenv('CONSUMER_SECRET')
+
 
 
 # Create a table to store the access tokens for the order if it doesn't exist
