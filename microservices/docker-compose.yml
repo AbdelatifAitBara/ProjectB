@@ -7,6 +7,7 @@ services:
       dockerfile: Dockerfile
       args:
         GIT_COMMIT: $$(git --git-dir=/home/vagrant/agent/ProjectB/.git rev-parse --short HEAD)
+    env_file: ./products/.env
     ports:
       - 7070:7070
     restart: always
@@ -36,6 +37,7 @@ services:
       dockerfile: Dockerfile
       args:
         GIT_COMMIT: $$(git --git-dir=/home/vagrant/agent/ProjectB/.git rev-parse --short HEAD)
+    env_file: ./products/.env
     ports:
       - 9090:9090
     restart: always
