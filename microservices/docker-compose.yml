@@ -25,6 +25,7 @@ services:
       - 8080:8080
     restart: always
     container_name: Product_Container
+    image: product_image:${GIT_COMMIT}
     networks:
       - production-network
     secrets:
@@ -50,7 +51,6 @@ services:
     image: order_image:${GIT_COMMIT}
     networks:
       - production-network
-
 
 secrets:
   mysql_database_user:
