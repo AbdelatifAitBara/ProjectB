@@ -15,8 +15,6 @@ RUN pip install --trusted-host pypi.python.org -r requirements.txt
 # Make port 9090 available to the world outside this container
 EXPOSE 9090
 
-http://192.168.10.10:8888/wp-json/wc/v3/orders
-
 # Define environment variables
 ENV MYSQL_DATABASE_USER=$MYSQL_DATABASE_USER
 ENV MYSQL_DATABASE_PASSWORD=$MYSQL_DATABASE_PASSWORD
