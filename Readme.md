@@ -1,16 +1,17 @@
-
 [![Build using these technologies](https://img.shields.io/badge/Build%20using%20these%20technologies-brightgreen)](https://github.com/AbdelatifAitBara/ProjectB)
 
 [![Vagrant](https://img.shields.io/badge/Vagrant-orange)](https://www.vagrantup.com/)
 [![VirtualBox](https://img.shields.io/badge/VirtualBox-blueviolet)](https://www.virtualbox.org/)
 [![Python](https://img.shields.io/badge/Python-blue)](https://www.python.org/)
-[![Nginx](https://img.shields.io/badge/Nginx-brightgreen)](https://nginx.org/)
 [![WordPress](https://img.shields.io/badge/WordPress-informational)](https://wordpress.org/)
 [![WooCommerce](https://img.shields.io/badge/WooCommerce-success)](https://woocommerce.com/)
 [![REST API](https://img.shields.io/badge/REST%20API-lightgrey)](https://en.wikipedia.org/wiki/Representational_state_transfer)
+[![Jenkins](https://img.shields.io/badge/Jenkins-red)](https://jenkins.io/)
+[![Docker](https://img.shields.io/badge/Docker-blue)](https://www.docker.com/)
+[![HAProxy](https://img.shields.io/badge/HAProxy-yellow)](http://www.haproxy.org/)
 
 
-[![Beta Version](https://img.shields.io/badge/Beta-Version%20v2.0-orange.svg)](https://github.com/AbdelatifAitBara/ProjectB/tree/53d115d42e8474a9218a6787ba8522f9e5a17146)
+[![Final Version 2.0](https://img.shields.io/badge/Final-Version%20v2.0-orange.svg)](https://github.com/AbdelatifAitBara/ProjectB/tree/3434a638b3a76ddc897f15e02fa55ade649d2d91)
 
 ## Prerequisites:
 
@@ -211,8 +212,3 @@ Orders Microservice:
 [![Made with Love](https://img.shields.io/badge/Made%20with-Love-red)](https://github.com/AbdelatifAitBara/ProjectB)
 
 
-
-
-
-
-TEST pipelines
