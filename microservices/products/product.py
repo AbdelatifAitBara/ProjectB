@@ -17,7 +17,7 @@ app.config['MYSQL_DATABASE_PASSWORD'] = os.getenv('MYSQL_DATABASE_PASSWORD')
 app.config['MYSQL_DATABASE_DB'] = os.getenv('MYSQL_DATABASE_DB')
 app.config['MYSQL_DATABASE_HOST'] = 'db'
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+
 
 API_URL = os.getenv('API_URL')
 consumer_key = os.getenv('CONSUMER_KEY')
