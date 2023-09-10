@@ -21,16 +21,6 @@ services:
       dockerfile: Dockerfile
       args:
         GIT_COMMIT: $$(git --git-dir=/home/vagrant/agent/ProjectB/.git rev-parse --short HEAD)
-    environment:
-      MYSQL_DATABASE_USER: ${MYSQL_DATABASE_USER}
-      MYSQL_DATABASE_PASSWORD: ${MYSQL_DATABASE_PASSWORD}
-      MYSQL_DATABASE_DB: ${MYSQL_DATABASE_DB}
-      MYSQL_DATABASE_HOST: ${MYSQL_DATABASE_HOST}
-      API_URL: ${API_URL}
-      CONSUMER_KEY: ${CONSUMER_KEY}
-      CONSUMER_SECRET: ${CONSUMER_SECRET}
-      SECRET_KEY: ${SECRET_KEY}
-      NAME: ${NAME}
     ports:
       - 8080:8080
     restart: always
