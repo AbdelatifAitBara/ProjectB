@@ -8,7 +8,13 @@ COPY product.py /app
 COPY requirements.txt /app
 COPY .env /app
 
+# Install any other needed packages specified in requirements.txt
+RUN pip install --trusted-host pypi.python.org -r requirements.txt
 
+# Install python-dotenv library
+RUN pip install python-dotenv
+
+# Load environment variables from .env file
 RUN python -c 'from dotenv import load_dotenv; load_dotenv()'
 
 # Define environment variables
