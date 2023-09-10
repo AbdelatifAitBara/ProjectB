@@ -93,7 +93,6 @@ Vagrant.configure("2") do |config|
       sudo chown $USER:docker /var/run/docker.sock
       sudo systemctl enable docker
       sudo systemctl start docker
-      sudo chown $USER:docker /var/run/docker.sock
       mkdir /home/vagrant/jenkins-compose
       docker network create jenkins-network
       cp /vagrant/jenkins-compose/docker-compose.yml /home/vagrant/jenkins-compose
@@ -174,6 +173,20 @@ Vagrant.configure("2") do |config|
         sudo ufw allow 80
         sudo ufw allow 443
         sudo ufw allow 22
+        sudo -E apt install apt-transport-https ca-certificates curl software-properties-common -y
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo -E apt-key add -
+        CODENAME=$(lsb_release -cs)
+        sudo -E add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $CODENAME stable"
+        sudo -E apt update
+        sudo -E apt install docker-ce=5:20.10.24~3-0~ubuntu-$CODENAME docker-ce-cli=5:20.10.24~3-0~ubuntu-$CODENAME containerd.io docker-compose -y
+        sudo usermod -a -G docker vagrant
+        sudo chown $USER:docker /var/run/docker.sock
+        sudo systemctl enable docker
+        sudo systemctl start docker
+        mkdir -p /home/vagrant/haproxy-compose
+        cp /vagrant/haproxy-compose/docker-compose.yml /home/vagrant/haproxy-compose/docker-compose.yml
+        docker network create haproxy
+        docker-compose -f /home/vagrant/haproxy-compose/docker-compose.yml up -d
         mkdir ssl
         cp /vagrant/ssl_generate.sh /home/vagrant/ssl
         sudo sudo apt-get install dos2unix
@@ -181,8 +194,9 @@ Vagrant.configure("2") do |config|
         sudo chmod +x /home/vagrant/ssl/ssl_generate.sh
         sudo bash /home/vagrant/ssl/ssl_generate.sh haproxy
         sudo apt install haproxy -y
-        cp /vagrant/haproxy_micro.cfg /etc/haproxy/haproxy.cfg
+        sudo cp /vagrant/haproxy_micro.cfg /etc/haproxy/haproxy.cfg
         cp /vagrant/haproxy /etc/default/haproxy
+        sudo systemctl enable haproxy
         sudo systemctl restart haproxy
         sudo touch /etc/cloud/cloud-init.disabled
       SHELL
