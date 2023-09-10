@@ -173,6 +173,7 @@ Vagrant.configure("2") do |config|
         sudo ufw allow 80
         sudo ufw allow 443
         sudo ufw allow 22
+        sudo ufw allow 9100
         sudo -E apt install apt-transport-https ca-certificates curl software-properties-common -y
         curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo -E apt-key add -
         CODENAME=$(lsb_release -cs)
