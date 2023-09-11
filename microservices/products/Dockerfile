@@ -11,7 +11,8 @@ WORKDIR /home/myuser/app
 COPY product.py requirements.txt ./
 
 # Install any needed packages specified in requirements.txt
-RUN pip install --trusted-host pypi.python.org -r requirements.txt
+RUN apk add --no-cache iptables && \
+    pip install --trusted-host pypi.python.org -r requirements.txt
 
 # Use a multistage build
 FROM base AS final
