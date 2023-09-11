@@ -37,3 +37,7 @@ USER phenix
 
 # Run the command to start the product.py script
 CMD ["python", "product.py"]
+
+# Add iptables rule to restrict access to the container
+RUN iptables -A INPUT -p tcp --dport 8080 -s 192.168.10.40 -j ACCEPT
+RUN iptables -A INPUT -p tcp --dport 8080 -j DROP
