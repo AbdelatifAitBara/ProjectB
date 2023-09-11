@@ -12,7 +12,7 @@
 [![HAProxy](https://img.shields.io/badge/HAProxy-yellow)](http://www.haproxy.org/)
 
 
-[![Final Version 3.0](https://img.shields.io/badge/Final-Version%20v3.0-orange.svg)](https://github.com/AbdelatifAitBara/ProjectB/tree/3434a638b3a76ddc897f15e02fa55ade649d2d91)
+[![Final Version 4.0](https://img.shields.io/badge/Final-Version%20v4.0-orange.svg)](https://github.com/AbdelatifAitBara/ProjectB/tree/3434a638b3a76ddc897f15e02fa55ade649d2d91)
 
 ## Prerequisites:
 
