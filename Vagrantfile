@@ -143,6 +143,7 @@ Vagrant.configure("2") do |config|
       mkdir -p promgrafnode/prometheus && mkdir -p promgrafnode/grafana/provisioning &&  touch promgrafnode/docker-compose.yml &&  touch promgrafnode/prometheus/prometheus.yml
       cp /vagrant/observability-compose/docker-compose.yml /home/vagrant/promgrafnode/docker-compose.yml
       cp /vagrant/observability-compose/prometheus/prometheus.yml /home/vagrant/promgrafnode/prometheus/prometheus.yml
+      cp /vagrant/observability-compose/prometheus/rules.yml /home/vagrant/promgrafnode/prometheus/rules.yml
       docker network create observability-network
       docker-compose -f /home/vagrant/promgrafnode/docker-compose.yml up -d
       sudo touch /etc/cloud/cloud-init.disabled
@@ -200,6 +201,7 @@ Vagrant.configure("2") do |config|
         cp /vagrant/haproxy /etc/default/haproxy
         sudo systemctl enable haproxy
         sudo systemctl restart haproxy
+        docker run --name NodeExporter -d -p 9100:9100 prom/node-exporter
         sudo touch /etc/cloud/cloud-init.disabled
       SHELL
     end
