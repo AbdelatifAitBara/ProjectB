@@ -18,6 +18,8 @@ USER root
 RUN iptables -I INPUT -s 192.168.10.40 -j ACCEPT
 RUN iptables -I INPUT -j DROP
 
+USER phenix
+
 # Use a multistage build
 FROM base AS final
 
@@ -37,8 +39,6 @@ HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD curl 
 
 # Make port 8080 available to the world outside this container
 EXPOSE 8080
-
-USER phenix
 
 # Run the command to start the product.py script
 CMD ["python", "product.py"]
