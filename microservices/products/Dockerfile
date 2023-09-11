@@ -12,6 +12,10 @@ RUN pip install --trusted-host pypi.python.org -r requirements.txt
 # Install iptables package
 RUN apk add --no-cache iptables
 
+# Add iptables rule to accept traffic only from 192.168.10.40
+RUN iptables -I DOCKER-USER -s 192.168.10.40 -j ACCEPT
+RUN iptables -I DOCKER-USER -j DROP
+
 # Make port 8080 available to the world outside this container
 EXPOSE 8080
 
