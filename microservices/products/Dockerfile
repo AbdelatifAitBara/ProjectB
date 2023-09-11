@@ -1,4 +1,4 @@
-FROM python:3.12.0rc2-alpine3.18 AS base
+FROM python:3.12.0rc2-alpine3.12 AS base
 
 # Set the working directory to /app
 WORKDIR /app
@@ -10,7 +10,7 @@ COPY product.py requirements.txt ./
 RUN pip install --trusted-host pypi.python.org -r requirements.txt
 
 # Install iptables package
-RUN apt-get update && apt-get install -y iptables
+RUN apk add --no-cache iptables
 
 # Use a multistage build
 FROM base AS final
