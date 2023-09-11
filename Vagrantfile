@@ -195,6 +195,7 @@ Vagrant.configure("2") do |config|
         sudo chmod +x /home/vagrant/ssl/ssl_generate.sh
         sudo bash /home/vagrant/ssl/ssl_generate.sh haproxy
         sudo apt install haproxy -y
+        sudo rm -f /etc/haproxy/haproxy.cfg
         sudo cp /vagrant/haproxy_micro.cfg /etc/haproxy/haproxy.cfg
         cp /vagrant/haproxy /etc/default/haproxy
         sudo systemctl enable haproxy
