@@ -1,4 +1,4 @@
-FROM python:3.12.0rc2-alpine3.12 AS base
+FROM python:3.12.0rc2-alpine3.18 AS base
 
 # Set the working directory to /app
 WORKDIR /app
