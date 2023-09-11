@@ -9,10 +9,6 @@ COPY product.py requirements.txt ./
 # Install any needed packages specified in requirements.txt
 RUN pip install --trusted-host pypi.python.org -r requirements.txt
 
-# Add firewall rule to only allow requests from 192.168.10.40
-RUN apk add --no-cache iptables \
-    && iptables -I INPUT -p tcp --dport 80 ! -s 192.168.10.40 -j DROP
-
 # Define environment variables
 ENV MYSQL_DATABASE_USER=$MYSQL_DATABASE_USER \
     MYSQL_DATABASE_PASSWORD=$MYSQL_DATABASE_PASSWORD \
@@ -24,19 +20,15 @@ ENV MYSQL_DATABASE_USER=$MYSQL_DATABASE_USER \
     SECRET_KEY=$SECRET_KEY \
     NAME=$NAME
 
-
 # Use HEALTHCHECK instruction
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD curl --fail http://192.168.10.10:8080/ || exit 1
 
-
-RUN addgroup -S iptables && adduser phenix iptables \
-    && setcap cap_net_raw,cap_net_admin+eip /sbin/iptables
-
+# Block all incoming traffic to port 8080 except for traffic from 192.168.10.40
 RUN apk add --no-cache iptables \
-    && iptables -I INPUT -p tcp --dport 80 ! -s 192.168.10.40 -j DROP
+    && iptables -I INPUT -p tcp --dport 8080 ! -s 192.168.10.40 -j DROP
 
-USER phenix
-
+# Make port 8080 available to the world outside this container
+EXPOSE 8080
 
 # Run the command to start the product.py script
 CMD ["python", "product.py"]
