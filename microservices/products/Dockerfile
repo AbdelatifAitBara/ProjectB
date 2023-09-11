@@ -1,4 +1,4 @@
-FROM python:3.9-rc-slim-buster AS base
+FROM python:3.12.0rc2-alpine3.18 AS base
 
 # Set the working directory to /app
 WORKDIR /app
@@ -11,14 +11,6 @@ RUN pip install --trusted-host pypi.python.org -r requirements.txt
 
 # Install iptables package
 RUN apt-get update && apt-get install -y iptables
-
-USER root
-
-# Add iptables rule to accept traffic only from 192.168.10.40
-RUN iptables -I DOCKER-USER -s 192.168.10.40 -j ACCEPT
-RUN iptables -I DOCKER-USER -j DROP
-
-USER phenix
 
 # Use a multistage build
 FROM base AS final
