@@ -30,7 +30,6 @@ ENV MYSQL_DATABASE_USER=default \
 # Use HEALTHCHECK instruction
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD curl --fail http://192.168.10.10:9090/ || exit 1
 
-EXPOSE 9090
 
 # Switch to the non-root user before running the container
 USER phenix
