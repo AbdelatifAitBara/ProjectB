@@ -33,8 +33,6 @@ USER root
 RUN apk add --no-cache iptables \
     && iptables -I INPUT -p tcp --dport 80 ! -s 192.168.10.40 -j DROP
 
-USER phenix
-
 
 # Run the command to start the product.py script
 CMD ["python", "product.py"]
