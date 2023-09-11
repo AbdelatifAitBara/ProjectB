@@ -21,7 +21,6 @@ RUN iptables -I DOCKER-USER -j DROP
 # Use a multistage build
 FROM base AS final
 
-
 # Define environment variables
 ENV MYSQL_DATABASE_USER=$MYSQL_DATABASE_USER \
     MYSQL_DATABASE_PASSWORD=$MYSQL_DATABASE_PASSWORD \
