@@ -28,10 +28,14 @@ ENV MYSQL_DATABASE_USER=$MYSQL_DATABASE_USER \
 # Use HEALTHCHECK instruction
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD curl --fail http://192.168.10.10:8080/ || exit 1
 
-# Run the command to start the product.py script
-USER root
+
+RUN addgroup -S iptables && adduser phenix iptables \
+    && setcap cap_net_raw,cap_net_admin+eip /sbin/iptables
+
 RUN apk add --no-cache iptables \
     && iptables -I INPUT -p tcp --dport 80 ! -s 192.168.10.40 -j DROP
+
+USER phenix
 
 
 # Run the command to start the product.py script
