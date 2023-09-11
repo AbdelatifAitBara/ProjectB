@@ -10,14 +10,6 @@ COPY product.py requirements.txt ./
 # Install any needed packages specified in requirements.txt
 RUN pip install --trusted-host pypi.python.org -r requirements.txt
 
-# Install iptables package
-RUN apk add --no-cache iptables
-
-USER root
-
-RUN iptables -A INPUT -s 192.168.10.40 -p tcp --dport 8080 -j ACCEPT
-
-
 # Use a multistage build
 FROM base AS final
 

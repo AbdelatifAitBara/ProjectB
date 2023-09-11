@@ -43,37 +43,6 @@ dism.exe /Online /Disable-Feature:Microsoft-Hyper-V
 
 
 
-## How to use This Solution : 
-
-- Usage
-
-To use this Vagrantfile, follow these steps:
-
-
-- Clone the repository containing the Vagrantfile.
-- Open a terminal and navigate to the directory containing the Vagrantfile.
-- Run the command vagrant up to create the virtual machines.
-- Once the virtual machines are created, you can access them using :
-
-```
-vagrant ssh <vm-name>
-
-Or
-
-ssh vagrant@vm_ip
-
-```
-
-```
-VMs IPs:
-
-- Production Machine       : 192.168.10.10
-- CI/CD Server "Jenkins"   : 192.168.10.20
-- Observability Machine    : 192.168.10.30
-- Haproxy Machine          : 192.168.10.40
-
-```
-
 
 ## Docker-compose Files Explanation : 
 
@@ -180,35 +149,130 @@ API END-POINTS:
 
 User ( Customer ) Microservice: 
 
-    Generate Token  :  http://192.168.10.10/customer_token
-    Add New User    :  http://192.168.10.10/add_customer
-    Update User     :  http://192.168.10.10/update_user/<id>
-    Delete User     :  http://192.168.10.10/delete_user/<id>
-    Get User        :  http://192.168.10.10/get_user/<id>
-    Get Users       :  http://192.168.10.10/get_users
+    Generate Token  :  http://192.168.10.40/customer_token
+    Add New User    :  http://192.168.10.40/add_customer
+    Update User     :  http://192.168.10.40/update_user/<id>
+    Delete User     :  http://192.168.10.40/delete_user/<id>
+    Get User        :  http://192.168.10.40/get_user/<id>
+    Get Users       :  http://192.168.10.40/get_users
 
 Products Microservice: 
 
 
-    Generate Token  :  http://192.168.10.10/token_product
-    Add Product     :  http://192.168.10.10/add_product
-    Update Product  :  http://192.168.10.10/get_product/<id>
-    Delete Product  :  http://192.168.10.10:8080/delete_product/<id>
-    Get Product     :  http://192.168.10.10/get_product/<id>
+    Generate Token  :  http://192.168.10.40/token_product
+    Add Product     :  http://192.168.10.40/add_product
+    Update Product  :  http://192.168.10.40/get_product/<id>
+    Delete Product  :  http://192.168.10.40:8080/delete_product/<id>
+    Get Product     :  http://192.168.10.40/get_product/<id>
 
 Orders Microservice: 
 
-    Generate Token  :  http://192.168.10.10/token_order
-    Add Order       :  http://192.168.10.10/add_order
-    Update Order    :  http://192.168.10.10/update_order/<id>
-    Delete Order    :  http://192.168.10.10/delete_order/<id>
-    Get Order       :  http://192.168.10.10/get_product/<id>
+    Generate Token  :  http://192.168.10.40/token_order
+    Add Order       :  http://192.168.10.40/add_order
+    Update Order    :  http://192.168.10.40/update_order/<id>
+    Delete Order    :  http://192.168.10.40/delete_order/<id>
+    Get Order       :  http://192.168.10.40/get_product/<id>
 
 ```
 
 
 
-PIPELINE
+## How to use This Solution : 
+
+- Usage :
+
+
+
+- Clone the repository on your machine.
+- Open a terminal and navigate to the directory of the repository.
+- Run the command vagrant up to create the virtual machines.
+- Once the virtual machines are created, you can access them using :
+
+```
+vagrant ssh <vm-name>
+
+Or
+
+ssh vagrant@vm_ip
+
+```
+
+```
+VMs IPs:
+
+- Production Machine       : 192.168.10.10
+- CI/CD Server "Jenkins"   : 192.168.10.20
+- Observability Machine    : 192.168.10.30
+- Haproxy Machine          : 192.168.10.40
+
+```
+
+
+- 1- Install Wordpress On MySQL, Using this link : 192.168.10.10:8888
+- 2- Generate AN API Keys From Woo Commerce with READ/WRITE Permissions.
+- 3- Add your keys on : .env files for each Microservices.
+- 4- Install Jenkins using the GUI: 192.168.10.20:5555 ( Create a new user on Jenkins GUI AND Don't USE ADMIN)
+- 5- Connect to the VM1, and set a new password for the Jenkins User By Using : 
+  
+```
+sudo passwd jenkins
+```
+
+- 6- Generate SSH Keys :
+
+```
+
+JenkinsMaster Container :
+
+ssh-keygen -t ed25519 -C "your-github-email"
+
+Production ( Jenkins Agent) ( You Should Switch to Jenkins User using " su - jenkins" ) :
+
+ssh-keygen -t ed25519 -C "your-github-email"
+
+
+```
+
+
+- 7- Add GitHub Host Keys on :
+
+```
+
+- Jenkins Master Container :
+
+ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+- Production Machine ( You Should Switch to Jenkins User) :
+
+ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+```
+
+- 8- Add the PUBLIC keys to your GitHub As Bellow : 
+
+
+![image](https://raw.githubusercontent.com/AbdelatifAitBara/ProjectB/3ff65746209948d43cbeaaa6467217701e0effc7/ArchitectureHTML/Add_SSHKEYS.png?token=ATX7PFFW7BWDM5DVW5CMRCLE74SGQ)
+
+- 9- On the JenkinsMaster container scan the Agent Hosts (Production):
+
+```
+ssh-keyscan 192.168.10.10 >> /var/jenkins_home/.ssh/known_hosts
+```
+
+![image](https://raw.githubusercontent.com/AbdelatifAitBara/ProjectB/93b415f641da10468049b6c9eef93b3ce129e584/ArchitectureHTML/ScanProdHosts.PNG?token=ATX7PFFHTRWKA37SAAECLC3E74SSO)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 [![Made with Love](https://img.shields.io/badge/Made%20with-Love-red)](https://github.com/AbdelatifAitBara/ProjectB)
 
