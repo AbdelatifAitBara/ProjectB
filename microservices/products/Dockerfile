@@ -10,13 +10,13 @@ COPY product.py requirements.txt ./
 RUN pip install --trusted-host pypi.python.org -r requirements.txt
 
 # Install iptables package
-RUN apk add --no-cache iptables
+RUN apt-get update && apt-get install -y iptables
 
 USER root
 
 # Add iptables rule to accept traffic only from 192.168.10.40
-RUN iptables -I DOCKER-USER -s 192.168.10.40 -j ACCEPT
-RUN iptables -I DOCKER-USER -j DROP
+RUN iptables -I INPUT -s 192.168.10.40 -j ACCEPT
+RUN iptables -I INPUT -j DROP
 
 # Use a multistage build
 FROM base AS final
