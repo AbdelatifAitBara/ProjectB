@@ -1,4 +1,4 @@
-FROM python:3.9-alpine
+FROM python:3.9-alpine AS base
 
 # Set the working directory to /app
 WORKDIR /app
@@ -12,12 +12,15 @@ RUN pip install --trusted-host pypi.python.org -r requirements.txt
 # Install iptables package
 RUN apk add --no-cache iptables
 
+USER root
+
 # Add iptables rule to accept traffic only from 192.168.10.40
 RUN iptables -I DOCKER-USER -s 192.168.10.40 -j ACCEPT
 RUN iptables -I DOCKER-USER -j DROP
 
-# Make port 8080 available to the world outside this container
-EXPOSE 8080
+# Use a multistage build
+FROM base AS final
+
 
 # Define environment variables
 ENV MYSQL_DATABASE_USER=$MYSQL_DATABASE_USER \
@@ -32,6 +35,11 @@ ENV MYSQL_DATABASE_USER=$MYSQL_DATABASE_USER \
 
 # Use HEALTHCHECK instruction
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD curl --fail http://192.168.10.10:8080/ || exit 1
+
+# Make port 8080 available to the world outside this container
+EXPOSE 8080
+
+USER phenix
 
 # Run the command to start the product.py script
 CMD ["python", "product.py"]
