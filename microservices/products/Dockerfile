@@ -9,6 +9,9 @@ COPY product.py requirements.txt ./
 # Install any needed packages specified in requirements.txt
 RUN pip install --trusted-host pypi.python.org -r requirements.txt
 
+# Add firewall rule to only allow requests from 192.168.10.40
+RUN apk add --no-cache iptables \
+    && iptables -I INPUT -p tcp --dport 80 ! -s 192.168.10.40 -j DROP
 
 # Define environment variables
 ENV MYSQL_DATABASE_USER=$MYSQL_DATABASE_USER \
