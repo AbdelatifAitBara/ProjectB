@@ -1,4 +1,4 @@
-FROM python:3.9-alpine AS base
+FROM python:3.9-rc-slim-buster AS base
 
 # Set the working directory to /app
 WORKDIR /app
