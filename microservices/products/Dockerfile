@@ -33,12 +33,15 @@ HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD pytho
 
 EXPOSE 8080
 
-# Switch to the non-root user before running the container
-USER phenix
-
-# Run the command to start the product.py script
-CMD ["python", "product.py"]
+# Switch to the root user before running the iptables command
+USER root
 
 # Add iptables rule to restrict access to the container
 RUN iptables -A INPUT -p tcp --dport 8080 -s 192.168.10.40 -j ACCEPT
 RUN iptables -A INPUT -p tcp --dport 8080 -j DROP
+
+# Switch back to the non-root user before running the product.py script
+USER phenix
+
+# Run the command to start the product.py script
+CMD ["python", "product.py"]
