@@ -82,7 +82,7 @@ def index():
     return render_template("index.html")
 
 
-@app.route("/request-token", methods=["POST"])
+@app.route("/product_token", methods=["POST"])
 def request_token():
     global access_token
     global token_valid_until
@@ -102,7 +102,7 @@ def request_token():
             timestamp = current_time.strftime("%Y-%m-%d %H:%M:%S")
 
             # Send a POST request to the microservice
-            url = "http://192.168.10.10:8080/token"
+            url = "http://192.168.10.10:8080/product_token"
             data = {"consumer_secret": consumer_secret}
 
             try:

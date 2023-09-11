@@ -30,6 +30,8 @@ ENV MYSQL_DATABASE_USER=default \
 # Use a specific command for HEALTHCHECK
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD python -c 'import requests; res = requests.get("http://localhost:8080/"); res.raise_for_status()'
 
+EXPOSE 8080
+
 # Switch to the non-root user before running the container
 USER phenix
 
