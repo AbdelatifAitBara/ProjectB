@@ -262,8 +262,15 @@ ssh-keyscan 192.168.10.10 >> /var/jenkins_home/.ssh/known_hosts
 ![image](https://raw.githubusercontent.com/AbdelatifAitBara/ProjectB/93b415f641da10468049b6c9eef93b3ce129e584/ArchitectureHTML/ScanProdHosts.PNG?token=ATX7PFFHTRWKA37SAAECLC3E74SSO)
 
 
+10- Configure your Jenkins Agent( Production Machine ), Try the apply the same configurations as bellow : 
 
+![image](https://raw.githubusercontent.com/AbdelatifAitBara/ProjectB/master/ArchitectureHTML/01.PNG?token=GHSAT0AAAAAACGRNPRXSZQEMIEKSZRLF4QSZH7FC2A)
 
+![image](https://raw.githubusercontent.com/AbdelatifAitBara/ProjectB/master/ArchitectureHTML/02.PNG?token=GHSAT0AAAAAACGRNPRWHFEFZPE6DWA3DZ4EZH7FDFQ)
+
+![image](https://raw.githubusercontent.com/AbdelatifAitBara/ProjectB/master/ArchitectureHTML/03.PNG?token=GHSAT0AAAAAACGRNPRWAMWLKZRVSHJPBABUZH7FDOQ)
+
+![image](https://raw.githubusercontent.com/AbdelatifAitBara/ProjectB/master/ArchitectureHTML/04.PNG?token=GHSAT0AAAAAACGRNPRXJIAFALLIVEMGSG52ZH7FEKA)
 
 
 
