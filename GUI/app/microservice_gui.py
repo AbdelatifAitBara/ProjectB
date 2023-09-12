@@ -224,7 +224,7 @@ def create_product():
         "regular_price": regular_price,
         "description": description,
         "short_description": short_description,
-        "image": [
+        "images": [
             {
                 "src": image
             }
