@@ -1,4 +1,4 @@
-TEST PIPELINE 2
+TEST PIPELINE IN FRONT OF ITS 
 
 
 [![Build using these technologies](https://img.shields.io/badge/Build%20using%20these%20technologies-brightgreen)](https://github.com/AbdelatifAitBara/ProjectB)
