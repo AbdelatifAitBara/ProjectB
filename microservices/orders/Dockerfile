@@ -1,5 +1,5 @@
 # Use a minimal base image
-FROM python:3.9-alpine AS base
+FROM python:3.12.0rc2-alpine3.18 AS base
 
 # Add a non-root user to the image
 RUN adduser -D phenix
