@@ -83,7 +83,7 @@ WORDPRESS_DB_USER, and WORDPRESS_DB_PASSWORD environment variables are set to co
   
 - The Jenkins service uses the official Jenkins Docker image and exposes port 5555 on the host machine, which maps to port 8080 in the container. It also mounts a volume named jenkinsvol1 to persist Jenkins data.
 
-### **3- Docker-compose For VM3 Observability :** 
+### **3- Docker-compose For VM3 Observability :
 
 - This is a docker-compose file that sets up a monitoring stack using Prometheus, Grafana, Node Exporter, Portainer, Redis, and Cadvisor.
 
@@ -248,12 +248,12 @@ ssh-keyscan github.com >> ~/.ssh/known_hosts
 
 ```
 
-**- 8- Add the PUBLIC keys to your GitHub As Bellow : **
+- **8- Add the PUBLIC keys to your GitHub As Bellow** : 
 
 
 ![image](https://github.com/AbdelatifAitBara/ProjectB/blob/master/ArchitectureHTML/Add_SSHKEYS.png?raw=true)
 
-**- 9- On the JenkinsMaster container scan the Agent Hosts (Production):**
+- **9- On the JenkinsMaster container scan the Agent Hosts (Production)**:
 
 ```
 ssh-keyscan 192.168.10.10 >> /var/jenkins_home/.ssh/known_hosts
@@ -262,7 +262,7 @@ ssh-keyscan 192.168.10.10 >> /var/jenkins_home/.ssh/known_hosts
 ![image](https://github.com/AbdelatifAitBara/ProjectB/blob/master/ArchitectureHTML/ScanProdHosts.PNG?raw=true)
 
 
-**10- Configure your Jenkins Agent( Production Machine ), Try the apply the same configurations as bellow : **
+**10- Configure your Jenkins Agent( Production Machine ), Try the apply the same configurations as bellow** : 
 
 ![image](https://github.com/AbdelatifAitBara/ProjectB/blob/master/ArchitectureHTML/01.PNG?raw=true)
 
@@ -275,7 +275,7 @@ ssh-keyscan 192.168.10.10 >> /var/jenkins_home/.ssh/known_hosts
 
 
 
-**11- Pipeline Configuration EXAMPLE : **
+11- **Pipeline Configuration EXAMPLE** : 
 
 
 ![image](https://github.com/AbdelatifAitBara/ProjectB/blob/master/ArchitectureHTML/Setup%2001.PNG?raw=true)
