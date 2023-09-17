@@ -1,14 +1,20 @@
 # Use a minimal base image for the final stage
-FROM python:3.12.0rc2-alpine3.18 AS final
+FROM ubuntu:latest AS final
 
 # Set the working directory to /app
 WORKDIR /app
+
+# Update the package list and install necessary packages
+RUN apt-get update && \
+    apt-get install -y python3 python3-pip curl && \
+    # Remove any temporary files and caches
+    rm -rf /var/lib/apt/lists/*
 
 # Copy only the necessary files for installation
 COPY requirements.txt ./
 
 # Install any needed packages specified in requirements.txt
-RUN pip install --trusted-host pypi.python.org -r requirements.txt && \
+RUN pip3 install --trusted-host pypi.python.org -r requirements.txt && \
     # Remove any temporary files and caches
     rm -rf /root/.cache
 
@@ -33,4 +39,4 @@ EXPOSE 8080
 COPY product.py ./
 
 # Run the command to start the product.py script
-CMD ["python", "product.py"]
+CMD ["python3", "product.py"]
