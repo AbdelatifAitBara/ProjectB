@@ -15,7 +15,7 @@ TEST PIPELINE IN FRONT OF ITS
 [![HAProxy](https://img.shields.io/badge/HAProxy-yellow)](http://www.haproxy.org/)
 
 
-[![Final Version 4.0](https://img.shields.io/badge/Final-Version%20v4.0-orange.svg)](https://github.com/AbdelatifAitBara/ProjectB/tree/1cb2817d7b21074ead4f52a8de958f94a7dacecf)
+[Final Version 4.0](https://img.shields.io/badge/Final-Version%20v4.0-orange.svg)
 
 ## Prerequisites:
 
@@ -86,7 +86,7 @@ WORDPRESS_DB_USER, and WORDPRESS_DB_PASSWORD environment variables are set to co
   
 - The Jenkins service uses the official Jenkins Docker image and exposes port 5555 on the host machine, which maps to port 8080 in the container. It also mounts a volume named jenkinsvol1 to persist Jenkins data.
 
-### **3- Docker-compose For VM3 Observability :** 
+### **3- Docker-compose For VM3 Observability :
 
 - This is a docker-compose file that sets up a monitoring stack using Prometheus, Grafana, Node Exporter, Portainer, Redis, and Cadvisor.
 
@@ -182,7 +182,7 @@ Orders Microservice:
 
 ## How to use This Solution : 
 
-- Usage :
+**5 - Usage :**
 
 
 
@@ -194,14 +194,14 @@ Orders Microservice:
 ```
 vagrant ssh <vm-name>
 
-Or
+**Or**
 
 ssh vagrant@vm_ip
 
 ```
 
 ```
-VMs IPs:
+**VMs IPs:**
 
 - Production Machine       : 192.168.10.10
 - CI/CD Server "Jenkins"   : 192.168.10.20
@@ -221,7 +221,7 @@ VMs IPs:
 sudo passwd jenkins
 ```
 
-- 6- Generate SSH Keys :
+**- 6- Generate SSH Keys :**
 
 ```
 
@@ -237,7 +237,7 @@ ssh-keygen -t ed25519 -C "your-github-email"
 ```
 
 
-- 7- Add GitHub Host Keys on :
+**- 7- Add GitHub Host Keys on :**
 
 ```
 
@@ -251,32 +251,43 @@ ssh-keyscan github.com >> ~/.ssh/known_hosts
 
 ```
 
-- 8- Add the PUBLIC keys to your GitHub As Bellow : 
+- **8- Add the PUBLIC keys to your GitHub As Bellow** : 
 
 
-![image](https://raw.githubusercontent.com/AbdelatifAitBara/ProjectB/3ff65746209948d43cbeaaa6467217701e0effc7/ArchitectureHTML/Add_SSHKEYS.png?token=ATX7PFFW7BWDM5DVW5CMRCLE74SGQ)
+![image](https://github.com/AbdelatifAitBara/ProjectB/blob/master/ArchitectureHTML/Add_SSHKEYS.png?raw=true)
 
-- 9- On the JenkinsMaster container scan the Agent Hosts (Production):
+- **9- On the JenkinsMaster container scan the Agent Hosts (Production)**:
 
 ```
 ssh-keyscan 192.168.10.10 >> /var/jenkins_home/.ssh/known_hosts
 ```
 
-![image](https://raw.githubusercontent.com/AbdelatifAitBara/ProjectB/93b415f641da10468049b6c9eef93b3ce129e584/ArchitectureHTML/ScanProdHosts.PNG?token=ATX7PFFHTRWKA37SAAECLC3E74SSO)
+![image](https://github.com/AbdelatifAitBara/ProjectB/blob/master/ArchitectureHTML/ScanProdHosts.PNG?raw=true)
 
 
-10- Configure your Jenkins Agent( Production Machine ), Try the apply the same configurations as bellow : 
+**10- Configure your Jenkins Agent( Production Machine ), Try the apply the same configurations as bellow** : 
 
-![image](https://raw.githubusercontent.com/AbdelatifAitBara/ProjectB/master/ArchitectureHTML/01.PNG?token=GHSAT0AAAAAACGRNPRXSZQEMIEKSZRLF4QSZH7FC2A)
+![image](https://github.com/AbdelatifAitBara/ProjectB/blob/master/ArchitectureHTML/01.PNG?raw=true)
 
-![image](https://raw.githubusercontent.com/AbdelatifAitBara/ProjectB/master/ArchitectureHTML/02.PNG?token=GHSAT0AAAAAACGRNPRWHFEFZPE6DWA3DZ4EZH7FDFQ)
+![image](https://github.com/AbdelatifAitBara/ProjectB/blob/master/ArchitectureHTML/02.PNG?raw=true)
 
-![image](https://raw.githubusercontent.com/AbdelatifAitBara/ProjectB/master/ArchitectureHTML/03.PNG?token=GHSAT0AAAAAACGRNPRWAMWLKZRVSHJPBABUZH7FDOQ)
+![image](https://github.com/AbdelatifAitBara/ProjectB/blob/master/ArchitectureHTML/03.PNG?raw=true)
 
-![image](https://raw.githubusercontent.com/AbdelatifAitBara/ProjectB/master/ArchitectureHTML/04.PNG?token=GHSAT0AAAAAACGRNPRXJIAFALLIVEMGSG52ZH7FEKA)
+![image](https://github.com/AbdelatifAitBara/ProjectB/blob/master/ArchitectureHTML/04.PNG?raw=true)
 
 
 
+
+11- **Pipeline Configuration EXAMPLE** : 
+
+
+![image](https://github.com/AbdelatifAitBara/ProjectB/blob/master/ArchitectureHTML/Setup%2001.PNG?raw=true)
+
+![image](https://github.com/AbdelatifAitBara/ProjectB/blob/master/ArchitectureHTML/Setup%2002.PNG?raw=true)
+
+![image](https://github.com/AbdelatifAitBara/ProjectB/blob/master/ArchitectureHTML/Setup%2003.PNG?raw=true)
+
+![image](https://github.com/AbdelatifAitBara/ProjectB/blob/master/ArchitectureHTML/Setup%2004.PNG?raw=true)
 
 
 
