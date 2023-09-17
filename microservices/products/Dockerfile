@@ -1,17 +1,16 @@
-# Use a minimal base image
-FROM python:3.12.0rc2-alpine3.18 AS base
+# Use a minimal base image for the final stage
+FROM python:3.12.0rc2-alpine3.18 AS final
 
 # Set the working directory to /app
 WORKDIR /app
 
-# Copy the current directory contents into the container at /app
-COPY product.py requirements.txt ./
+# Copy only the necessary files for installation
+COPY requirements.txt ./
 
 # Install any needed packages specified in requirements.txt
-RUN pip install --trusted-host pypi.python.org -r requirements.txt
-
-# Use a multistage build
-FROM base AS final
+RUN pip install --trusted-host pypi.python.org -r requirements.txt && \
+    # Remove any temporary files and caches
+    rm -rf /root/.cache
 
 # Define environment variables
 ENV MYSQL_DATABASE_USER=$MYSQL_DATABASE_USER \
@@ -29,6 +28,9 @@ HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD curl 
 
 # Make port 8080 available to the world outside this container
 EXPOSE 8080
+
+# Copy the product.py script to the container
+COPY product.py ./
 
 # Run the command to start the product.py script
 CMD ["python", "product.py"]
