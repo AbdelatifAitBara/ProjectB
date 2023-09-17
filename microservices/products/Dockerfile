@@ -11,7 +11,7 @@ COPY product.py requirements.txt ./
 RUN pip install --trusted-host pypi.python.org --no-cache-dir -r requirements.txt
 
 # Use a multistage build
-FROM base AS final
+FROM gcr.io/distroless/python3-debian11 AS final
 
 # Define environment variables
 ENV MYSQL_DATABASE_USER=$MYSQL_DATABASE_USER \
@@ -33,4 +33,4 @@ HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD curl 
 EXPOSE 8080
 
 # Run the command to start the product.py script
-CMD ["python", "product.py"]
+CMD ["/usr/local/bin/python", "product.py"]
