@@ -11,7 +11,7 @@ COPY product.py requirements.txt ./
 RUN pip install --trusted-host pypi.python.org --no-cache-dir -r requirements.txt
 
 # Use a multistage build
-FROM gcr.io/distroless/python3-debian11 AS final
+FROM base AS final
 
 # Define environment variables
 ENV MYSQL_DATABASE_USER=$MYSQL_DATABASE_USER \
@@ -23,8 +23,6 @@ ENV MYSQL_DATABASE_USER=$MYSQL_DATABASE_USER \
     CONSUMER_SECRET=$CONSUMER_SECRET \
     SECRET_KEY=$SECRET_KEY \
     NAME=$NAME
-
-COPY --from=base /app/product.py /
 
 # Use HEALTHCHECK instruction
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD curl --fail http://192.168.10.10:8080/ || exit 1
