@@ -1,22 +1,17 @@
-# Use a minimal base image for the final stage
-FROM ubuntu:latest AS final
+# Use a minimal base image
+FROM python:3.12.0rc2-alpine3.18 AS base
 
 # Set the working directory to /app
 WORKDIR /app
 
-# Update the package list and install necessary packages
-RUN apt-get update && \
-    apt-get install -y python3 python3-pip curl && \
-    # Remove any temporary files and caches
-    rm -rf /var/lib/apt/lists/*
-
-# Copy only the necessary files for installation
-COPY requirements.txt ./
+# Copy the current directory contents into the container at /app
+COPY product.py requirements.txt ./
 
 # Install any needed packages specified in requirements.txt
-RUN pip3 install --trusted-host pypi.python.org -r requirements.txt && \
-    # Remove any temporary files and caches
-    rm -rf /root/.cache
+RUN pip install --trusted-host pypi.python.org --no-cache-dir -r requirements.txt
+
+# Use a multistage build
+FROM base AS final
 
 # Define environment variables
 ENV MYSQL_DATABASE_USER=$MYSQL_DATABASE_USER \
@@ -29,14 +24,13 @@ ENV MYSQL_DATABASE_USER=$MYSQL_DATABASE_USER \
     SECRET_KEY=$SECRET_KEY \
     NAME=$NAME
 
+COPY --from=base /app/product.py /
+
 # Use HEALTHCHECK instruction
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD curl --fail http://192.168.10.10:8080/ || exit 1
 
 # Make port 8080 available to the world outside this container
 EXPOSE 8080
 
-# Copy the product.py script to the container
-COPY product.py ./
-
 # Run the command to start the product.py script
-CMD ["python3", "product.py"]
+CMD ["python", "product.py"]
