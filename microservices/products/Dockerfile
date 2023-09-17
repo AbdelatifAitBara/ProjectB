@@ -33,4 +33,4 @@ HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD curl 
 EXPOSE 8080
 
 # Run the command to start the product.py script
-CMD ["/usr/local/bin/python", "product.py"]
+CMD ["python", "product.py"]
