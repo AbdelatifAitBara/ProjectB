@@ -46,6 +46,31 @@ services:
     networks:
       - production-network
 
+  webgui:
+    build:
+      context: ./gui_tests/gui
+      dockerfile: Dockerfile
+      args:
+        GIT_COMMIT: $$(git --git-dir=/home/vagrant/agent/ProjectB/.git rev-parse --short HEAD)
+    ports:
+      - 5000:5000
+    restart: always
+    container_name: Gui_Container
+    image: webgui_image:${GIT_COMMIT}
+    networks:
+      - production-network
+
+  tests:
+    build:
+      context: ./gui_tests
+      dockerfile: Dockerfile
+      args:
+        GIT_COMMIT: $$(git --git-dir=/home/vagrant/agent/ProjectB/.git rev-parse --short HEAD)
+    restart: "no"
+    container_name: testgui_container
+    image: test_image:${GIT_COMMIT}
+    networks:
+      - production-network
 
 networks:
   production-network:

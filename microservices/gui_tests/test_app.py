@@ -32,10 +32,10 @@ class TestApp(unittest.TestCase):
         # Configure the mock post method to return the mock response
         mock_post.return_value = mock_response
 
-        # Test 1 Consumer_secret key field is empty.
+        # Consumer_secret key field is empty.
         # MagicMock Emulate frontend html form: send POST request to /request-token (Flask app route)
         # At the same time MagicMock receive data from my flask backend app
-        response = app.test_client().post('/request-token', data={'consumer_secret': ''})
+        response = app.test_client().post('/product_token', data={'consumer_secret': ''})
         # Assertions
         self.assertEqual(response.status_code, mock_status_code)
         self.assertIn(b'Consumer_secret key field is empty.', response.data)  
@@ -56,9 +56,9 @@ class TestApp(unittest.TestCase):
         # Configure the mock post method to return the mock response
         mock_post.return_value = mock_response
 
-        # Test 2 Consumer_secret key field is NOT empty.
+        # Consumer_secret key field is NOT empty.
         # Emulate frontend html form: send POST request to /request-token (Flask app route)
-        response = app.test_client().post('/request-token', data={'consumer_secret': 'any_consumer_secret'})
+        response = app.test_client().post('/product_token', data={'consumer_secret': 'any_consumer_secret'})
         # Assertions
         self.assertEqual(response.status_code, mock_status_code)
         self.assertIn(b'fake_access_token', response.data)  
