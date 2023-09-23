@@ -1,5 +1,5 @@
-Flask==2.0.1
+Flask==2.2.5
 Flask-Cors==3.0.10
-PyJWT==2.3.0
+PyJWT>=2.4.0
 requests
 datetime
