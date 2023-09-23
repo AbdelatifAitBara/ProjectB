@@ -1,5 +1,5 @@
 # Use a minimal base image
-FROM python:3.12.0rc2-alpine3.18 AS base
+FROM python:3.9-alpine AS base
 
 # Set the working directory to /app
 WORKDIR /app
@@ -8,7 +8,7 @@ WORKDIR /app
 COPY product.py requirements.txt ./
 
 # Install any needed packages specified in requirements.txt
-RUN pip install --trusted-host pypi.python.org --no-cache-dir -r requirements.txt
+RUN pip install --trusted-host pypi.python.org -r requirements.txt
 
 # Use a multistage build
 FROM base AS final
