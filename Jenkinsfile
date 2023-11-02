@@ -12,7 +12,7 @@ pipeline {
             steps {
                 sh "rm -rf ${PROJECT_DIR}"
                 sh "mkdir -p ${PROJECT_DIR}"
-                sh "git -C ${PROJECT_DIR} clone --recursive git@github.com:Tigran69LYON/ProjectB.git"
+                sh "git -C ${PROJECT_DIR} clone --recursive git@github.com:AbdelatifAitBara/ProjectB.git"
             }
         }
 
